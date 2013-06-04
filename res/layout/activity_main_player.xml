@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".MainPlayer" >
+    
+    <ImageView 
+        android:id="@+id/tune_cover_iv"
+        android:layout_width="fill_parent"
+        android:layout_height="430dp"
+        android:layout_alignParentTop="true"
+        android:contentDescription="tune_cover"
+        android:scaleType="centerCrop" android:background="#000000"/>
+    
+    <TextView
+        android:id="@+id/tune_name_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@id/tune_cover_iv"
+        android:textSize="22sp"
+        android:layout_marginBottom="50dp"
+        android:textIsSelectable="false"
+        android:textColor="#ffffff"
+        android:shadowRadius="1"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowColor="#898887"/>
+    
+    <TextView
+        android:id="@+id/tune_info_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@id/tune_cover_iv"
+        android:textSize="14sp"
+        android:layout_marginBottom="30dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffffff"
+        android:shadowRadius="1"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowColor="#898887"/>
+    
+    <TextView
+        android:id="@+id/tune_played_time_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@id/tune_cover_iv"
+        android:textSize="14sp"
+        android:layout_marginBottom="5dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffffff"
+        android:shadowRadius="1"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowColor="#898887"/>
+    
+    <ProgressBar 
+        android:id="@+id/tune_progress_pb"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:layout_alignBottom="@id/tune_cover_iv"
+        />
+	
+    <ImageButton 
+        android:id="@+id/playlist_ib"
+        android:layout_width="80dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tune_cover_iv"
+        android:contentDescription="call playlist menu"
+        android:src="@drawable/list"
+        android:layout_alignParentBottom="true" android:layout_marginTop="5dp" android:layout_marginLeft="25dp"
+            />
+    
+    <ImageButton 
+        android:id="@+id/play_ib"
+        android:layout_width="80dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/tune_cover_iv"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="play or pause"
+        android:src="@drawable/play_button_selector"
+        android:layout_marginTop="5dp"/>
+    
+    <ImageButton 
+        android:id="@+id/nexttune_ib"
+        android:layout_width="80dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tune_cover_iv"
+        android:contentDescription="next tune"
+        android:src="@drawable/next"
+        android:layout_marginTop="5dp" android:layout_marginRight="25dp"/>
+    
+    <RelativeLayout 
+        android:id="@+id/playlist_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="430dp"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:background="#000000" android:alpha="0.93">
+        
+        <ListView 
+            android:id="@+id/playlist_lv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            ></ListView>
+        
+        <ImageView 
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:contentDescription="bottom triangle masker"
+            />
+        
+    </RelativeLayout>
+    
+</RelativeLayout>
