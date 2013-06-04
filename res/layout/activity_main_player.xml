@@ -52,14 +52,19 @@
         android:shadowRadius="1"
         android:shadowDx="1"
         android:shadowDy="1"
-        android:shadowColor="#898887"/>
+        android:shadowColor="#898887"
+        android:gravity="right"/>
     
-    <ProgressBar 
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
         android:id="@+id/tune_progress_pb"
         android:layout_width="fill_parent"
         android:layout_height="5dp"
+        android:indeterminate="false"
+        android:layout_alignParentLeft="true"
         android:layout_alignBottom="@id/tune_cover_iv"
-        />
+        android:progress="0"
+        android:max="0"/>
 	
     <ImageButton 
         android:id="@+id/playlist_ib"
@@ -116,5 +121,5 @@
             />
         
     </RelativeLayout>
-    
+
 </RelativeLayout>

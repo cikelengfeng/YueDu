@@ -36,20 +36,25 @@ public class MainPlayer extends FragmentActivity {
     private static final int NEVER_PLAYED = -1;
     private static final int PLAYED = 0;
     protected static final String PLAYER_ACTIVITY_BROADCAST = "player_activity_broadcast";
+    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY = "player_activity_broadcast_category_play";
+    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE = "player_activity_broadcast_category_pause";
+    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_NEXT = "player_activity_broadcast_category_next";
 
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
-            Log.d("yuedu","service broadcast comed , current position is "+currentPosition);
             setCurrentPosition((int) currentPosition);
         }
     };
 
     private void setCurrentPosition(int currentPosition) {
         assert currentPosition >= 0;
-        getmProgressBar().setProgress(currentPosition);
-
+        Log.d("yuedu","set progress bar current postion "+currentPosition + " progress max : "+getmProgressBar().getMax());
+        getmProgressBar().incrementProgressBy(currentPosition - getmProgressBar().getProgress());
+        int min = currentPosition/60000;
+        int sec = currentPosition%60000/1000;
+        getmPlayedTimeTextView().setText(min + ":" + sec);
     }
 
     private AsyncHttpClient mClient;
@@ -68,12 +73,27 @@ public class MainPlayer extends FragmentActivity {
     private ImageButton mPlayButton;
     private ImageButton mNextButton;
     private ProgressBar mProgressBar;
+    private TextView mPlayedTimeTextView;
+
+    public TextView getmPlayedTimeTextView() {
+        if (mPlayedTimeTextView == null) {
+            mPlayedTimeTextView = (TextView) findViewById(R.id.tune_played_time_tv);
+        }
+        return mPlayedTimeTextView;
+    }
 
     public ProgressBar getmProgressBar() {
         if (mProgressBar == null) {
             mProgressBar = (ProgressBar) findViewById(R.id.tune_progress_pb);
         }
         return mProgressBar;
+    }
+
+    private int getCurrentPlayingTuneDuration() {
+        JSONObject tune = getmPlaylist().get(mPlayingTuneIndex);
+        int min = tune.optInt("min",0);
+        int sec = tune.optInt("sec",0);
+        return (min * 60 + sec)*1000;
     }
 
     public AsyncHttpClient getClient() {
@@ -195,6 +215,8 @@ public class MainPlayer extends FragmentActivity {
         getmImageFetcher().loadImage(url, getmImageView());
         getmTitleView().setText(title);
         getmInfoView().setText(info);
+        getmProgressBar().setMax(getCurrentPlayingTuneDuration());
+        getmPlayedTimeTextView().setText("00:00");
     }
 
     private YueduServiceConnection mServiceConnection = new YueduServiceConnection();
@@ -246,8 +268,10 @@ public class MainPlayer extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE|BIND_IMPORTANT);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver, new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST));
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE | BIND_IMPORTANT);
+        IntentFilter filter = new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver, filter);
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {
 
@@ -271,6 +295,7 @@ public class MainPlayer extends FragmentActivity {
         getmListButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(PLAYER_ACTIVITY_BROADCAST));
                 getmListViewContainer().setVisibility(getmListViewContainer().getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
@@ -296,6 +321,7 @@ public class MainPlayer extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("ondestroy","activity unregister broadcast receiver!!!!!");
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mServiceBroadcastReceiver);
     }
 
