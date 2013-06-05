@@ -9,6 +9,7 @@ import android.os.*;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,10 +40,27 @@ public class YueduService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("yuedu","activity broadcast comed "+intent);
+            Set<String> categorys = intent.getCategories();
+            if (categorys.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
+                String path = intent.getStringExtra(MainPlayer.PLAY_TUNE_INTENT_EXTRA_PATH_KEY);
+                if (mDataSource == null || !mDataSource.equals(path)) {
+                    setTunePath(path);
+                    play();
+                } else {
+                    try {
+                        getmPlayer().start();
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else if (categorys.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
+                pause();
+            }
         }
     };
 
     private Timer mUIUpdateTimer;
+    private MediaPlayer mPlayer1;
 
     public Timer getmUIUpdateTimer() {
         if (mUIUpdateTimer == null) {
@@ -57,8 +75,9 @@ public class YueduService extends IntentService {
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    Log.d("yuedu","media player has prepared!!!!!!!!!!!");
+                    Log.d("yuedu", "media player has prepared!!!!!!!!!!!");
                     Timer timer = getmUIUpdateTimer();
+                    timer.purge();
                     timer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
@@ -67,25 +86,26 @@ public class YueduService extends IntentService {
                             Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
                             intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
                             intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY, currentPosition);
-                            intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY,duration);
+                            intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY, duration);
                             sendLocalBroadcast(intent);
                         }
-                    },0,500);
+                    }, 0, 500);
                 }
             });
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    getmUIUpdateTimer().cancel();
+                    Log.d("yuedu", "media player has completed!!!!!!!");
+                    getmUIUpdateTimer().purge();
                 }
             });
             mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-                    getmUIUpdateTimer().cancel();
+                    Log.d("yuedu", "media player error has occurred!!!!!!!");
+                    getmUIUpdateTimer().purge();
                     return false;
                 }
-
             });
         }
         return mPlayer;
@@ -95,6 +115,19 @@ public class YueduService extends IntentService {
         if (intent != null) {
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
         }
+    }
+
+    private void registerLocalBroadcastReceiver() {
+        assert mActivityBroadcastReceiver != null;
+        IntentFilter filter = new IntentFilter(MainPlayer.PLAYER_ACTIVITY_BROADCAST);
+        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
+        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver,filter);
+    }
+
+    private void unregisterLocalBroadcastReceiver() {
+        assert mActivityBroadcastReceiver != null;
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mActivityBroadcastReceiver);
     }
 
     public AudioManager getmAudioManager() {
@@ -146,21 +179,17 @@ public class YueduService extends IntentService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mActivityBroadcastReceiver);
+        unregisterLocalBroadcastReceiver();
         if (mUIUpdateTimer != null) {
-            mUIUpdateTimer.cancel();
             mUIUpdateTimer.purge();
+            mUIUpdateTimer.cancel();
         }
         return super.onUnbind(intent);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        IntentFilter filter = new IntentFilter(MainPlayer.PLAYER_ACTIVITY_BROADCAST);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_NEXT);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver, filter);
+        registerLocalBroadcastReceiver();
         return mBinder;
     }
 
@@ -276,5 +305,8 @@ public class YueduService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
         stop();
+        if (mPlayer != null) {
+            mPlayer.release();
+        }
     }
 }

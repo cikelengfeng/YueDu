@@ -10,8 +10,6 @@ import android.content.pm.Signature;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
-import android.os.Parcel;
-import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
@@ -38,7 +36,8 @@ public class MainPlayer extends FragmentActivity {
     protected static final String PLAYER_ACTIVITY_BROADCAST = "player_activity_broadcast";
     protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY = "player_activity_broadcast_category_play";
     protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE = "player_activity_broadcast_category_pause";
-    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_NEXT = "player_activity_broadcast_category_next";
+
+    protected static final String PLAY_TUNE_INTENT_EXTRA_PATH_KEY = "player_activity_play_tune_path_key";
 
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -109,7 +108,7 @@ public class MainPlayer extends FragmentActivity {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    playTuneAtIndex(position);
+                    changeTuneAtIndex(position);
                 }
             });
         }
@@ -269,9 +268,7 @@ public class MainPlayer extends FragmentActivity {
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE | BIND_IMPORTANT);
-        IntentFilter filter = new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver, filter);
+        registerLocalBroadcastReceiver();
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {
 
@@ -295,7 +292,6 @@ public class MainPlayer extends FragmentActivity {
         getmListButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(PLAYER_ACTIVITY_BROADCAST));
                 getmListViewContainer().setVisibility(getmListViewContainer().getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
@@ -321,15 +317,17 @@ public class MainPlayer extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("ondestroy","activity unregister broadcast receiver!!!!!");
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mServiceBroadcastReceiver);
+        unregisterLocalBroadcastReceiver();
     }
 
     private void play() {
-        playTuneAtIndex(mPlayingTuneIndex);
+        if (mPlayingTuneIndex < getmPlaylist().size()) {
+            JSONObject tune = getmPlaylist().get(mPlayingTuneIndex);
+            startPlay(tune);
+        }
     }
 
-    private void playTuneAtIndex(int index) {
+    private void changeTuneAtIndex(int index) {
         mPlayingTuneIndex = index;
         if (index < getmPlaylist().size()) {
             JSONObject tune = getmPlaylist().get(index);
@@ -341,32 +339,46 @@ public class MainPlayer extends FragmentActivity {
     private void startPlay(JSONObject tune) {
         String path = tune.optString("mp3");
         if (path != null && path.length() > 0) {
-            Parcel data = Parcel.obtain();
-            data.writeString(path);
-            try {
-                boolean result = mServiceConnection.mServiceBinder.transact(YueduService.TRANSACT_CODE_PLAY,data,null,0);
-                getmPlayButton().setSelected(result);
-                mState = PLAYED;
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(PLAYER_ACTIVITY_BROADCAST);
+            intent.addCategory(PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
+            intent.putExtra(PLAY_TUNE_INTENT_EXTRA_PATH_KEY,path);
+            sendLocalBroadcast(intent);
+            //TODO remove to receiver
+            getmPlayButton().setSelected(true);
+            mState = PLAYED;
+        }else {
+            //TODO show warning
         }
     }
 
     private void pausePlay() {
-        try {
-            boolean result = mServiceConnection.mServiceBinder.transact(YueduService.TRANSACT_CODE_PAUSE, Parcel.obtain(), null, 0);
-            getmPlayButton().setSelected(!result);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        Intent intent = new Intent(PLAYER_ACTIVITY_BROADCAST);
+        intent.addCategory(PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
+        sendLocalBroadcast(intent);
     }
 
     private void playNextTune() {
         if (mPlayingTuneIndex >= getmPlaylist().size() - 1) {
             return;
         }
-        playTuneAtIndex(mPlayingTuneIndex+1);
+        changeTuneAtIndex(mPlayingTuneIndex + 1);
+    }
+
+    private void sendLocalBroadcast(Intent intent) {
+        assert intent != null;
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    private void registerLocalBroadcastReceiver() {
+        assert mServiceBroadcastReceiver != null;
+        IntentFilter filter = new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver,filter);
+    }
+
+    private void unregisterLocalBroadcastReceiver() {
+        assert mServiceBroadcastReceiver != null;
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mServiceBroadcastReceiver);
     }
 
     @Override
