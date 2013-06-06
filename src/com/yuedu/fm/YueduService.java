@@ -30,6 +30,7 @@ public class YueduService extends IntentService {
     * intent category
     * */
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION = "player_service_category_current_position";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE = "player_service_category_player_will_prepare";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED = "player_service_category_player_prepared";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY = "player_service_category_player_will_play";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING = "player_service_category_player_playing";
@@ -42,9 +43,14 @@ public class YueduService extends IntentService {
 
 
     private void sendPreparedBroadcast() {
-
         Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
         intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendWillPrepareBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
         sendLocalBroadcast(intent);
     }
 
@@ -113,8 +119,8 @@ public class YueduService extends IntentService {
     private BroadcastReceiver mActivityBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Set<String> categorys = intent.getCategories();
-            if (categorys.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
+            Set<String> categories = intent.getCategories();
+            if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
                 String path = intent.getStringExtra(MainPlayer.PLAY_TUNE_INTENT_EXTRA_PATH_KEY);
                 if (mDataSource == null || !mDataSource.equals(path)) {
                     if (mScheduler != null) {
@@ -130,7 +136,7 @@ public class YueduService extends IntentService {
                         e.printStackTrace();
                     }
                 }
-            }else if (categorys.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
+            }else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
                 pause();
             }
         }
@@ -289,7 +295,6 @@ public class YueduService extends IntentService {
             MediaPlayer player = getmPlayer();
             player.reset();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setScreenOnWhilePlaying(true);
             player.setDataSource(tunePath);
             mDataSource = tunePath;
         } catch (Exception e) {
@@ -313,6 +318,7 @@ public class YueduService extends IntentService {
                     player.stop();
                     sendStoppedBroadcast();
                 }
+                sendWillPrepareBroadcast();
                 player.prepareAsync();
                 return true;
             } catch (Exception e) {

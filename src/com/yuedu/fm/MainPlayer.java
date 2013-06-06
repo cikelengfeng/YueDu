@@ -61,11 +61,15 @@ public class MainPlayer extends FragmentActivity {
                 Log.d("yuedu","media player will play!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE)) {
                 Log.d("yuedu","media player will pause!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
+                Log.d("yuedu","media player will prepare!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                 Log.d("yuedu","media player error occurred!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
                 setPlayButtonPlaying(false);
                 Log.d("yuedu","media player complete!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED)) {
+                Log.d("yuedu","media player prepared!!!!");
             }
         }
     };
@@ -132,6 +136,7 @@ public class MainPlayer extends FragmentActivity {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    setPlaylistViewVisible(false);
                     changeTuneAtIndex(position);
                 }
             });
@@ -310,7 +315,7 @@ public class MainPlayer extends FragmentActivity {
         getmListButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getmListViewContainer().setVisibility(getmListViewContainer().getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                setPlaylistViewVisible(!isPlaylistViewVisible());
             }
         });
         getmPlayButton().setOnClickListener(new View.OnClickListener() {
@@ -331,6 +336,16 @@ public class MainPlayer extends FragmentActivity {
                 playNextTune();
             }
         });
+        getmTitleView().setSelected(true);
+    }
+
+    private void setPlaylistViewVisible(boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.GONE;
+        getmListViewContainer().setVisibility(visibility);
+    }
+
+    private boolean isPlaylistViewVisible() {
+        return getmListViewContainer().getVisibility() == View.VISIBLE;
     }
 
     private boolean playButtonIsPlayingState() {
@@ -401,6 +416,7 @@ public class MainPlayer extends FragmentActivity {
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP);

@@ -18,14 +18,18 @@
         android:layout_height="35dp"
         android:layout_alignBottom="@id/tune_cover_iv"
         android:textSize="22sp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:layout_marginBottom="50dp"
         android:textIsSelectable="false"
         android:textColor="#ffffff"
         android:shadowRadius="1"
         android:shadowDx="1"
         android:shadowDy="1"
-        android:shadowColor="#898887"/>
-    
+        android:shadowColor="#898887">
+        </TextView>
+
     <TextView
         android:id="@+id/tune_info_tv"
         android:layout_width="fill_parent"
