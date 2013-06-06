@@ -3,6 +3,7 @@ package com.yuedu.fm;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Set;
 
 import android.content.*;
 import android.content.pm.PackageManager;
@@ -31,8 +32,6 @@ import android.os.Bundle;
 
 public class MainPlayer extends FragmentActivity {
 
-    private static final int NEVER_PLAYED = -1;
-    private static final int PLAYED = 0;
     protected static final String PLAYER_ACTIVITY_BROADCAST = "player_activity_broadcast";
     protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY = "player_activity_broadcast_category_play";
     protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE = "player_activity_broadcast_category_pause";
@@ -42,23 +41,48 @@ public class MainPlayer extends FragmentActivity {
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
-            setCurrentPosition((int) currentPosition);
+            String action = intent.getAction();
+            Set<String> categories = intent.getCategories();
+            if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING)) {
+                setPlayButtonPlaying(true);
+                Log.d("yuedu","media player is playing!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION)) {
+                long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
+                setCurrentPosition((int) currentPosition);
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
+                setPlayButtonPlaying(false);
+                Log.d("yuedu","media player is paused!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED)) {
+                setPlayButtonPlaying(false);
+                Log.d("yuedu","media player is stopped!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP)) {
+                Log.d("yuedu","media player will stop!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY)) {
+                Log.d("yuedu","media player will play!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE)) {
+                Log.d("yuedu","media player will pause!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
+                Log.d("yuedu","media player error occurred!!!!");
+            }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
+                setPlayButtonPlaying(false);
+                Log.d("yuedu","media player complete!!!!");
+            }
         }
     };
 
     private void setCurrentPosition(int currentPosition) {
         assert currentPosition >= 0;
-        Log.d("yuedu","set progress bar current postion "+currentPosition + " progress max : "+getmProgressBar().getMax());
-        getmProgressBar().incrementProgressBy(currentPosition - getmProgressBar().getProgress());
-        int min = currentPosition/60000;
-        int sec = currentPosition%60000/1000;
-        getmPlayedTimeTextView().setText(min + ":" + sec);
+        getmProgressBar().setProgress(currentPosition);
+        int positionInSecond = currentPosition/1000;
+        int minFirstBit = positionInSecond/600;
+        int minSecondBit = positionInSecond%600/60;
+        int secFirstBit = positionInSecond%600%60/10;
+        int secSecondBit = positionInSecond%600%60%10;
+        getmPlayedTimeTextView().setText(minFirstBit +""+ minSecondBit + ":" + secFirstBit +""+ secSecondBit);
     }
 
     private AsyncHttpClient mClient;
     private ArrayList<JSONObject> mPlaylist;
-    private int mState = NEVER_PLAYED;
     private int mPlayingTuneIndex = 0;
     private PlaylistAdapter mAdapter;
 
@@ -102,7 +126,7 @@ public class MainPlayer extends FragmentActivity {
         return mClient;
     }
 
-    public ListView getListView() {
+    public ListView getmListView() {
         if (mListView == null) {
             mListView = (ListView) findViewById(R.id.playlist_lv);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -201,11 +225,10 @@ public class MainPlayer extends FragmentActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        getListView().setAdapter(mAdapter);
+        getmListView().setAdapter(mAdapter);
     }
 
-
-    public void setCover(JSONObject tune) {
+    private void changeCoverForTune(JSONObject tune) {
         String url = tune.optString("bg", "");
         String title = tune.optString("title", "");
         String author = tune.optString("author", "");
@@ -215,6 +238,7 @@ public class MainPlayer extends FragmentActivity {
         getmTitleView().setText(title);
         getmInfoView().setText(info);
         getmProgressBar().setMax(getCurrentPlayingTuneDuration());
+        getmProgressBar().setProgress(0);
         getmPlayedTimeTextView().setText("00:00");
     }
 
@@ -248,16 +272,10 @@ public class MainPlayer extends FragmentActivity {
             Log.w("yuedu", "Network Type Changed "+info);
             if (info.getType() == ConnectivityManager.TYPE_WIFI && info.getState() == NetworkInfo.State.CONNECTED) {
                 Log.d("yuedu","wifi is connected");
-                if (mState != NEVER_PLAYED) {
-                    Log.d("yuedu","resume playing");
-                    play();
-                }
             }else {
                 Log.w("yuedu","wifi is disconnected");
-                if (mState != NEVER_PLAYED) {
-                    Log.d("yuedu","pause playing");
-                    pausePlay();
-                }
+                Log.d("yuedu","pause playing");
+                pausePlay();
             }
         }
     };
@@ -267,7 +285,7 @@ public class MainPlayer extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE | BIND_IMPORTANT);
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE | Context.BIND_IMPORTANT);
         registerLocalBroadcastReceiver();
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {
@@ -279,7 +297,7 @@ public class MainPlayer extends FragmentActivity {
                 Log.d("yuedu","play list received "+al);
                 setPlaylist(al);
                 JSONObject tune = getmPlaylist().get(0);
-                setCover(tune);
+                changeCoverForTune(tune);
             }
 
             @Override
@@ -298,11 +316,12 @@ public class MainPlayer extends FragmentActivity {
         getmPlayButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setSelected(!v.isSelected());
-                if (v.isSelected()) {
-                    play();
-                }else {
+                if (playButtonIsPlayingState()) {
+                    setPlayButtonPlaying(false);
                     pausePlay();
+                }else {
+                    setPlayButtonPlaying(true);
+                    play();
                 }
             }
         });
@@ -312,6 +331,14 @@ public class MainPlayer extends FragmentActivity {
                 playNextTune();
             }
         });
+    }
+
+    private boolean playButtonIsPlayingState() {
+        return getmPlayButton().isSelected();
+    }
+
+    private void setPlayButtonPlaying(boolean isPlaying) {
+        getmPlayButton().setSelected(isPlaying);
     }
 
     @Override
@@ -331,7 +358,7 @@ public class MainPlayer extends FragmentActivity {
         mPlayingTuneIndex = index;
         if (index < getmPlaylist().size()) {
             JSONObject tune = getmPlaylist().get(index);
-            setCover(tune);
+            changeCoverForTune(tune);
             startPlay(tune);
         }
     }
@@ -343,9 +370,7 @@ public class MainPlayer extends FragmentActivity {
             intent.addCategory(PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
             intent.putExtra(PLAY_TUNE_INTENT_EXTRA_PATH_KEY,path);
             sendLocalBroadcast(intent);
-            //TODO remove to receiver
-            getmPlayButton().setSelected(true);
-            mState = PLAYED;
+            setPlayButtonPlaying(true);
         }else {
             //TODO show warning
         }
@@ -373,6 +398,15 @@ public class MainPlayer extends FragmentActivity {
         assert mServiceBroadcastReceiver != null;
         IntentFilter filter = new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST);
         filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
+        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver,filter);
     }
 

@@ -12,23 +12,97 @@ import android.util.Log;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by xudong on 13-5-19.
  */
 public class YueduService extends IntentService {
+
     /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     */
-
-    public static final int TRANSACT_CODE_PLAY = 0;
-    public static final int TRANSACT_CODE_PAUSE = 2;
-    public static final int TRANSACT_CODE_STOP = 4;
-
+     * intent action
+     * */
     protected static final String PLAYER_SERVICE_BROADCAST = "player_service_broadcast";
+    /**
+    * intent category
+    * */
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION = "player_service_category_current_position";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED = "player_service_category_player_prepared";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY = "player_service_category_player_will_play";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING = "player_service_category_player_playing";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE = "player_service_category_player_will_pause";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED = "player_service_category_player_paused";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP = "player_service_category_player_will_stop";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED = "player_service_category_player_stopped";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED = "player_service_category_player_error_occurred";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE = "player_service_category_player_complete";
+
+
+    private void sendPreparedBroadcast() {
+
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendWillPlayBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendPlayingBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendWillPauseBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendPausedBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendWillStopBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendStoppedBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendErrorOccurredBroadcast(String error) {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
+        intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY,error);
+        sendLocalBroadcast(intent);
+    }
+
+    private void sendCompletionBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE);
+        sendLocalBroadcast(intent);
+    }
+
+    /**
+    * intent extra key
+    * */
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY = "player_service_category_extra_current_position_key";
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY = "player_service_category_extra_current_duration_key";
+    protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY = "player_service_category_extra_tune_path_key";
 
     private AudioManager mAudioManager;
     private MediaPlayer mPlayer;
@@ -39,16 +113,19 @@ public class YueduService extends IntentService {
     private BroadcastReceiver mActivityBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("yuedu","activity broadcast comed "+intent);
             Set<String> categorys = intent.getCategories();
             if (categorys.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
                 String path = intent.getStringExtra(MainPlayer.PLAY_TUNE_INTENT_EXTRA_PATH_KEY);
                 if (mDataSource == null || !mDataSource.equals(path)) {
+                    if (mScheduler != null) {
+                        getmScheduler().purge();
+                        getmScheduler().pause();
+                    }
                     setTunePath(path);
-                    play();
+                    prepareToPlay();
                 } else {
                     try {
-                        getmPlayer().start();
+                        play();
                     }catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -59,14 +136,27 @@ public class YueduService extends IntentService {
         }
     };
 
-    private Timer mUIUpdateTimer;
-    private MediaPlayer mPlayer1;
+    private PausableThreadPoolExecutor mScheduler;
 
-    public Timer getmUIUpdateTimer() {
-        if (mUIUpdateTimer == null) {
-            mUIUpdateTimer = new Timer("yuedu",true);
+    public PausableThreadPoolExecutor getmScheduler() {
+        if (mScheduler == null) {
+            mScheduler = new PausableThreadPoolExecutor(1);
+            mScheduler.setContinueExistingPeriodicTasksAfterShutdownPolicy(true);
+            mScheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
+            mScheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    long currentPosition = getmPlayer().getCurrentPosition();
+                    long duration = getmPlayer().getDuration();
+                    Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+                    intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
+                    intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY, currentPosition);
+                    intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY, duration);
+                    sendLocalBroadcast(intent);
+                }
+            },0, 500, TimeUnit.MILLISECONDS);
         }
-        return mUIUpdateTimer;
+        return mScheduler;
     }
 
     public MediaPlayer getmPlayer() {
@@ -75,35 +165,27 @@ public class YueduService extends IntentService {
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    Log.d("yuedu", "media player has prepared!!!!!!!!!!!");
-                    Timer timer = getmUIUpdateTimer();
-                    timer.purge();
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            long currentPosition = getmPlayer().getCurrentPosition();
-                            long duration = getmPlayer().getDuration();
-                            Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-                            intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
-                            intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY, currentPosition);
-                            intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY, duration);
-                            sendLocalBroadcast(intent);
-                        }
-                    }, 0, 500);
+                    sendPreparedBroadcast();
+                    prepareToStart();
+                    play();
+                    getmScheduler().purge();
+                    getmScheduler().resume();
                 }
             });
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    Log.d("yuedu", "media player has completed!!!!!!!");
-                    getmUIUpdateTimer().purge();
+                    getmScheduler().purge();
+                    getmScheduler().pause();
+                    sendCompletionBroadcast();
                 }
             });
             mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-                    Log.d("yuedu", "media player error has occurred!!!!!!!");
-                    getmUIUpdateTimer().purge();
+                    getmScheduler().purge();
+                    getmScheduler().pause();
+                    sendErrorOccurredBroadcast("error");
                     return false;
                 }
             });
@@ -147,7 +229,7 @@ public class YueduService extends IntentService {
                             pause();
                             break;
                         case AudioManager.AUDIOFOCUS_GAIN:
-                            play();
+                            prepareToPlay();
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
                             stop();
@@ -180,9 +262,9 @@ public class YueduService extends IntentService {
     @Override
     public boolean onUnbind(Intent intent) {
         unregisterLocalBroadcastReceiver();
-        if (mUIUpdateTimer != null) {
-            mUIUpdateTimer.purge();
-            mUIUpdateTimer.cancel();
+        if (mScheduler != null) {
+            mScheduler.purge();
+            mScheduler.shutdownNow();
         }
         return super.onUnbind(intent);
     }
@@ -198,29 +280,7 @@ public class YueduService extends IntentService {
     class YueduBinder extends Binder {
         @Override
         protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            switch (code) {
-                case TRANSACT_CODE_PLAY:
-                    String tunePath = data.readString();
-                    if (mDataSource == null || !mDataSource.equals(tunePath)) {
-                        setTunePath(tunePath);
-                        return play();
-                    } else {
-                        try {
-                            getmPlayer().start();
-                            return true;
-                        }catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    }
-                case TRANSACT_CODE_PAUSE:
-                    return pause();
-                case TRANSACT_CODE_STOP:
-                    return stop();
-                default:
-                    return false;
-            }
-
+            return false;
         }
     }
 
@@ -237,17 +297,23 @@ public class YueduService extends IntentService {
         }
     }
 
-    private boolean play() {
+    private void play() {
+        sendWillPlayBroadcast();
+        getmPlayer().start();
+        sendPlayingBroadcast();
+    }
+
+    private boolean prepareToPlay() {
         int focus = getmAudioManager().requestAudioFocus(getmFocusListener(), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (focus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             MediaPlayer player = getmPlayer();
             try {
                 if (player.isPlaying()) {
+                    sendWillStopBroadcast();
                     player.stop();
+                    sendStoppedBroadcast();
                 }
-                player.prepare();
-                prepareToStart();
-                player.start();
+                player.prepareAsync();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -261,7 +327,9 @@ public class YueduService extends IntentService {
     private boolean stop() {
         if (getmPlayer().isPlaying()) {
             prepareToStop();
+            sendWillStopBroadcast();
             getmPlayer().stop();
+            sendStoppedBroadcast();
             return true;
         }
         return false;
@@ -270,7 +338,9 @@ public class YueduService extends IntentService {
     private boolean pause() {
         if (getmPlayer().isPlaying()) {
             prepareToPause();
+            sendWillPauseBroadcast();
             getmPlayer().pause();
+            sendPausedBroadcast();
             return true;
         }
         return false;
@@ -307,6 +377,47 @@ public class YueduService extends IntentService {
         stop();
         if (mPlayer != null) {
             mPlayer.release();
+        }
+    }
+
+    static class PausableThreadPoolExecutor extends ScheduledThreadPoolExecutor {
+        private boolean isPaused;
+        private ReentrantLock pauseLock = new ReentrantLock();
+        private Condition unpaused = pauseLock.newCondition();
+
+        public PausableThreadPoolExecutor(int corePoolSize) {
+            super(corePoolSize);
+        }
+
+        protected void beforeExecute(Thread t, Runnable r) {
+            super.beforeExecute(t, r);
+            pauseLock.lock();
+            try {
+                while (isPaused) unpaused.await();
+            } catch (InterruptedException ie) {
+                t.interrupt();
+            } finally {
+                pauseLock.unlock();
+            }
+        }
+
+        public void pause() {
+            pauseLock.lock();
+            try {
+                isPaused = true;
+            } finally {
+                pauseLock.unlock();
+            }
+        }
+
+        public void resume() {
+            pauseLock.lock();
+            try {
+                isPaused = false;
+                unpaused.signalAll();
+            } finally {
+                pauseLock.unlock();
+            }
         }
     }
 }
