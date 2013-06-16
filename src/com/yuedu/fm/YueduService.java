@@ -3,15 +3,19 @@ package com.yuedu.fm;
 import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.content.*;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.os.*;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import javazoom.jl.decoder.*;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -24,11 +28,11 @@ public class YueduService extends IntentService {
 
     /**
      * intent action
-     * */
+     */
     protected static final String PLAYER_SERVICE_BROADCAST = "player_service_broadcast";
     /**
-    * intent category
-    * */
+     * intent category
+     */
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION = "player_service_category_current_position";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE = "player_service_category_player_will_prepare";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED = "player_service_category_player_prepared";
@@ -93,7 +97,7 @@ public class YueduService extends IntentService {
     private void sendErrorOccurredBroadcast(String error) {
         Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
         intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
-        intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY,error);
+        intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY, error);
         sendLocalBroadcast(intent);
     }
 
@@ -104,8 +108,8 @@ public class YueduService extends IntentService {
     }
 
     /**
-    * intent extra key
-    * */
+     * intent extra key
+     */
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY = "player_service_category_extra_current_position_key";
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY = "player_service_category_extra_current_duration_key";
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY = "player_service_category_extra_tune_path_key";
@@ -127,16 +131,20 @@ public class YueduService extends IntentService {
                         getmScheduler().purge();
                         getmScheduler().pause();
                     }
-                    setTunePath(path);
-                    prepareToPlay();
+                    try {
+                        setTunePath(path);
+//                        prepareToPlay();//TODO
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     try {
                         play();
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
+            } else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
                 pause();
             }
         }
@@ -160,7 +168,7 @@ public class YueduService extends IntentService {
                     intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY, duration);
                     sendLocalBroadcast(intent);
                 }
-            },0, 500, TimeUnit.MILLISECONDS);
+            }, 0, 500, TimeUnit.MILLISECONDS);
         }
         return mScheduler;
     }
@@ -181,18 +189,28 @@ public class YueduService extends IntentService {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    getmScheduler().purge();
-                    getmScheduler().pause();
+                    if (mScheduler != null) {
+                        getmScheduler().purge();
+                        getmScheduler().pause();
+                    }
                     sendCompletionBroadcast();
                 }
             });
             mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-                    getmScheduler().purge();
-                    getmScheduler().pause();
+                    if (mScheduler != null) {
+                        getmScheduler().purge();
+                        getmScheduler().pause();
+                    }
                     sendErrorOccurredBroadcast("error");
                     return false;
+                }
+            });
+            mPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                @Override
+                public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                    Log.d("yuedu", "buffer percent " + percent);
                 }
             });
         }
@@ -210,7 +228,7 @@ public class YueduService extends IntentService {
         IntentFilter filter = new IntentFilter(MainPlayer.PLAYER_ACTIVITY_BROADCAST);
         filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
         filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver,filter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver, filter);
     }
 
     private void unregisterLocalBroadcastReceiver() {
@@ -290,16 +308,48 @@ public class YueduService extends IntentService {
         }
     }
 
-    private void setTunePath(String tunePath) {
-        try {
-            MediaPlayer player = getmPlayer();
-            player.reset();
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            player.setDataSource(tunePath);
-            mDataSource = tunePath;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void setTunePath(final String tunePath) throws IOException, JavaLayerException {
+//        Uri uri = new Uri.Builder().path(tunePath).build();
+//        MediaPlayer player = getmPlayer();
+//        player.reset();
+//        player.setDataSource(getApplicationContext(),uri);
+//        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mDataSource = tunePath;
+
+        new AsyncTask<Void,Void,Void>() {
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    HttpURLConnection connection = (HttpURLConnection) new URL(tunePath).openConnection();
+                    connection.connect();
+                    InputStream inputStream = connection.getInputStream();
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(getCacheDir(),SystemClock.elapsedRealtime()+".mp3"));
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                    Decoder decoder = new Decoder();
+                    Bitstream bitstream = new Bitstream(inputStream);
+                    int minBufferSize = AudioTrack.getMinBufferSize(44100,AudioFormat.CHANNEL_CONFIGURATION_STEREO,AudioFormat.ENCODING_PCM_16BIT);
+                    AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC,44100,AudioFormat.CHANNEL_CONFIGURATION_STEREO,AudioFormat.ENCODING_PCM_16BIT,minBufferSize,AudioTrack.MODE_STREAM);
+                    track.play();
+                    Header header;
+                    while ((header = bitstream.readFrame()) != null) {
+                        SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                        track.write(buffer.getBuffer(),0,buffer.getBufferLength());
+                        for (short s : buffer.getBuffer()) {
+                            bufferedOutputStream.write((byte)(s & 0xff));
+                            bufferedOutputStream.write((byte)((s >> 8) & 0xff));
+                        }
+                        bitstream.closeFrame();
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }finally {
+
+                }
+                return null;
+            }
+        }.execute((Void)null);
     }
 
     private void play() {
