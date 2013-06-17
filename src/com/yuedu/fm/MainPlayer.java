@@ -1,6 +1,11 @@
 package com.yuedu.fm;
 
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.ConnectivityManager;
@@ -11,14 +16,27 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.yuedu.R;
 import com.yuedu.image.ImageCache.ImageCacheParams;
 import com.yuedu.image.ImageFetcher;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +65,7 @@ public class MainPlayer extends FragmentActivity {
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION)) {
                 long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
                 setCurrentPosition((int) currentPosition);
+                Log.d("yuedu","new position "+currentPosition);
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
                 setPlayButtonPlaying(false);
                 Log.d("yuedu","media player is paused!!!!");
@@ -236,7 +255,7 @@ public class MainPlayer extends FragmentActivity {
         String title = tune.optString("title", "");
         String author = tune.optString("author", "");
         String player = tune.optString("player", "");
-        String info = "author:" + author + " player:" + player;
+        String info = getString(R.string.author) + author +" "+ getString(R.string.player) + player;
         getmImageFetcher().loadImage(url, getmImageView());
         getmTitleView().setText(title);
         getmInfoView().setText(info);
@@ -454,7 +473,7 @@ public class MainPlayer extends FragmentActivity {
             String titleStr = tune.optString("title", "");
             String author = tune.optString("author", "");
             String player = tune.optString("player", "");
-            String infoStr = "author:" + author + " player:" + player;
+            String infoStr = getContext().getString(R.string.author) + author +" "+getContext().getString(R.string.player) + player;
             String timeStr = tune.optString("min", "00") + ":" + tune.optString("sec", "00");
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.playlist_item, null);

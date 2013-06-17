@@ -3,5 +3,7 @@
 
     <string name="app_name">YueDu</string>
     <string name="action_settings">Settings</string>
+    <string name="author">作者:</string>
+    <string name="player">主播:</string>
 
 </resources>
