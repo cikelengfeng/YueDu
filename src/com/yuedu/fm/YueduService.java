@@ -2,17 +2,28 @@ package com.yuedu.fm;
 
 import android.annotation.TargetApi;
 import android.app.IntentService;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Binder;
+import android.os.Build;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import javazoom.jl.decoder.*;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Set;
@@ -20,6 +31,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javazoom.jl.decoder.Bitstream;
+import javazoom.jl.decoder.Decoder;
+import javazoom.jl.decoder.Header;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.decoder.SampleBuffer;
 
 /**
  * Created by xudong on 13-5-19.
@@ -115,7 +132,7 @@ public class YueduService extends IntentService {
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY = "player_service_category_extra_tune_path_key";
 
     private AudioManager mAudioManager;
-    private MediaPlayer mPlayer;
+    private StreamingDownloadMediaPlayer mPlayer;
     private AudioManager.OnAudioFocusChangeListener mFocusListener;
     static private final ComponentName REMOTE_CONTROL_RECEIVER_NAME = new ComponentName("com.yuedu.fm", "RemoteControlReceiver");
     private NoisyAudioStreamReceiver mNoisyAudioStreamReceiver;
@@ -133,7 +150,7 @@ public class YueduService extends IntentService {
                     }
                     try {
                         setTunePath(path);
-//                        prepareToPlay();//TODO
+                        prepareToPlay();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -173,46 +190,47 @@ public class YueduService extends IntentService {
         return mScheduler;
     }
 
-    public MediaPlayer getmPlayer() {
+    public StreamingDownloadMediaPlayer getmPlayer() {
         if (mPlayer == null) {
-            mPlayer = new MediaPlayer();
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    sendPreparedBroadcast();
-                    prepareToStart();
-                    play();
-                    getmScheduler().purge();
-                    getmScheduler().resume();
-                }
-            });
-            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    if (mScheduler != null) {
-                        getmScheduler().purge();
-                        getmScheduler().pause();
-                    }
-                    sendCompletionBroadcast();
-                }
-            });
-            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-                    if (mScheduler != null) {
-                        getmScheduler().purge();
-                        getmScheduler().pause();
-                    }
-                    sendErrorOccurredBroadcast("error");
-                    return false;
-                }
-            });
-            mPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-                @Override
-                public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                    Log.d("yuedu", "buffer percent " + percent);
-                }
-            });
+            mPlayer = new StreamingDownloadMediaPlayer();
+            //TODO listener API
+//            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                @Override
+//                public void onPrepared(MediaPlayer mp) {
+//                    sendPreparedBroadcast();
+//                    prepareToStart();
+//                    play();
+//                    getmScheduler().purge();
+//                    getmScheduler().resume();
+//                }
+//            });
+//            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                @Override
+//                public void onCompletion(MediaPlayer mediaPlayer) {
+//                    if (mScheduler != null) {
+//                        getmScheduler().purge();
+//                        getmScheduler().pause();
+//                    }
+//                    sendCompletionBroadcast();
+//                }
+//            });
+//            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//                @Override
+//                public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
+//                    if (mScheduler != null) {
+//                        getmScheduler().purge();
+//                        getmScheduler().pause();
+//                    }
+//                    sendErrorOccurredBroadcast("error");
+//                    return false;
+//                }
+//            });
+//            mPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+//                @Override
+//                public void onBufferingUpdate(MediaPlayer mp, int percent) {
+//                    Log.d("yuedu", "buffer percent " + percent);
+//                }
+//            });
         }
         return mPlayer;
     }
@@ -309,11 +327,6 @@ public class YueduService extends IntentService {
     }
 
     private void setTunePath(final String tunePath) throws IOException, JavaLayerException {
-//        Uri uri = new Uri.Builder().path(tunePath).build();
-//        MediaPlayer player = getmPlayer();
-//        player.reset();
-//        player.setDataSource(getApplicationContext(),uri);
-//        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mDataSource = tunePath;
 
         new AsyncTask<Void,Void,Void>() {
@@ -361,7 +374,7 @@ public class YueduService extends IntentService {
     private boolean prepareToPlay() {
         int focus = getmAudioManager().requestAudioFocus(getmFocusListener(), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (focus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            MediaPlayer player = getmPlayer();
+            StreamingDownloadMediaPlayer player = getmPlayer();
             try {
                 if (player.isPlaying()) {
                     sendWillStopBroadcast();
