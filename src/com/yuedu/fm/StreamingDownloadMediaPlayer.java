@@ -3,12 +3,11 @@ package com.yuedu.fm;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
-
-import com.yuedu.image.AsyncTask;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -211,45 +210,59 @@ public class StreamingDownloadMediaPlayer {
         }
         mPrepareTask = new PrepareAsyncTask() {
             @Override
-            protected Void doInBackground(URL... params) throws BitstreamException, DecoderException, IOException, InterruptedException {
+            protected Void doInBackground(URL... params) {
                 URL url1 = params[0];
-                HttpURLConnection connection = (HttpURLConnection) url1.openConnection();
-                connection.connect();
-                InputStream inputStream = connection.getInputStream();
-                Bitstream bitstream = new Bitstream(inputStream);
-                Header header;
-                float decodedAudioTime = 0;
-                float oneShotAudioTime = (float) (1000.0/44.1);
-                boolean prepared = false;
-                while ((header = bitstream.readFrame()) != null) {
-                    SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                    writeDecodedFrameToBuffer(mBuffer, buffer.getBuffer());
-                    if (bufferedOutputStream != null) {
-                        writeDecodedFrameToFile(bufferedOutputStream, buffer.getBuffer());
-                    }
-                    decodedAudioTime += oneShotAudioTime;
-                    if (decodedAudioTime >= MIN_AUDIO_PREPARE_TIME && !prepared) {
-                        Log.d("yuedu","buffer is prepared!!!!!!!!!!!!!");
-                        prepared = true;
-                        if (blocking) {
-                            notifyAll();
-                            blocking = false;
+                HttpURLConnection connection = null;
+                InputStream inputStream = null;
+                Bitstream bitstream = null;
+                try {
+                    connection = (HttpURLConnection) url1.openConnection();
+                    connection.connect();
+                    inputStream = connection.getInputStream();
+                    bitstream = new Bitstream(inputStream);
+                    Header header;
+                    float decodedAudioTime = 0;
+                    float oneShotAudioTime = (float) (1000.0/44.1);
+                    boolean prepared = false;
+                    while ((header = bitstream.readFrame()) != null) {
+                        SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                        writeDecodedFrameToBuffer(mBuffer, buffer.getBuffer());
+                        if (bufferedOutputStream != null) {
+                            writeDecodedFrameToFile(bufferedOutputStream, buffer.getBuffer());
                         }
-                        notifyPrepared();
+                        decodedAudioTime += oneShotAudioTime;
+                        if (decodedAudioTime >= MIN_AUDIO_PREPARE_TIME && !prepared) {
+                            Log.d("yuedu","buffer is prepared!!!!!!!!!!!!!");
+                            prepared = true;
+                            if (blocking) {
+                                notifyAll();
+                                blocking = false;
+                            }
+                            notifyPrepared();
+                        }
+                        bitstream.closeFrame();
                     }
-                    bitstream.closeFrame();
+                    if (blocking) {
+                        notifyAll();
+                        blocking = false;
+                    }
+                    if (bufferedOutputStream != null) {
+                        bufferedOutputStream.flush();
+                        bufferedOutputStream.close();
+                    }
+                    if (bitstream != null) {
+                        bitstream.close();
+                    }
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }finally {
+                    if (connection != null) {
+                        connection.disconnect();
+                    }
                 }
-                if (blocking) {
-                    notifyAll();
-                    blocking = false;
-                }
-                if (bufferedOutputStream != null) {
-                    bufferedOutputStream.flush();
-                    bufferedOutputStream.close();
-                }
-                bitstream.close();
-                inputStream.close();
-                connection.disconnect();
                 return null;
             }
         };
