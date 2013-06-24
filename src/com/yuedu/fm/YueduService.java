@@ -7,24 +7,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.AudioTrack;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -32,11 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.Decoder;
-import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.decoder.SampleBuffer;
 
 /**
  * Created by xudong on 13-5-19.
@@ -194,16 +181,16 @@ public class YueduService extends IntentService {
         if (mPlayer == null) {
             mPlayer = new StreamingDownloadMediaPlayer();
             //TODO listener API
-//            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                @Override
-//                public void onPrepared(MediaPlayer mp) {
-//                    sendPreparedBroadcast();
-//                    prepareToStart();
-//                    play();
-//                    getmScheduler().purge();
-//                    getmScheduler().resume();
-//                }
-//            });
+            mPlayer.setOnPreparedListener(new StreamingDownloadMediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(StreamingDownloadMediaPlayer mp) {
+                    sendPreparedBroadcast();
+                    prepareToStart();
+                    play();
+                    getmScheduler().purge();
+                    getmScheduler().resume();
+                }
+            });
 //            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //                @Override
 //                public void onCompletion(MediaPlayer mediaPlayer) {
@@ -328,41 +315,9 @@ public class YueduService extends IntentService {
 
     private void setTunePath(final String tunePath) throws IOException, JavaLayerException {
         mDataSource = tunePath;
-
-        new AsyncTask<Void,Void,Void>() {
-
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(tunePath).openConnection();
-                    connection.connect();
-                    InputStream inputStream = connection.getInputStream();
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(getCacheDir(),SystemClock.elapsedRealtime()+".mp3"));
-                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-                    Decoder decoder = new Decoder();
-                    Bitstream bitstream = new Bitstream(inputStream);
-                    int minBufferSize = AudioTrack.getMinBufferSize(44100,AudioFormat.CHANNEL_CONFIGURATION_STEREO,AudioFormat.ENCODING_PCM_16BIT);
-                    AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC,44100,AudioFormat.CHANNEL_CONFIGURATION_STEREO,AudioFormat.ENCODING_PCM_16BIT,minBufferSize,AudioTrack.MODE_STREAM);
-                    track.play();
-                    Header header;
-                    while ((header = bitstream.readFrame()) != null) {
-                        SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                        track.write(buffer.getBuffer(),0,buffer.getBufferLength());
-                        for (short s : buffer.getBuffer()) {
-                            bufferedOutputStream.write((byte)(s & 0xff));
-                            bufferedOutputStream.write((byte)((s >> 8) & 0xff));
-                        }
-                        bitstream.closeFrame();
-                    }
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }finally {
-
-                }
-                return null;
-            }
-        }.execute((Void)null);
+        StreamingDownloadMediaPlayer player = getmPlayer();
+        player.reset();
+        player.setDataSource(new URL(tunePath));
     }
 
     private void play() {
