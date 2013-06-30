@@ -3,10 +3,7 @@ package com.yuedu.fm;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
+import android.os.*;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
@@ -17,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -36,7 +34,6 @@ import javazoom.jl.decoder.SampleBuffer;
  */
 public class StreamingDownloadMediaPlayer {
 
-    final static float MIN_AUDIO_PREPARE_TIME = 10000;//10 seconds
     public enum PlayerState {
         IDLE,
         INITIALIZED,
@@ -53,18 +50,19 @@ public class StreamingDownloadMediaPlayer {
             return readableMap.get(this);
         }
 
-        private static Map<PlayerState,String> readableMap;
+        private static Map<PlayerState, String> readableMap;
+
         static {
             readableMap = new HashMap<PlayerState, String>(9);
-            readableMap.put(IDLE,"IDLE");
-            readableMap.put(INITIALIZED,"INITIALIZED");
-            readableMap.put(PREPARING,"PREPARING");
-            readableMap.put(PREPARED,"PREPARED");
-            readableMap.put(STARTED,"STARTED");
-            readableMap.put(STOPPED,"STOPPED");
-            readableMap.put(PAUSED,"PAUSED");
-            readableMap.put(COMPLETED,"COMPLETED");
-            readableMap.put(END,"END");
+            readableMap.put(IDLE, "IDLE");
+            readableMap.put(INITIALIZED, "INITIALIZED");
+            readableMap.put(PREPARING, "PREPARING");
+            readableMap.put(PREPARED, "PREPARED");
+            readableMap.put(STARTED, "STARTED");
+            readableMap.put(STOPPED, "STOPPED");
+            readableMap.put(PAUSED, "PAUSED");
+            readableMap.put(COMPLETED, "COMPLETED");
+            readableMap.put(END, "END");
         }
     }
 
@@ -76,44 +74,23 @@ public class StreamingDownloadMediaPlayer {
     private Decoder mDecoder = new Decoder();
     private AudioTrack mAudioTrack;
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    private PrepareAsyncTask mPrepareTask;
-    private PlayAsyncTask mPlayTask;
-    private ArrayBlockingQueue<short[]> mBuffer = new ArrayBlockingQueue<short[]>(25);
-
+    private StreamingAsyncTask mStreamingTask;
+    private ArrayBlockingQueue<short[]> mBuffer = new ArrayBlockingQueue<short[]>(250);
     private OnPreparedListener mPreparedListener;
 
-    private static abstract class PrepareAsyncTask extends AsyncTask<URL,Void,Void> {
+    private abstract class StreamingAsyncTask extends AsyncTask<URL, Void, Void> {
         boolean blocking = false;
-    }
-
-    private class PlayAsyncTask extends AsyncTask<Void,Void,Void> {
-        private boolean isPaused = false;
-        private boolean isStopped = false;
-        private ReentrantLock pauseLock = new ReentrantLock();
-        private Condition unpaused = pauseLock.newCondition();
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            while(!isStopped) {
-                if (isPaused) {
-                    pauseLock.lock();
-                    try {
-                        unpaused.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } finally {
-                        pauseLock.unlock();
-                    }
-                }
-                writeDecodedFrameFromBufferToTrack(mBuffer,mAudioTrack);
-            }
-            return null;
-        }
+        boolean isPaused = false;
+        boolean isStopped = false;
+        boolean isPlaying = false;
+        ReentrantLock pauseLock = new ReentrantLock();
+        Condition unpaused = pauseLock.newCondition();
 
         public void pause() {
             pauseLock.lock();
             try {
                 isPaused = true;
+                isPlaying = false;
             } finally {
                 pauseLock.unlock();
             }
@@ -130,13 +107,13 @@ public class StreamingDownloadMediaPlayer {
                 } finally {
                     pauseLock.unlock();
                 }
-            }else {
-                execute(null);
             }
+            isPlaying = true;
         }
 
         public void stop() {
             isStopped = true;
+            isPlaying = false;
             cancel(true);
         }
     }
@@ -173,7 +150,7 @@ public class StreamingDownloadMediaPlayer {
             throw new IllegalArgumentException("input stream is null");
         }
         if (mState != PlayerState.IDLE) {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            throw new IllegalStateException("cannot setDataSource in [" + mState + "] state");
         }
         this.mURL = url;
         this.mState = PlayerState.INITIALIZED;
@@ -187,52 +164,66 @@ public class StreamingDownloadMediaPlayer {
             mAudioTrack.stop();
         }
         int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,44100,AudioFormat.CHANNEL_OUT_STEREO,AudioFormat.ENCODING_PCM_16BIT,minBufferSize,AudioTrack.MODE_STREAM);
+        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, minBufferSize, AudioTrack.MODE_STREAM);
     }
 
     public void prepare() throws IOException, BitstreamException, DecoderException, InterruptedException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED || mState == PlayerState.PREPARING) {
-            handleInput(mURL,mDecoder,false);
-        }else {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            handleInput(mURL, mDecoder, false);
+        } else {
+            throw new IllegalStateException("cannot prepare in [" + mState + "] state");
         }
     }
 
-    protected void handleInput(final URL url,final Decoder decoder, final boolean isAsynchronous) throws IOException, BitstreamException, DecoderException, InterruptedException {
+    protected void handleInput(final URL url, final Decoder decoder, final boolean isAsynchronous) throws IOException, BitstreamException, DecoderException, InterruptedException {
         boolean shouldCache = (getCacheDir() != null && getCacheDir().isDirectory());
         FileOutputStream fileOutputStream;
         final BufferedOutputStream bufferedOutputStream;
         if (shouldCache) {
-            fileOutputStream = new FileOutputStream(new File(getCacheDir(), SystemClock.elapsedRealtime()+".mp3"));
+            fileOutputStream = new FileOutputStream(new File(getCacheDir(), SystemClock.elapsedRealtime() + ".mp3"));
             bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        }else {
+        } else {
             bufferedOutputStream = null;
         }
-        mPrepareTask = new PrepareAsyncTask() {
+        mStreamingTask = new StreamingAsyncTask() {
             @Override
             protected Void doInBackground(URL... params) {
                 URL url1 = params[0];
                 HttpURLConnection connection = null;
-                InputStream inputStream = null;
-                Bitstream bitstream = null;
+                InputStream inputStream;
+                Bitstream bitstream;
                 try {
                     connection = (HttpURLConnection) url1.openConnection();
                     connection.connect();
                     inputStream = connection.getInputStream();
                     bitstream = new Bitstream(inputStream);
                     Header header;
-                    float decodedAudioTime = 0;
-                    float oneShotAudioTime = (float) (1000.0/44.1);
                     boolean prepared = false;
-                    while ((header = bitstream.readFrame()) != null) {
+                    while ((header = bitstream.readFrame()) != null && !isStopped) {
                         SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                        writeDecodedFrameToBuffer(mBuffer, buffer.getBuffer());
-                        if (bufferedOutputStream != null) {
-                            writeDecodedFrameToFile(bufferedOutputStream, buffer.getBuffer());
+                        short[] copyBuffer = new short[buffer.getBufferLength()];
+                        System.arraycopy(buffer.getBuffer(),0,copyBuffer,0,buffer.getBufferLength());
+                        if (isPaused) {
+                            pauseLock.lock();
+                            try {
+                                unpaused.await();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } finally {
+                                pauseLock.unlock();
+                            }
                         }
-                        decodedAudioTime += oneShotAudioTime;
-                        if (decodedAudioTime >= MIN_AUDIO_PREPARE_TIME && !prepared) {
-                            Log.d("yuedu","buffer is prepared!!!!!!!!!!!!!");
+                        if (mBuffer.remainingCapacity() > 0) {
+                            writeDecodedFrameToBuffer(mBuffer, copyBuffer);
+                        }
+                        if (isPlaying && mBuffer.size() > 0) {
+                            writeDecodedFrameFromBufferToTrack(mBuffer, mAudioTrack);
+                        }
+                        if (bufferedOutputStream != null) {
+                            writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
+                        }
+                        if (mBuffer.remainingCapacity()==0 && !prepared) {
+                            Log.d("yuedu", "buffer is prepared!!!!!!!!!!!!!");
                             prepared = true;
                             if (blocking) {
                                 notifyAll();
@@ -256,9 +247,9 @@ public class StreamingDownloadMediaPlayer {
                     if (inputStream != null) {
                         inputStream.close();
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     if (connection != null) {
                         connection.disconnect();
                     }
@@ -266,13 +257,13 @@ public class StreamingDownloadMediaPlayer {
                 return null;
             }
         };
-        synchronized (mPrepareTask) {
-            mPrepareTask.execute(url);
+        synchronized (mStreamingTask) {
+            mStreamingTask.execute(url);
             if (isAsynchronous) {
                 mState = PlayerState.PREPARING;
-            }else {
-                mPrepareTask.wait();
-                mPrepareTask.blocking = true;
+            } else {
+                mStreamingTask.wait();
+                mStreamingTask.blocking = true;
             }
         }
     }
@@ -289,35 +280,44 @@ public class StreamingDownloadMediaPlayer {
         });
     }
 
-    private void writeDecodedFrameFromBufferToTrack(final ArrayBlockingQueue<short[]> buffer,final AudioTrack track) {
-        if (buffer.remainingCapacity() == 0) {
+    static long totalTime = 0;
+    static int callNumber = 0;
+    private void writeDecodedFrameFromBufferToTrack(final ArrayBlockingQueue<short[]> buffer, final AudioTrack track) {
+        try {
+            long start = SystemClock.elapsedRealtime();
             short[] frame = readDecodedFrameFromBuffer(buffer);
-            track.write(frame,0,frame.length);
+            track.write(frame, 0, frame.length);
+            long end = SystemClock.elapsedRealtime();
+            totalTime += end - start;
+            callNumber += 1;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void writeDecodedFrameToBuffer(final ArrayBlockingQueue<short[]> buffer,short[] frameData) throws InterruptedException {
-        buffer.offer(frameData);
+    private void writeDecodedFrameToBuffer(final ArrayBlockingQueue<short[]> buffer, short[] frameData) throws InterruptedException {
+        buffer.put(frameData);
     }
 
-    private short[] readDecodedFrameFromBuffer(final ArrayBlockingQueue<short[]> buffer) {
-        return buffer.poll();
+    private short[] readDecodedFrameFromBuffer(final ArrayBlockingQueue<short[]> buffer) throws InterruptedException {
+        short[] frame = buffer.take();
+        return frame;
     }
 
-    protected void writeDecodedFrameToFile(final OutputStream outputStream,short[] frameData) throws IOException {
+    protected void writeDecodedFrameToFile(final OutputStream outputStream, short[] frameData) throws IOException {
         for (short s : frameData) {
-            outputStream.write((byte)(s & 0xff));
-            outputStream.write((byte)((s >> 8) & 0xff));
+            outputStream.write((byte) (s & 0xff));
+            outputStream.write((byte) ((s >> 8) & 0xff));
         }
     }
 
 
     public void prepareAsync() throws DecoderException, InterruptedException, BitstreamException, IOException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED) {
-            handleInput(mURL,mDecoder,true);
-        }else {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            handleInput(mURL, mDecoder, true);
+        } else {
+            throw new IllegalStateException("cannot prepareAsync in [" + mState + "] state");
         }
     }
 
@@ -325,12 +325,10 @@ public class StreamingDownloadMediaPlayer {
         if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED) {
             mState = PlayerState.STARTED;
             mAudioTrack.play();
-            if (mPlayTask == null) {
-                mPlayTask = new PlayAsyncTask();
-                mPlayTask.start();
-            }
-        }else {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            Log.d("yuedu","audio track is playing!!!!!");
+            mStreamingTask.start();
+        } else {
+            throw new IllegalStateException("cannot start in [" + mState + "] state");
         }
     }
 
@@ -338,9 +336,9 @@ public class StreamingDownloadMediaPlayer {
         if (mState == PlayerState.STARTED) {
             mState = PlayerState.PAUSED;
             mAudioTrack.pause();
-            mPlayTask.pause();
-        }else {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            mStreamingTask.pause();
+        } else {
+            throw new IllegalStateException("cannot pause in [" + mState + "] state");
         }
     }
 
@@ -348,9 +346,9 @@ public class StreamingDownloadMediaPlayer {
         if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED || mState == PlayerState.STARTED) {
             mState = PlayerState.STOPPED;
             mAudioTrack.stop();
-            mPlayTask.stop();
-        }else {
-            throw new IllegalStateException("cannot setDataSource in ["+mState +"] state");
+            mStreamingTask.stop();
+        } else {
+            throw new IllegalStateException("cannot stop in [" + mState + "] state");
         }
     }
 
@@ -382,12 +380,12 @@ public class StreamingDownloadMediaPlayer {
         mHandler = null;
         mURL = null;
         mPreparedListener = null;
-        if (mPrepareTask != null) {
-            if (!mPrepareTask.isCancelled()) {
-                mPrepareTask.cancel(true);
+        if (mStreamingTask != null) {
+            if (!mStreamingTask.isCancelled()) {
+                mStreamingTask.cancel(true);
             }
-            mPrepareTask.notifyAll();
-            mPrepareTask = null;
+            mStreamingTask.notifyAll();
+            mStreamingTask = null;
         }
     }
 
