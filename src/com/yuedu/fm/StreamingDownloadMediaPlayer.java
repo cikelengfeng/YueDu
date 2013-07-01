@@ -3,7 +3,10 @@ package com.yuedu.fm;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
@@ -14,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -101,12 +103,7 @@ public class StreamingDownloadMediaPlayer {
                 throw new IllegalStateException("play task has been stopped and cancelled");
             }
             if (isPaused) {
-                pauseLock.lock();
-                try {
-                    isPaused = false;
-                } finally {
-                    pauseLock.unlock();
-                }
+                resume();
             }
             isPlaying = true;
         }
@@ -115,6 +112,16 @@ public class StreamingDownloadMediaPlayer {
             isStopped = true;
             isPlaying = false;
             cancel(true);
+        }
+
+        public void resume() {
+            pauseLock.lock();
+            try {
+                isPaused = false;
+                unpaused.signalAll();
+            } finally {
+                pauseLock.unlock();
+            }
         }
     }
 
@@ -199,10 +206,7 @@ public class StreamingDownloadMediaPlayer {
                     bitstream = new Bitstream(inputStream);
                     Header header;
                     boolean prepared = false;
-                    while ((header = bitstream.readFrame()) != null && !isStopped) {
-                        SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                        short[] copyBuffer = new short[buffer.getBufferLength()];
-                        System.arraycopy(buffer.getBuffer(),0,copyBuffer,0,buffer.getBufferLength());
+                    while (((header = bitstream.readFrame()) != null || !mBuffer.isEmpty()) && !isStopped) {
                         if (isPaused) {
                             pauseLock.lock();
                             try {
@@ -213,16 +217,23 @@ public class StreamingDownloadMediaPlayer {
                                 pauseLock.unlock();
                             }
                         }
-                        if (mBuffer.remainingCapacity() > 0) {
-                            writeDecodedFrameToBuffer(mBuffer, copyBuffer);
+                        if (header != null) {//输入流已经读完，停止向buffer中写数据
+                            SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                            short[] copyBuffer = new short[buffer.getBufferLength()];
+                            System.arraycopy(buffer.getBuffer(), 0, copyBuffer, 0, buffer.getBufferLength());
+
+                            if (mBuffer.remainingCapacity() > 0) {
+                                writeDecodedFrameToBuffer(mBuffer, copyBuffer);
+                            }
+                            if (bufferedOutputStream != null) {
+                                writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
+                            }
                         }
-                        if (isPlaying && mBuffer.size() > 0) {
+
+                        if (isPlaying && !mBuffer.isEmpty()) {
                             writeDecodedFrameFromBufferToTrack(mBuffer, mAudioTrack);
                         }
-                        if (bufferedOutputStream != null) {
-                            writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
-                        }
-                        if (mBuffer.remainingCapacity()==0 && !prepared) {
+                        if (mBuffer.remainingCapacity() == 0 && !prepared) {
                             Log.d("yuedu", "buffer is prepared!!!!!!!!!!!!!");
                             prepared = true;
                             if (blocking) {
@@ -282,6 +293,7 @@ public class StreamingDownloadMediaPlayer {
 
     static long totalTime = 0;
     static int callNumber = 0;
+
     private void writeDecodedFrameFromBufferToTrack(final ArrayBlockingQueue<short[]> buffer, final AudioTrack track) {
         try {
             long start = SystemClock.elapsedRealtime();
@@ -290,6 +302,7 @@ public class StreamingDownloadMediaPlayer {
             long end = SystemClock.elapsedRealtime();
             totalTime += end - start;
             callNumber += 1;
+            Log.d("yuedu","writeDecodedFrameFromBufferToTrack time "+(end - start)+" avg "+totalTime/callNumber);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -325,7 +338,6 @@ public class StreamingDownloadMediaPlayer {
         if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED) {
             mState = PlayerState.STARTED;
             mAudioTrack.play();
-            Log.d("yuedu","audio track is playing!!!!!");
             mStreamingTask.start();
         } else {
             throw new IllegalStateException("cannot start in [" + mState + "] state");
