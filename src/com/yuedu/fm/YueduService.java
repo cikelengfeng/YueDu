@@ -136,6 +136,11 @@ public class YueduService extends IntentService {
                         getmScheduler().pause();
                     }
                     try {
+                        if (getmPlayer().isPlaying() || getmPlayer().isPaused() || getmPlayer().isCompleted()) {
+                            sendWillStopBroadcast();
+                            getmPlayer().stop();
+                            sendStoppedBroadcast();
+                        }
                         setTunePath(path);
                         prepareToPlay();
                     } catch (Exception e) {
@@ -331,11 +336,6 @@ public class YueduService extends IntentService {
         if (focus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             StreamingDownloadMediaPlayer player = getmPlayer();
             try {
-                if (player.isPlaying()) {
-                    sendWillStopBroadcast();
-                    player.stop();
-                    sendStoppedBroadcast();
-                }
                 sendWillPrepareBroadcast();
                 player.prepareAsync();
                 return true;

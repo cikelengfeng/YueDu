@@ -73,7 +73,6 @@ public class StreamingDownloadMediaPlayer {
     private PlayerState mState;
     private boolean mLooping;
     private File mCacheDir;
-    private Decoder mDecoder = new Decoder();
     private AudioTrack mAudioTrack;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private StreamingAsyncTask mStreamingTask;
@@ -109,6 +108,9 @@ public class StreamingDownloadMediaPlayer {
         }
 
         public void stop() {
+            if (isPaused){
+                resume();
+            }
             isStopped = true;
             isPlaying = false;
             cancel(true);
@@ -168,15 +170,20 @@ public class StreamingDownloadMediaPlayer {
         mState = PlayerState.IDLE;
         mLooping = false;
         if (mAudioTrack != null && isPlaying()) {
+            mAudioTrack.flush();
             mAudioTrack.stop();
         }
-        int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, minBufferSize, AudioTrack.MODE_STREAM);
+
+        if (mAudioTrack == null) {
+            int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+            Log.d("yuedu","min buffer size "+minBufferSize);
+            mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, minBufferSize, AudioTrack.MODE_STREAM);
+        }
     }
 
     public void prepare() throws IOException, BitstreamException, DecoderException, InterruptedException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED || mState == PlayerState.PREPARING) {
-            handleInput(mURL, mDecoder, false);
+            handleInput(mURL, new Decoder(), false);
         } else {
             throw new IllegalStateException("cannot prepare in [" + mState + "] state");
         }
@@ -205,23 +212,18 @@ public class StreamingDownloadMediaPlayer {
                     inputStream = connection.getInputStream();
                     bitstream = new Bitstream(inputStream);
                     Header header;
-                    boolean prepared = false;
+                    boolean firstPrepared = false;
+                    boolean bufferIsEmptyDuringPlaying = false;
                     while (((header = bitstream.readFrame()) != null || !mBuffer.isEmpty()) && !isStopped) {
                         if (isPaused) {
                             pauseLock.lock();
-                            try {
-                                unpaused.await();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } finally {
-                                pauseLock.unlock();
-                            }
+                            unpaused.await();
                         }
                         if (header != null) {//输入流已经读完，停止向buffer中写数据
-                            SampleBuffer buffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                            short[] copyBuffer = new short[buffer.getBufferLength()];
-                            System.arraycopy(buffer.getBuffer(), 0, copyBuffer, 0, buffer.getBufferLength());
-
+                            SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                            short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
+                            System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
+                            Log.d("yuedu","new frame size "+copyBuffer.length);
                             if (mBuffer.remainingCapacity() > 0) {
                                 writeDecodedFrameToBuffer(mBuffer, copyBuffer);
                             }
@@ -229,13 +231,18 @@ public class StreamingDownloadMediaPlayer {
                                 writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
                             }
                         }
+                        //when buffer is empty,we should wait for enough data
+                        bufferIsEmptyDuringPlaying = mBuffer.isEmpty() && mBuffer.size() < mBuffer.remainingCapacity()/2;
 
-                        if (isPlaying && !mBuffer.isEmpty()) {
+                        if (isPlaying && !bufferIsEmptyDuringPlaying) {
                             writeDecodedFrameFromBufferToTrack(mBuffer, mAudioTrack);
                         }
-                        if (mBuffer.remainingCapacity() == 0 && !prepared) {
+
+
+
+                        if (mBuffer.remainingCapacity() == 0 && !firstPrepared) {
                             Log.d("yuedu", "buffer is prepared!!!!!!!!!!!!!");
-                            prepared = true;
+                            firstPrepared = true;
                             if (blocking) {
                                 notifyAll();
                                 blocking = false;
@@ -258,9 +265,18 @@ public class StreamingDownloadMediaPlayer {
                     if (inputStream != null) {
                         inputStream.close();
                     }
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (DecoderException e) {
+                    e.printStackTrace();
+                } catch (BitstreamException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
+                    if (pauseLock.isLocked()) {
+                        pauseLock.unlock();
+                    }
                     if (connection != null) {
                         connection.disconnect();
                     }
@@ -302,7 +318,7 @@ public class StreamingDownloadMediaPlayer {
             long end = SystemClock.elapsedRealtime();
             totalTime += end - start;
             callNumber += 1;
-            Log.d("yuedu","writeDecodedFrameFromBufferToTrack time "+(end - start)+" avg "+totalTime/callNumber);
+//            Log.d("yuedu","writeDecodedFrameFromBufferToTrack time "+(end - start)+" avg "+totalTime/callNumber);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -328,7 +344,7 @@ public class StreamingDownloadMediaPlayer {
 
     public void prepareAsync() throws DecoderException, InterruptedException, BitstreamException, IOException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED) {
-            handleInput(mURL, mDecoder, true);
+            handleInput(mURL, new Decoder(), true);
         } else {
             throw new IllegalStateException("cannot prepareAsync in [" + mState + "] state");
         }
@@ -357,8 +373,10 @@ public class StreamingDownloadMediaPlayer {
     public void stop() {
         if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED || mState == PlayerState.STARTED) {
             mState = PlayerState.STOPPED;
-            mAudioTrack.stop();
+            mBuffer.clear();
             mStreamingTask.stop();
+            mAudioTrack.flush();
+            mAudioTrack.stop();
         } else {
             throw new IllegalStateException("cannot stop in [" + mState + "] state");
         }
@@ -382,13 +400,22 @@ public class StreamingDownloadMediaPlayer {
         return mState == PlayerState.STARTED;
     }
 
+    public boolean isPaused() {
+        return mState == PlayerState.PAUSED;
+    }
+
+    public boolean isCompleted() {
+        return mState == PlayerState.COMPLETED;
+    }
+
     public void release() {
-        if (isPlaying()) {
+        if (mAudioTrack != null) {
+            mAudioTrack.flush();
             mAudioTrack.stop();
+            mAudioTrack.release();
+            mAudioTrack = null;
         }
-        mAudioTrack = null;
         mCacheDir = null;
-        mDecoder = null;
         mHandler = null;
         mURL = null;
         mPreparedListener = null;

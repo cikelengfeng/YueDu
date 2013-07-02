@@ -65,7 +65,7 @@ public class MainPlayer extends FragmentActivity {
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION)) {
                 long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
                 setCurrentPosition((int) currentPosition);
-                Log.d("yuedu","new position "+currentPosition);
+//                Log.d("yuedu","new position "+currentPosition);
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
                 setPlayButtonPlaying(false);
                 Log.d("yuedu","media player is paused!!!!");
@@ -80,6 +80,7 @@ public class MainPlayer extends FragmentActivity {
                 Log.d("yuedu","media player will pause!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
                 Log.d("yuedu","media player will prepare!!!!");
+                setPlayButtonPlaying(true);
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                 Log.d("yuedu","media player error occurred!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
