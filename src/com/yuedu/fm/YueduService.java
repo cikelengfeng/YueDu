@@ -185,6 +185,7 @@ public class YueduService extends IntentService {
     public StreamingDownloadMediaPlayer getmPlayer() {
         if (mPlayer == null) {
             mPlayer = new StreamingDownloadMediaPlayer();
+//            mPlayer.setCacheDir(getExternalCacheDir());
             //TODO listener API
             mPlayer.setOnPreparedListener(new StreamingDownloadMediaPlayer.OnPreparedListener() {
                 @Override

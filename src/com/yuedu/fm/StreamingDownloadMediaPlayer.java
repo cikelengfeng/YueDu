@@ -101,14 +101,12 @@ public class StreamingDownloadMediaPlayer {
             if (isCancelled()) {
                 throw new IllegalStateException("play task has been stopped and cancelled");
             }
-            if (isPaused) {
-                resume();
-            }
+            resume();
             isPlaying = true;
         }
 
         public void stop() {
-            if (isPaused){
+            if (isPaused) {
                 resume();
             }
             isStopped = true;
@@ -170,14 +168,13 @@ public class StreamingDownloadMediaPlayer {
         mState = PlayerState.IDLE;
         mLooping = false;
         if (mAudioTrack != null && isPlaying()) {
+            mAudioTrack.pause();
             mAudioTrack.flush();
-            mAudioTrack.stop();
         }
 
         if (mAudioTrack == null) {
-            int minBufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-            Log.d("yuedu","min buffer size "+minBufferSize);
-            mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, minBufferSize, AudioTrack.MODE_STREAM);
+            mBufferSize = 2 * AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+            mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, mBufferSize, AudioTrack.MODE_STREAM);
         }
     }
 
@@ -213,35 +210,15 @@ public class StreamingDownloadMediaPlayer {
                     bitstream = new Bitstream(inputStream);
                     Header header;
                     boolean firstPrepared = false;
-                    boolean bufferIsEmptyDuringPlaying = false;
-                    while (((header = bitstream.readFrame()) != null || !mBuffer.isEmpty()) && !isStopped) {
+                    int totalBytes = 0;
+                    int oneshootBytes = 0;
+                    while ((header = bitstream.readFrame()) != null && !isStopped) {
                         if (isPaused) {
                             pauseLock.lock();
                             unpaused.await();
                         }
-                        if (header != null) {//输入流已经读完，停止向buffer中写数据
-                            SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                            short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
-                            System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
-                            Log.d("yuedu","new frame size "+copyBuffer.length);
-                            if (mBuffer.remainingCapacity() > 0) {
-                                writeDecodedFrameToBuffer(mBuffer, copyBuffer);
-                            }
-                            if (bufferedOutputStream != null) {
-                                writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
-                            }
-                        }
-                        //when buffer is empty,we should wait for enough data
-                        bufferIsEmptyDuringPlaying = mBuffer.isEmpty() && mBuffer.size() < mBuffer.remainingCapacity()/2;
 
-                        if (isPlaying && !bufferIsEmptyDuringPlaying) {
-                            writeDecodedFrameFromBufferToTrack(mBuffer, mAudioTrack);
-                        }
-
-
-
-                        if (mBuffer.remainingCapacity() == 0 && !firstPrepared) {
-                            Log.d("yuedu", "buffer is prepared!!!!!!!!!!!!!");
+                        if (totalBytes >= mBufferSize - 2 * oneshootBytes && !firstPrepared) {
                             firstPrepared = true;
                             if (blocking) {
                                 notifyAll();
@@ -249,11 +226,18 @@ public class StreamingDownloadMediaPlayer {
                             }
                             notifyPrepared();
                         }
+
+                        SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                        oneshootBytes = decoderBuffer.getBufferLength() * 2;
+                        short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
+                        System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
+                        mAudioTrack.write(copyBuffer, 0, decoderBuffer.getBufferLength());
+                        totalBytes += oneshootBytes;
+
+                        if (bufferedOutputStream != null) {
+                            writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
+                        }
                         bitstream.closeFrame();
-                    }
-                    if (blocking) {
-                        notifyAll();
-                        blocking = false;
                     }
                     if (bufferedOutputStream != null) {
                         bufferedOutputStream.flush();
@@ -318,7 +302,6 @@ public class StreamingDownloadMediaPlayer {
             long end = SystemClock.elapsedRealtime();
             totalTime += end - start;
             callNumber += 1;
-//            Log.d("yuedu","writeDecodedFrameFromBufferToTrack time "+(end - start)+" avg "+totalTime/callNumber);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -373,8 +356,8 @@ public class StreamingDownloadMediaPlayer {
     public void stop() {
         if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED || mState == PlayerState.STARTED) {
             mState = PlayerState.STOPPED;
-            mBuffer.clear();
             mStreamingTask.stop();
+            mAudioTrack.pause();
             mAudioTrack.flush();
             mAudioTrack.stop();
         } else {
@@ -410,8 +393,8 @@ public class StreamingDownloadMediaPlayer {
 
     public void release() {
         if (mAudioTrack != null) {
+            mAudioTrack.pause();
             mAudioTrack.flush();
-            mAudioTrack.stop();
             mAudioTrack.release();
             mAudioTrack = null;
         }
