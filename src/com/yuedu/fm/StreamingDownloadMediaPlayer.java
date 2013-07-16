@@ -8,12 +8,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -99,7 +97,6 @@ public class StreamingDownloadMediaPlayer {
                 throw new IllegalStateException("play task has been stopped and cancelled");
             }
             resume();
-            isPlaying = true;
         }
 
         public void stop() {
@@ -113,8 +110,9 @@ public class StreamingDownloadMediaPlayer {
 
         public void resume() {
             pauseLock.lock();
+            isPaused = false;
+            isPlaying = true;
             try {
-                isPaused = false;
                 unpaused.signalAll();
             } finally {
                 pauseLock.unlock();
@@ -184,28 +182,84 @@ public class StreamingDownloadMediaPlayer {
         }
     }
 
+    final private static class FileStreamingPipe extends InputStream {
+
+        private InputStream inputStream;
+        private FileOutputStream outputStream;
+
+        private FileStreamingPipe(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        @Override
+        public int available() throws IOException {
+            return inputStream.available();
+        }
+
+        @Override
+        public void close() throws IOException {
+            inputStream.close();
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
+
+        @Override
+        public void mark(int readlimit) {
+            inputStream.mark(readlimit);
+        }
+
+        @Override
+        public boolean markSupported() {
+            return inputStream.markSupported();
+        }
+
+        @Override
+        public int read(byte[] buffer, int offset, int length) throws IOException {
+            int result = inputStream.read(buffer,offset,length);
+            if (outputStream != null) {
+                outputStream.write(buffer,offset,length);
+            }
+            return result;
+        }
+
+        @Override
+        public synchronized void reset() throws IOException {
+            inputStream.reset();
+        }
+
+        @Override
+        public long skip(long byteCount) throws IOException {
+            return inputStream.skip(byteCount);
+        }
+
+        @Override
+        public int read() throws IOException {
+            return inputStream.read();
+        }
+    }
+
     protected void handleInput(final URL url, final Decoder decoder) throws IOException, BitstreamException, DecoderException, InterruptedException {
         boolean shouldCache = (getCacheDir() != null && getCacheDir().isDirectory());
-        FileOutputStream fileOutputStream;
-        final BufferedOutputStream bufferedOutputStream;
+        final FileOutputStream fileOutputStream;
         if (shouldCache) {
             fileOutputStream = new FileOutputStream(new File(getCacheDir(), SystemClock.elapsedRealtime() + ".mp3"));
-            bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        } else {
-            bufferedOutputStream = null;
+        }else {
+            fileOutputStream = null;
         }
         mStreamingTask = new StreamingAsyncTask() {
             @Override
             protected Void doInBackground(URL... params) {
                 URL url1 = params[0];
                 HttpURLConnection connection = null;
-                InputStream inputStream;
+                FileStreamingPipe filePipe;
                 Bitstream bitstream;
                 try {
                     connection = (HttpURLConnection) url1.openConnection();
                     connection.connect();
-                    inputStream = connection.getInputStream();
-                    bitstream = new Bitstream(inputStream);
+                    filePipe = new FileStreamingPipe(connection.getInputStream());
+                    filePipe.outputStream = fileOutputStream;
+                    bitstream = new Bitstream(filePipe);
                     Header header;
                     boolean firstPrepared = false;
                     int totalBytes = 0;
@@ -213,7 +267,11 @@ public class StreamingDownloadMediaPlayer {
                     while ((header = bitstream.readFrame()) != null && !isStopped) {
                         if (isPaused) {
                             pauseLock.lock();
-                            unpaused.await();
+                            try {
+                                unpaused.await();
+                            }finally {
+                                pauseLock.unlock();
+                            }
                         }
 
                         if (totalBytes >= mBufferSize - 2 * oneshootBytes && !firstPrepared) {
@@ -227,21 +285,16 @@ public class StreamingDownloadMediaPlayer {
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
                         mAudioTrack.write(copyBuffer, 0, decoderBuffer.getBufferLength());
                         totalBytes += oneshootBytes;
-
-                        if (bufferedOutputStream != null) {
-                            writeDecodedFrameToFile(bufferedOutputStream, copyBuffer);
-                        }
                         bitstream.closeFrame();
                     }
-                    if (bufferedOutputStream != null) {
-                        bufferedOutputStream.flush();
-                        bufferedOutputStream.close();
+                    if (filePipe != null) {
+                        filePipe.close();
                     }
                     if (bitstream != null) {
                         bitstream.close();
                     }
-                    if (inputStream != null) {
-                        inputStream.close();
+                    if (filePipe != null) {
+                        filePipe.close();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -252,9 +305,6 @@ public class StreamingDownloadMediaPlayer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    if (pauseLock.isLocked()) {
-                        pauseLock.unlock();
-                    }
                     if (connection != null) {
                         connection.disconnect();
                     }
@@ -277,14 +327,6 @@ public class StreamingDownloadMediaPlayer {
             }
         });
     }
-
-    protected void writeDecodedFrameToFile(final OutputStream outputStream, short[] frameData) throws IOException {
-        for (short s : frameData) {
-            outputStream.write((byte) (s & 0xff));
-            outputStream.write((byte) ((s >> 8) & 0xff));
-        }
-    }
-
 
     public void prepareAsync() throws DecoderException, InterruptedException, BitstreamException, IOException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED) {
