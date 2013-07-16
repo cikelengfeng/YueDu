@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -19,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -76,11 +74,10 @@ public class StreamingDownloadMediaPlayer {
     private AudioTrack mAudioTrack;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private StreamingAsyncTask mStreamingTask;
-    private ArrayBlockingQueue<short[]> mBuffer = new ArrayBlockingQueue<short[]>(250);
+    private int mBufferSize;
     private OnPreparedListener mPreparedListener;
 
     private abstract class StreamingAsyncTask extends AsyncTask<URL, Void, Void> {
-        boolean blocking = false;
         boolean isPaused = false;
         boolean isStopped = false;
         boolean isPlaying = false;
@@ -180,13 +177,14 @@ public class StreamingDownloadMediaPlayer {
 
     public void prepare() throws IOException, BitstreamException, DecoderException, InterruptedException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED || mState == PlayerState.PREPARING) {
-            handleInput(mURL, new Decoder(), false);
+//            handleInput(mURL, new Decoder(), false);
+            throw new UnsupportedOperationException("not supported");
         } else {
             throw new IllegalStateException("cannot prepare in [" + mState + "] state");
         }
     }
 
-    protected void handleInput(final URL url, final Decoder decoder, final boolean isAsynchronous) throws IOException, BitstreamException, DecoderException, InterruptedException {
+    protected void handleInput(final URL url, final Decoder decoder) throws IOException, BitstreamException, DecoderException, InterruptedException {
         boolean shouldCache = (getCacheDir() != null && getCacheDir().isDirectory());
         FileOutputStream fileOutputStream;
         final BufferedOutputStream bufferedOutputStream;
@@ -220,10 +218,6 @@ public class StreamingDownloadMediaPlayer {
 
                         if (totalBytes >= mBufferSize - 2 * oneshootBytes && !firstPrepared) {
                             firstPrepared = true;
-                            if (blocking) {
-                                notifyAll();
-                                blocking = false;
-                            }
                             notifyPrepared();
                         }
 
@@ -268,15 +262,8 @@ public class StreamingDownloadMediaPlayer {
                 return null;
             }
         };
-        synchronized (mStreamingTask) {
-            mStreamingTask.execute(url);
-            if (isAsynchronous) {
-                mState = PlayerState.PREPARING;
-            } else {
-                mStreamingTask.wait();
-                mStreamingTask.blocking = true;
-            }
-        }
+        mStreamingTask.execute(url);
+        mState = PlayerState.PREPARING;
     }
 
     private void notifyPrepared() {
@@ -291,32 +278,6 @@ public class StreamingDownloadMediaPlayer {
         });
     }
 
-    static long totalTime = 0;
-    static int callNumber = 0;
-
-    private void writeDecodedFrameFromBufferToTrack(final ArrayBlockingQueue<short[]> buffer, final AudioTrack track) {
-        try {
-            long start = SystemClock.elapsedRealtime();
-            short[] frame = readDecodedFrameFromBuffer(buffer);
-            track.write(frame, 0, frame.length);
-            long end = SystemClock.elapsedRealtime();
-            totalTime += end - start;
-            callNumber += 1;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void writeDecodedFrameToBuffer(final ArrayBlockingQueue<short[]> buffer, short[] frameData) throws InterruptedException {
-        buffer.put(frameData);
-    }
-
-    private short[] readDecodedFrameFromBuffer(final ArrayBlockingQueue<short[]> buffer) throws InterruptedException {
-        short[] frame = buffer.take();
-        return frame;
-    }
-
     protected void writeDecodedFrameToFile(final OutputStream outputStream, short[] frameData) throws IOException {
         for (short s : frameData) {
             outputStream.write((byte) (s & 0xff));
@@ -327,7 +288,7 @@ public class StreamingDownloadMediaPlayer {
 
     public void prepareAsync() throws DecoderException, InterruptedException, BitstreamException, IOException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED) {
-            handleInput(mURL, new Decoder(), true);
+            handleInput(mURL, new Decoder());
         } else {
             throw new IllegalStateException("cannot prepareAsync in [" + mState + "] state");
         }
