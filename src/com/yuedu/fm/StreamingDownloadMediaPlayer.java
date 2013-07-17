@@ -121,7 +121,7 @@ public class StreamingDownloadMediaPlayer {
     }
 
     static public interface OnPreparedListener {
-        void onPrepared(StreamingDownloadMediaPlayer mediaPlayer);
+        abstract void onPrepared(StreamingDownloadMediaPlayer mediaPlayer);
     }
 
     public PlayerState getState() {
@@ -175,7 +175,6 @@ public class StreamingDownloadMediaPlayer {
 
     public void prepare() throws IOException, BitstreamException, DecoderException, InterruptedException {
         if (mState == PlayerState.INITIALIZED || mState == PlayerState.STOPPED || mState == PlayerState.PREPARING) {
-//            handleInput(mURL, new Decoder(), false);
             throw new UnsupportedOperationException("not supported");
         } else {
             throw new IllegalStateException("cannot prepare in [" + mState + "] state");
@@ -373,8 +372,7 @@ public class StreamingDownloadMediaPlayer {
     }
 
     public long getCurrentPosition() {
-        //TODO
-        return 0;
+        return Math.round(mAudioTrack.getPlaybackHeadPosition()/mAudioTrack.getSampleRate())*1000;
     }
 
     public long getDuration() {
