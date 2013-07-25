@@ -15,6 +15,7 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
@@ -185,7 +186,10 @@ public class YueduService extends IntentService {
     public StreamingDownloadMediaPlayer getmPlayer() {
         if (mPlayer == null) {
             mPlayer = new StreamingDownloadMediaPlayer();
-//            mPlayer.setCacheDir(getExternalCacheDir());
+            File diskFileCacheDir = new File(getExternalCacheDir(),"yuedu.audio.cache");
+            if (diskFileCacheDir.exists() || diskFileCacheDir.mkdirs()) {
+                mPlayer.setCacheDir(diskFileCacheDir);
+            }
             //TODO listener API
             mPlayer.setOnPreparedListener(new StreamingDownloadMediaPlayer.OnPreparedListener() {
                 @Override
@@ -197,16 +201,16 @@ public class YueduService extends IntentService {
                     getmScheduler().resume();
                 }
             });
-//            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                @Override
-//                public void onCompletion(MediaPlayer mediaPlayer) {
-//                    if (mScheduler != null) {
-//                        getmScheduler().purge();
-//                        getmScheduler().pause();
-//                    }
-//                    sendCompletionBroadcast();
-//                }
-//            });
+            mPlayer.setOnCompletionListener(new StreamingDownloadMediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(StreamingDownloadMediaPlayer mediaPlayer) {
+                    if (mScheduler != null) {
+                        getmScheduler().purge();
+                        getmScheduler().pause();
+                    }
+                    sendCompletionBroadcast();
+                }
+            });
 //            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 //                @Override
 //                public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
@@ -216,12 +220,6 @@ public class YueduService extends IntentService {
 //                    }
 //                    sendErrorOccurredBroadcast("error");
 //                    return false;
-//                }
-//            });
-//            mPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-//                @Override
-//                public void onBufferingUpdate(MediaPlayer mp, int percent) {
-//                    Log.d("yuedu", "buffer percent " + percent);
 //                }
 //            });
         }

@@ -207,7 +207,7 @@ public class MainPlayer extends FragmentActivity {
     public ImageFetcher getmImageFetcher() {
         if (mImageFetcher == null) {
             ImageCacheParams cacheParams = new ImageCacheParams(getApplicationContext(),
-                    "yueducache");
+                    "yuedu.image.cache");
 
             cacheParams.setMemCacheSizePercent(0.6f); // Set memory cache to 60% of app memory
             mImageFetcher = new ImageFetcher(getApplicationContext(), -1);

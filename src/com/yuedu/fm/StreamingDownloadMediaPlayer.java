@@ -6,12 +6,17 @@ import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
+import android.util.Log;
+
+import com.yuedu.image.DiskLruCache;
+import com.yuedu.utils.MD5Util;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -70,10 +75,15 @@ public class StreamingDownloadMediaPlayer {
     private boolean mLooping;
     private File mCacheDir;
     private AudioTrack mAudioTrack;
+    private DiskLruCache mDiskCache;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private StreamingAsyncTask mStreamingTask;
     private int mBufferSize;
     private OnPreparedListener mPreparedListener;
+    private OnCompletionListener mCompletionListener;
+
+    private static final int DISK_FILE_CACHE_INDEX = 0;
+    private static final int DISK_FILE_CACHE_VERSION = 1;
 
     private abstract class StreamingAsyncTask extends AsyncTask<URL, Void, Void> {
         boolean isPaused = false;
@@ -124,6 +134,10 @@ public class StreamingDownloadMediaPlayer {
         abstract void onPrepared(StreamingDownloadMediaPlayer mediaPlayer);
     }
 
+    static public interface OnCompletionListener {
+        abstract void onCompletion(StreamingDownloadMediaPlayer mediaPlayer);
+    }
+
     public PlayerState getState() {
         return mState;
     }
@@ -140,11 +154,27 @@ public class StreamingDownloadMediaPlayer {
         this.mPreparedListener = mPreparedListener;
     }
 
+    public void setOnCompletionListener(OnCompletionListener onCompletionListener) {
+        this.mCompletionListener = onCompletionListener;
+    }
+
     public void setCacheDir(File dir) {
         if (dir == null || !dir.isDirectory()) {
             throw new IllegalArgumentException("input dir is null or not a directory");
         }
         mCacheDir = dir;
+    }
+
+    private DiskLruCache getDiskCache() {
+        File cacheDir = getCacheDir();
+        if (cacheDir != null && cacheDir.isDirectory() && mDiskCache == null) {
+            try {
+                mDiskCache = DiskLruCache.open(cacheDir,DISK_FILE_CACHE_VERSION,1,200*1024*1024);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mDiskCache;
     }
 
     public void setDataSource(URL url) {
@@ -170,6 +200,19 @@ public class StreamingDownloadMediaPlayer {
         if (mAudioTrack == null) {
             mBufferSize = 2 * AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
             mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, mBufferSize, AudioTrack.MODE_STREAM);
+            mAudioTrack.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
+                @Override
+                public void onMarkerReached(AudioTrack audioTrack) {
+                    if (mCompletionListener != null) {
+                        mCompletionListener.onCompletion(StreamingDownloadMediaPlayer.this);
+                    }
+                }
+
+                @Override
+                public void onPeriodicNotification(AudioTrack audioTrack) {
+
+                }
+            });
         }
     }
 
@@ -181,13 +224,14 @@ public class StreamingDownloadMediaPlayer {
         }
     }
 
-    final private static class FileStreamingPipe extends InputStream {
+    final private static class StreamingPipe extends InputStream {
 
         private InputStream inputStream;
-        private FileOutputStream outputStream;
+        private OutputStream outputStream;
 
-        private FileStreamingPipe(InputStream inputStream) {
+        private StreamingPipe(@NotNull InputStream inputStream, @NotNull OutputStream outputStream) {
             this.inputStream = inputStream;
+            this.outputStream = outputStream;
         }
 
         @Override
@@ -239,26 +283,29 @@ public class StreamingDownloadMediaPlayer {
     }
 
     protected void handleInput(final URL url, final Decoder decoder) throws IOException, BitstreamException, DecoderException, InterruptedException {
-        boolean shouldCache = (getCacheDir() != null && getCacheDir().isDirectory());
-        final FileOutputStream fileOutputStream;
-        if (shouldCache) {
-            fileOutputStream = new FileOutputStream(new File(getCacheDir(), SystemClock.elapsedRealtime() + ".mp3"));
-        }else {
-            fileOutputStream = null;
-        }
         mStreamingTask = new StreamingAsyncTask() {
             @Override
             protected Void doInBackground(URL... params) {
                 URL url1 = params[0];
                 HttpURLConnection connection = null;
-                FileStreamingPipe filePipe;
-                Bitstream bitstream;
+                InputStream inputStream = null;
+                Bitstream bitstream = null;
+                DiskLruCache diskCache = getDiskCache();
+                String key = MD5Util.md5(url.getPath());
+                DiskLruCache.Editor diskEditor = null;
                 try {
-                    connection = (HttpURLConnection) url1.openConnection();
-                    connection.connect();
-                    filePipe = new FileStreamingPipe(connection.getInputStream());
-                    filePipe.outputStream = fileOutputStream;
-                    bitstream = new Bitstream(filePipe);
+                    DiskLruCache.Snapshot mp3Snapshot = diskCache.get(key);
+                    if (mp3Snapshot != null) {
+                        inputStream = mp3Snapshot.getInputStream(DISK_FILE_CACHE_INDEX);
+                    }else {
+                        connection = (HttpURLConnection) url1.openConnection();
+                        connection.connect();
+                        diskEditor = diskCache.edit(key);
+                        inputStream = new StreamingPipe(connection.getInputStream(),diskEditor.newOutputStream(DISK_FILE_CACHE_INDEX));
+                    }
+                    Log.d("yuedu","audio content length  "+ connection.getContentLength());
+                    mAudioTrack.setNotificationMarkerPosition(connection.getContentLength()*2);
+                    bitstream = new Bitstream(inputStream);
                     Header header;
                     boolean firstPrepared = false;
                     int totalBytes = 0;
@@ -279,6 +326,7 @@ public class StreamingDownloadMediaPlayer {
                         }
 
                         SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
+                        Log.d("yuedu","header size in bytes "+decoderBuffer.getBufferLength()*2+" frames "+header.calculate_framesize());
                         oneshootBytes = decoderBuffer.getBufferLength() * 2;
                         short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
@@ -286,27 +334,36 @@ public class StreamingDownloadMediaPlayer {
                         totalBytes += oneshootBytes;
                         bitstream.closeFrame();
                     }
-                    if (filePipe != null) {
-                        filePipe.close();
+                    if (diskEditor != null) {
+                        diskEditor.commit();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (diskEditor != null) {
+                        try {
+                            //任何情况下播放异常中断，都撤销磁盘存储
+                            diskEditor.abort();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } finally {
+                    if (inputStream != null) {
+                        DiskLruCache.closeQuietly(inputStream);
                     }
                     if (bitstream != null) {
-                        bitstream.close();
+                        try {
+                            bitstream.close();
+                        } catch (BitstreamException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    if (filePipe != null) {
-                        filePipe.close();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (DecoderException e) {
-                    e.printStackTrace();
-                } catch (BitstreamException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
                     if (connection != null) {
                         connection.disconnect();
                     }
+                    isStopped = true;
+                    isPaused = false;
+                    isPlaying = false;
                 }
                 return null;
             }
