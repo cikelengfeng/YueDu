@@ -6,7 +6,6 @@ import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.yuedu.image.DiskLruCache;
 import com.yuedu.utils.MD5Util;
@@ -147,6 +146,9 @@ public class StreamingDownloadMediaPlayer {
     }
 
     public File getCacheDir() {
+        if (mCacheDir != null && mCacheDir.exists()) {
+            mCacheDir.mkdirs();
+        }
         return mCacheDir;
     }
 
@@ -241,7 +243,9 @@ public class StreamingDownloadMediaPlayer {
 
         @Override
         public void close() throws IOException {
-            inputStream.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
             if (outputStream != null) {
                 outputStream.close();
             }
@@ -297,14 +301,14 @@ public class StreamingDownloadMediaPlayer {
                     DiskLruCache.Snapshot mp3Snapshot = diskCache.get(key);
                     if (mp3Snapshot != null) {
                         inputStream = mp3Snapshot.getInputStream(DISK_FILE_CACHE_INDEX);
+                        diskCache.flush();
                     }else {
                         connection = (HttpURLConnection) url1.openConnection();
                         connection.connect();
                         diskEditor = diskCache.edit(key);
                         inputStream = new StreamingPipe(connection.getInputStream(),diskEditor.newOutputStream(DISK_FILE_CACHE_INDEX));
+                        mAudioTrack.setNotificationMarkerPosition(connection.getContentLength()*2);
                     }
-                    Log.d("yuedu","audio content length  "+ connection.getContentLength());
-                    mAudioTrack.setNotificationMarkerPosition(connection.getContentLength()*2);
                     bitstream = new Bitstream(inputStream);
                     Header header;
                     boolean firstPrepared = false;
@@ -326,7 +330,7 @@ public class StreamingDownloadMediaPlayer {
                         }
 
                         SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-                        Log.d("yuedu","header size in bytes "+decoderBuffer.getBufferLength()*2+" frames "+header.calculate_framesize());
+//                        Log.d("yuedu","header size in bytes "+decoderBuffer.getBufferLength()*2+" frames "+header.calculate_framesize());
                         oneshootBytes = decoderBuffer.getBufferLength() * 2;
                         short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
@@ -335,7 +339,12 @@ public class StreamingDownloadMediaPlayer {
                         bitstream.closeFrame();
                     }
                     if (diskEditor != null) {
-                        diskEditor.commit();
+                        if (isStopped) {
+                            diskEditor.abort();
+                        }else {
+                            diskEditor.commit();
+                        }
+                        diskCache.flush();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
