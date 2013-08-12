@@ -303,7 +303,7 @@ public class MainPlayer extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE | Context.BIND_IMPORTANT);
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
         registerLocalBroadcastReceiver();
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {
@@ -448,7 +448,7 @@ public class MainPlayer extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_player, menu);
-        return true;
+        return false;
     }
 
     static private class PlaylistAdapter extends ArrayAdapter<JSONObject> {
