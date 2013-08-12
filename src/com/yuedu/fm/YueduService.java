@@ -16,6 +16,7 @@ import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
@@ -211,17 +212,22 @@ public class YueduService extends IntentService {
                     sendCompletionBroadcast();
                 }
             });
-//            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//                @Override
-//                public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-//                    if (mScheduler != null) {
-//                        getmScheduler().purge();
-//                        getmScheduler().pause();
-//                    }
-//                    sendErrorOccurredBroadcast("error");
-//                    return false;
-//                }
-//            });
+            mPlayer.setOnErrorListener(new StreamingDownloadMediaPlayer.OnErrorListener() {
+                @Override
+                public void onError(StreamingDownloadMediaPlayer mediaPlayer, Throwable e) {
+                    if (mScheduler != null) {
+                        getmScheduler().purge();
+                        getmScheduler().pause();
+                    }
+                    String error;
+                    if (e instanceof FileNotFoundException) {
+                        error = "未发现网络音频文件";
+                    }else {
+                        error = e.getLocalizedMessage();
+                    }
+                    sendErrorOccurredBroadcast(error);
+                }
+            });
         }
         return mPlayer;
     }

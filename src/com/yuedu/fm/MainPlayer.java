@@ -6,15 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +26,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,8 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -65,7 +61,6 @@ public class MainPlayer extends FragmentActivity {
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION)) {
                 long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
                 setCurrentPosition((int) currentPosition);
-//                Log.d("yuedu","new position "+currentPosition);
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
                 setPlayButtonPlaying(false);
                 Log.d("yuedu","media player is paused!!!!");
@@ -83,6 +78,7 @@ public class MainPlayer extends FragmentActivity {
                 setPlayButtonPlaying(true);
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                 Log.d("yuedu","media player error occurred!!!!");
+                Toast.makeText(getApplicationContext(),intent.getStringExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY),Toast.LENGTH_SHORT).show();
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
                 setPlayButtonPlaying(false);
                 Log.d("yuedu","media player complete!!!!");
@@ -511,37 +507,6 @@ public class MainPlayer extends FragmentActivity {
                 }
             }
         }
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public Signature getApkSignature(String apkPath) throws Exception {
-        Class clazz = Class.forName("android.content.pm.PackageParser");
-        Method method = clazz.getMethod("parsePackage", File.class,
-                String.class, DisplayMetrics.class, int.class);
-
-        Object packageParser = clazz.getConstructor(String.class).newInstance(
-                "");
-        Object packag = method.invoke(packageParser, new File(apkPath), null,
-                this.getResources().getDisplayMetrics(), 0x0004);
-
-        method = clazz.getMethod("collectCertificates",
-                Class.forName("android.content.pm.PackageParser$Package"),
-                int.class);
-        method.invoke(packageParser, packag, PackageManager.GET_SIGNATURES);
-
-        Signature mSignatures[] = (Signature[]) packag.getClass()
-                .getField("mSignatures").get(packag);
-        return mSignatures.length > 0 ? mSignatures[0] : null;
-    }
-
-    /**
-     * 获得当前程序的apk的签名信息
-     *
-     * @return
-     * @throws Exception
-     */
-    public Signature getApkSignature() throws Exception {
-        return getApkSignature(this.getApplicationInfo().publicSourceDir);
     }
 
 }

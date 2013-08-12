@@ -468,7 +468,7 @@ public class StreamingDownloadMediaPlayer {
     }
 
     public long getCurrentPosition() {
-        return Math.round(mAudioTrack.getPlaybackHeadPosition()/mAudioTrack.getSampleRate())*1000;
+        return Math.round(mAudioTrack.getPlaybackHeadPosition()/mAudioTrack.getPlaybackRate())*1000;
     }
 
     public long getDuration() {
