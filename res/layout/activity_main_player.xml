@@ -3,12 +3,46 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MainPlayer" >
-    
+
+    <ImageButton
+            android:id="@+id/playlist_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="call playlist menu"
+            android:src="@drawable/list"
+            android:background="@null"
+            android:layout_alignParentBottom="true" android:layout_marginTop="5dp" android:layout_marginLeft="25dp"
+            />
+
+    <ImageButton
+            android:id="@+id/play_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="play or pause"
+            android:src="@drawable/play_button_selector"
+            android:background="@null"
+            android:layout_marginTop="5dp"/>
+
+    <ImageButton
+            android:id="@+id/nexttune_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="next tune"
+            android:src="@drawable/next"
+            android:background="@null"
+            android:layout_marginTop="5dp" android:layout_marginRight="25dp"/>
+
     <ImageView 
         android:id="@+id/tune_cover_iv"
         android:layout_width="fill_parent"
-        android:layout_height="430dp"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
+        android:layout_above="@id/playlist_ib"
         android:contentDescription="tune_cover"
         android:scaleType="centerCrop" android:background="#000000"/>
     
@@ -71,47 +105,13 @@
         android:progress="0"
         android:max="0"/>
 	
-    <ImageButton 
-        android:id="@+id/playlist_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:contentDescription="call playlist menu"
-        android:src="@drawable/list"
-        android:background="@null"
-        android:layout_alignParentBottom="true" android:layout_marginTop="5dp" android:layout_marginLeft="25dp"
-            />
-    
-    <ImageButton 
-        android:id="@+id/play_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="play or pause"
-        android:src="@drawable/play_button_selector"
-        android:background="@null"
-        android:layout_marginTop="5dp"/>
-    
-    <ImageButton 
-        android:id="@+id/nexttune_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:contentDescription="next tune"
-        android:src="@drawable/next"
-        android:background="@null"
-        android:layout_marginTop="5dp" android:layout_marginRight="25dp"/>
-    
-    <RelativeLayout 
+    <RelativeLayout
         android:id="@+id/playlist_ll"
         android:layout_width="fill_parent"
-        android:layout_height="440dp"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="75dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:visibility="gone"
         android:background="#00000000"
         >
@@ -123,7 +123,7 @@
             android:layout_marginBottom="10dp"
             android:background="#000000"
             android:alpha="0.93"
-            ></ListView>
+            />
         
         <ImageView 
             android:layout_width="80dp"
