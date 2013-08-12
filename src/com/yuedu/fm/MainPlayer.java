@@ -207,7 +207,7 @@ public class MainPlayer extends FragmentActivity {
     public ImageFetcher getmImageFetcher() {
         if (mImageFetcher == null) {
             ImageCacheParams cacheParams = new ImageCacheParams(getApplicationContext(),
-                    "yuedu.image.cache");
+                    "image");
 
             cacheParams.setMemCacheSizePercent(0.6f); // Set memory cache to 60% of app memory
             mImageFetcher = new ImageFetcher(getApplicationContext(), -1);
@@ -291,9 +291,8 @@ public class MainPlayer extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
             NetworkInfo info = cm.getActiveNetworkInfo();
-            assert info != null;
             Log.w("yuedu", "Network Type Changed "+info);
-            if (info.getType() == ConnectivityManager.TYPE_WIFI && info.getState() == NetworkInfo.State.CONNECTED) {
+            if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI && info.getState() == NetworkInfo.State.CONNECTED) {
                 Log.d("yuedu","wifi is connected");
             }else {
                 Log.w("yuedu","wifi is disconnected");

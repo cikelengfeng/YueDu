@@ -186,7 +186,7 @@ public class YueduService extends IntentService {
     public StreamingDownloadMediaPlayer getmPlayer() {
         if (mPlayer == null) {
             mPlayer = new StreamingDownloadMediaPlayer();
-            File diskFileCacheDir = new File(getExternalCacheDir(),"yuedu.audio.cache");
+            File diskFileCacheDir = new File(getExternalCacheDir(),"audio");
             if (diskFileCacheDir.exists() || diskFileCacheDir.mkdirs()) {
                 mPlayer.setCacheDir(diskFileCacheDir);
             }

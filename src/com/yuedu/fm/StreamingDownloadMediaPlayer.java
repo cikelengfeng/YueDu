@@ -45,7 +45,7 @@ public class StreamingDownloadMediaPlayer {
         STOPPED,
         PAUSED,
         COMPLETED,
-        END;
+        ERROR;
 
         @Override
         public String toString() {
@@ -64,7 +64,7 @@ public class StreamingDownloadMediaPlayer {
             readableMap.put(STOPPED, "STOPPED");
             readableMap.put(PAUSED, "PAUSED");
             readableMap.put(COMPLETED, "COMPLETED");
-            readableMap.put(END, "END");
+            readableMap.put(ERROR, "ERROR");
         }
     }
 
@@ -80,6 +80,8 @@ public class StreamingDownloadMediaPlayer {
     private int mBufferSize;
     private OnPreparedListener mPreparedListener;
     private OnCompletionListener mCompletionListener;
+    private OnErrorListener mErrorListener;
+
 
     private static final int DISK_FILE_CACHE_INDEX = 0;
     private static final int DISK_FILE_CACHE_VERSION = 1;
@@ -137,6 +139,10 @@ public class StreamingDownloadMediaPlayer {
         abstract void onCompletion(StreamingDownloadMediaPlayer mediaPlayer);
     }
 
+    static public interface OnErrorListener {
+        abstract void onError(StreamingDownloadMediaPlayer mediaPlayer,Throwable error);
+    }
+
     public PlayerState getState() {
         return mState;
     }
@@ -160,6 +166,10 @@ public class StreamingDownloadMediaPlayer {
         this.mCompletionListener = onCompletionListener;
     }
 
+    public void setOnErrorListener(OnErrorListener onErrorListener) {
+        this.mErrorListener = onErrorListener;
+    }
+
     public void setCacheDir(File dir) {
         if (dir == null || !dir.isDirectory()) {
             throw new IllegalArgumentException("input dir is null or not a directory");
@@ -169,7 +179,7 @@ public class StreamingDownloadMediaPlayer {
 
     private DiskLruCache getDiskCache() {
         File cacheDir = getCacheDir();
-        if (cacheDir != null && cacheDir.isDirectory() && mDiskCache == null) {
+        if (cacheDir != null && mDiskCache == null) {
             try {
                 mDiskCache = DiskLruCache.open(cacheDir,DISK_FILE_CACHE_VERSION,1,200*1024*1024);
             } catch (IOException e) {
@@ -197,6 +207,7 @@ public class StreamingDownloadMediaPlayer {
         if (mAudioTrack != null && isPlaying()) {
             mAudioTrack.pause();
             mAudioTrack.flush();
+            mAudioTrack.stop();
         }
 
         if (mAudioTrack == null) {
@@ -206,7 +217,12 @@ public class StreamingDownloadMediaPlayer {
                 @Override
                 public void onMarkerReached(AudioTrack audioTrack) {
                     if (mCompletionListener != null) {
-                        mCompletionListener.onCompletion(StreamingDownloadMediaPlayer.this);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mCompletionListener.onCompletion(StreamingDownloadMediaPlayer.this);
+                            }
+                        });
                     }
                 }
 
@@ -307,13 +323,13 @@ public class StreamingDownloadMediaPlayer {
                         connection.connect();
                         diskEditor = diskCache.edit(key);
                         inputStream = new StreamingPipe(connection.getInputStream(),diskEditor.newOutputStream(DISK_FILE_CACHE_INDEX));
-                        mAudioTrack.setNotificationMarkerPosition(connection.getContentLength()*2);
                     }
                     bitstream = new Bitstream(inputStream);
                     Header header;
                     boolean firstPrepared = false;
                     int totalBytes = 0;
                     int oneshootBytes = 0;
+                    int totalFrameSize = 0;
                     while ((header = bitstream.readFrame()) != null && !isStopped) {
                         if (isPaused) {
                             pauseLock.lock();
@@ -330,12 +346,13 @@ public class StreamingDownloadMediaPlayer {
                         }
 
                         SampleBuffer decoderBuffer = (SampleBuffer) decoder.decodeFrame(header, bitstream);
-//                        Log.d("yuedu","header size in bytes "+decoderBuffer.getBufferLength()*2+" frames "+header.calculate_framesize());
+
                         oneshootBytes = decoderBuffer.getBufferLength() * 2;
                         short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
                         mAudioTrack.write(copyBuffer, 0, decoderBuffer.getBufferLength());
                         totalBytes += oneshootBytes;
+                        totalFrameSize += header.calculate_framesize();
                         bitstream.closeFrame();
                     }
                     if (diskEditor != null) {
@@ -343,10 +360,11 @@ public class StreamingDownloadMediaPlayer {
                             diskEditor.abort();
                         }else {
                             diskEditor.commit();
+                            mAudioTrack.setNotificationMarkerPosition(totalFrameSize);
                         }
                         diskCache.flush();
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                     if (diskEditor != null) {
                         try {
@@ -355,6 +373,15 @@ public class StreamingDownloadMediaPlayer {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
+                    }
+                    mState = PlayerState.ERROR;
+                    if (mErrorListener != null) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mErrorListener.onError(StreamingDownloadMediaPlayer.this,e);
+                            }
+                        });
                     }
                 } finally {
                     if (inputStream != null) {
@@ -370,6 +397,9 @@ public class StreamingDownloadMediaPlayer {
                     if (connection != null) {
                         connection.disconnect();
                     }
+                    if (!isStopped && mState != PlayerState.ERROR) {
+                        StreamingDownloadMediaPlayer.this.stop();
+                    }
                     isStopped = true;
                     isPaused = false;
                     isPlaying = false;
@@ -377,15 +407,15 @@ public class StreamingDownloadMediaPlayer {
                 return null;
             }
         };
-        mStreamingTask.execute(url);
         mState = PlayerState.PREPARING;
+        mStreamingTask.execute(url);
     }
 
     private void notifyPrepared() {
+        mState = PlayerState.PREPARED;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mState = PlayerState.PREPARED;
                 if (mPreparedListener != null) {
                     mPreparedListener.onPrepared(StreamingDownloadMediaPlayer.this);
                 }
