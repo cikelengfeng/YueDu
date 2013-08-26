@@ -76,17 +76,33 @@ public class MainPlayer extends FragmentActivity {
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
                 Log.d("yuedu","media player will prepare!!!!");
                 setPlayButtonPlaying(true);
+                showLoading();
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                 Log.d("yuedu","media player error occurred!!!!");
                 Toast.makeText(getApplicationContext(),intent.getStringExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY),Toast.LENGTH_SHORT).show();
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
-                setPlayButtonPlaying(false);
+                playNextTune();
                 Log.d("yuedu","media player complete!!!!");
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED)) {
                 Log.d("yuedu","media player prepared!!!!");
+                hideLoading();
             }
         }
     };
+
+    private void showLoading() {
+        if (!getmProgressBar().isIndeterminate()) {
+            Log.d("yuedu","set progress bar indeterminate!!!!");
+            getmProgressBar().setIndeterminate(true);
+        }
+    }
+
+    private void hideLoading() {
+        if (getmProgressBar().isIndeterminate()) {
+            Log.d("yuedu","set progress bar determinate!!!!");
+            getmProgressBar().setIndeterminate(false);
+        }
+    }
 
     private void setCurrentPosition(int currentPosition) {
         assert currentPosition >= 0;
@@ -386,6 +402,7 @@ public class MainPlayer extends FragmentActivity {
     private void changeTuneAtIndex(int index) {
         mPlayingTuneIndex = index;
         if (index < getmPlaylist().size()) {
+            getmListView().setSelection(index);
             JSONObject tune = getmPlaylist().get(index);
             changeCoverForTune(tune);
             startPlay(tune);
@@ -491,7 +508,7 @@ public class MainPlayer extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-                KeyEvent event = (KeyEvent) intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                 switch (event.getKeyCode()) {
                     case KeyEvent.KEYCODE_MEDIA_PLAY:
                         play();

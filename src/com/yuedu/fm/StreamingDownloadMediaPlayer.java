@@ -77,7 +77,7 @@ public class StreamingDownloadMediaPlayer {
     private DiskLruCache mDiskCache;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private StreamingAsyncTask mStreamingTask;
-    private int mBufferSize;
+    private int mBufferSize =  2 * AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
     private OnPreparedListener mPreparedListener;
     private OnCompletionListener mCompletionListener;
     private OnErrorListener mErrorListener;
@@ -204,34 +204,33 @@ public class StreamingDownloadMediaPlayer {
         mURL = null;
         mState = PlayerState.IDLE;
         mLooping = false;
-        if (mAudioTrack != null && isPlaying()) {
+        if (mAudioTrack != null) {
             mAudioTrack.pause();
             mAudioTrack.flush();
             mAudioTrack.stop();
+            mAudioTrack.release();
         }
 
-        if (mAudioTrack == null) {
-            mBufferSize = 2 * AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-            mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, mBufferSize, AudioTrack.MODE_STREAM);
-            mAudioTrack.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
-                @Override
-                public void onMarkerReached(AudioTrack audioTrack) {
-                    if (mCompletionListener != null) {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mCompletionListener.onCompletion(StreamingDownloadMediaPlayer.this);
-                            }
-                        });
-                    }
+        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, mBufferSize, AudioTrack.MODE_STREAM);
+        mAudioTrack.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
+            @Override
+            public void onMarkerReached(AudioTrack audioTrack) {
+                if (mCompletionListener != null) {
+                    stop();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCompletionListener.onCompletion(StreamingDownloadMediaPlayer.this);
+                        }
+                    });
                 }
+            }
 
-                @Override
-                public void onPeriodicNotification(AudioTrack audioTrack) {
+            @Override
+            public void onPeriodicNotification(AudioTrack audioTrack) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     public void prepare() throws IOException, BitstreamException, DecoderException, InterruptedException {
@@ -492,6 +491,7 @@ public class StreamingDownloadMediaPlayer {
         if (mAudioTrack != null) {
             mAudioTrack.pause();
             mAudioTrack.flush();
+            mAudioTrack.stop();
             mAudioTrack.release();
             mAudioTrack = null;
         }
@@ -503,7 +503,6 @@ public class StreamingDownloadMediaPlayer {
             if (!mStreamingTask.isCancelled()) {
                 mStreamingTask.cancel(true);
             }
-            mStreamingTask.notifyAll();
             mStreamingTask = null;
         }
     }

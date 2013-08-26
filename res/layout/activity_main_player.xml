@@ -98,12 +98,10 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:id="@+id/tune_progress_pb"
         android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:indeterminate="false"
+        android:layout_height="10dp"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@id/tune_cover_iv"
-        android:progress="0"
-        android:max="0"/>
+        />
 	
     <RelativeLayout
         android:id="@+id/playlist_ll"
