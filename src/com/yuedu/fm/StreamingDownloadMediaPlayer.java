@@ -216,7 +216,6 @@ public class StreamingDownloadMediaPlayer {
             @Override
             public void onMarkerReached(AudioTrack audioTrack) {
                 if (mCompletionListener != null) {
-                    stop();
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -354,12 +353,16 @@ public class StreamingDownloadMediaPlayer {
                         totalFrameSize += header.calculate_framesize();
                         bitstream.closeFrame();
                     }
+
+                    if (!isStopped) {
+                        mAudioTrack.setNotificationMarkerPosition(totalFrameSize);
+                    }
+
                     if (diskEditor != null) {
                         if (isStopped) {
                             diskEditor.abort();
                         }else {
                             diskEditor.commit();
-                            mAudioTrack.setNotificationMarkerPosition(totalFrameSize);
                         }
                         diskCache.flush();
                     }
