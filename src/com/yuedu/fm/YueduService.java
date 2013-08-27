@@ -162,7 +162,7 @@ public class YueduService extends IntentService {
     };
 
     private String getCurrentDataSource() {
-        return getmPlayer().getDataSource()==null?null:getmPlayer().getDataSource().getPath();
+        return getmPlayer().getDataSource()==null?null:getmPlayer().getDataSource().toString();
     }
 
     private PausableThreadPoolExecutor mScheduler;
