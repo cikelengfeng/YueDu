@@ -200,6 +200,10 @@ public class StreamingDownloadMediaPlayer {
         this.mState = PlayerState.INITIALIZED;
     }
 
+    public URL getDataSource() {
+        return mURL;
+    }
+
     public void reset() {
         mURL = null;
         mState = PlayerState.IDLE;
@@ -400,6 +404,7 @@ public class StreamingDownloadMediaPlayer {
                     if (connection != null) {
                         connection.disconnect();
                     }
+
                     isStopped = true;
                     isPaused = false;
                     isPlaying = false;
@@ -452,7 +457,7 @@ public class StreamingDownloadMediaPlayer {
     }
 
     public void stop() {
-        if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED || mState == PlayerState.STARTED) {
+        if (mState == PlayerState.PREPARED || mState == PlayerState.COMPLETED || mState == PlayerState.PAUSED || mState == PlayerState.STARTED || mState == PlayerState.PREPARING) {
             mState = PlayerState.STOPPED;
             mStreamingTask.stop();
             mAudioTrack.pause();
@@ -488,6 +493,14 @@ public class StreamingDownloadMediaPlayer {
         return mState == PlayerState.COMPLETED;
     }
 
+    public boolean isPreparing() {
+        return mState == PlayerState.PREPARING;
+    }
+
+    public  boolean isPrepared() {
+        return mState == PlayerState.PREPARED;
+    }
+
     public void release() {
         if (mAudioTrack != null) {
             mAudioTrack.pause();
@@ -506,6 +519,7 @@ public class StreamingDownloadMediaPlayer {
             }
             mStreamingTask = null;
         }
+        mState = PlayerState.IDLE;
     }
 
 }

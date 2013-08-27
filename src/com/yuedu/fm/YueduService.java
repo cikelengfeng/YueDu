@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -125,20 +126,19 @@ public class YueduService extends IntentService {
     private AudioManager.OnAudioFocusChangeListener mFocusListener;
     static private final ComponentName REMOTE_CONTROL_RECEIVER_NAME = new ComponentName("com.yuedu.fm", "RemoteControlReceiver");
     private NoisyAudioStreamReceiver mNoisyAudioStreamReceiver;
-    private String mDataSource;
     private BroadcastReceiver mActivityBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Set<String> categories = intent.getCategories();
             if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
                 String path = intent.getStringExtra(MainPlayer.PLAY_TUNE_INTENT_EXTRA_PATH_KEY);
-                if (mDataSource == null || !mDataSource.equals(path)) {
+                if (!TextUtils.isEmpty(path) && (getCurrentDataSource() == null || !path.equals(getCurrentDataSource()))) {
                     if (mScheduler != null) {
                         getmScheduler().purge();
                         getmScheduler().pause();
                     }
                     try {
-                        if (getmPlayer().isPlaying() || getmPlayer().isPaused() || getmPlayer().isCompleted()) {
+                        if (getmPlayer().isPlaying() || getmPlayer().isPaused() || getmPlayer().isCompleted() || getmPlayer().isPreparing()) {
                             sendWillStopBroadcast();
                             getmPlayer().stop();
                             sendStoppedBroadcast();
@@ -160,6 +160,10 @@ public class YueduService extends IntentService {
             }
         }
     };
+
+    private String getCurrentDataSource() {
+        return getmPlayer().getDataSource()==null?null:getmPlayer().getDataSource().getPath();
+    }
 
     private PausableThreadPoolExecutor mScheduler;
 
@@ -219,7 +223,6 @@ public class YueduService extends IntentService {
                         getmScheduler().purge();
                         getmScheduler().pause();
                     }
-                    mDataSource = null;
                     String error;
                     if (e instanceof FileNotFoundException) {
                         error = "未发现网络音频文件";
@@ -325,7 +328,6 @@ public class YueduService extends IntentService {
     }
 
     private void setTunePath(final String tunePath) throws IOException, JavaLayerException {
-        mDataSource = tunePath;
         StreamingDownloadMediaPlayer player = getmPlayer();
         player.reset();
         player.setDataSource(new URL(tunePath));
