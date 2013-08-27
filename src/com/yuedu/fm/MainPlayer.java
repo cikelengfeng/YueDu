@@ -78,8 +78,10 @@ public class MainPlayer extends FragmentActivity {
                 setPlayButtonPlaying(true);
                 showLoading();
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
+                setPlayButtonPlaying(false);
+                hideLoading();
+                Toast.makeText(getApplicationContext(),intent.getStringExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY),Toast.LENGTH_LONG).show();
                 Log.d("yuedu","media player error occurred!!!!");
-                Toast.makeText(getApplicationContext(),intent.getStringExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY),Toast.LENGTH_SHORT).show();
             }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
                 playNextTune();
                 Log.d("yuedu","media player complete!!!!");

@@ -219,6 +219,7 @@ public class YueduService extends IntentService {
                         getmScheduler().purge();
                         getmScheduler().pause();
                     }
+                    mDataSource = null;
                     String error;
                     if (e instanceof FileNotFoundException) {
                         error = "未发现网络音频文件";
