@@ -271,7 +271,7 @@ public class YueduService extends IntentService {
                             prepareToPlay();
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
-                            stop();
+                            pause();
                         default:
                             break;
                     }
