@@ -14,7 +14,10 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -122,8 +125,10 @@ public class YueduService extends IntentService {
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY = "player_service_category_extra_tune_path_key";
 
     private AudioManager mAudioManager;
+    private TelephonyManager mTelephonyManager;
     private StreamingDownloadMediaPlayer mPlayer;
     private AudioManager.OnAudioFocusChangeListener mFocusListener;
+    private PhoneStateListener mPhoneStateListener;
     static private final ComponentName REMOTE_CONTROL_RECEIVER_NAME = new ComponentName("com.yuedu.fm", "RemoteControlReceiver");
     private NoisyAudioStreamReceiver mNoisyAudioStreamReceiver;
     private BroadcastReceiver mActivityBroadcastReceiver = new BroadcastReceiver() {
@@ -262,6 +267,13 @@ public class YueduService extends IntentService {
         return mAudioManager;
     }
 
+    public TelephonyManager getmTelephonyManager() {
+        if (mTelephonyManager == null) {
+            mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        }
+        return mTelephonyManager;
+    }
+
     public AudioManager.OnAudioFocusChangeListener getmFocusListener() {
         if (mFocusListener == null) {
             mFocusListener = new AudioManager.OnAudioFocusChangeListener() {
@@ -285,6 +297,37 @@ public class YueduService extends IntentService {
         return mFocusListener;
     }
 
+    public PhoneStateListener getmPhoneStateListener() {
+        if (mPhoneStateListener == null) {
+            mPhoneStateListener = new PhoneStateListener() {
+                @Override
+                public void onCallStateChanged(int state, String incomingNumber) {
+                    if (state == TelephonyManager.CALL_STATE_RINGING) {
+                        //Incoming call: Pause music
+                        if (getmPlayer().isPlaying()) {
+                            pause();
+                        }
+                        Log.d("yuedu", "incoming call!!!! number is "+incomingNumber);
+                    } else if(state == TelephonyManager.CALL_STATE_IDLE) {
+                        //Not in call: Play music
+                        if (getmPlayer().isPaused()) {
+                            play();
+                        }
+                        Log.d("yuedu", "not in call!!!!");
+                    } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                        //A call is dialing, active or on hold
+                        if (getmPlayer().isPlaying()) {
+                            pause();
+                        }
+                        Log.d("yuedu", "A call is dialing, active or on hold!!!!" +incomingNumber);
+                    }
+                    super.onCallStateChanged(state, incomingNumber);
+                }
+            };
+        }
+        return mPhoneStateListener;
+    }
+
     public NoisyAudioStreamReceiver getmNoisyAudioStreamReceiver() {
         if (mNoisyAudioStreamReceiver == null) {
             mNoisyAudioStreamReceiver = new NoisyAudioStreamReceiver();
@@ -305,6 +348,10 @@ public class YueduService extends IntentService {
     @Override
     public boolean onUnbind(Intent intent) {
         unregisterLocalBroadcastReceiver();
+        TelephonyManager telMgr = getmTelephonyManager();
+        if (telMgr != null) {
+            telMgr.listen(getmPhoneStateListener(),PhoneStateListener.LISTEN_NONE);
+        }
         if (mScheduler != null) {
             mScheduler.purge();
             mScheduler.shutdownNow();
@@ -315,6 +362,11 @@ public class YueduService extends IntentService {
     @Override
     public IBinder onBind(Intent intent) {
         registerLocalBroadcastReceiver();
+        TelephonyManager telMgr = getmTelephonyManager();
+        if (telMgr != null) {
+            Log.d("yuedu","start listen phone state");
+            telMgr.listen(getmPhoneStateListener(),PhoneStateListener.LISTEN_CALL_STATE);
+        }
         return mBinder;
     }
 
@@ -340,18 +392,21 @@ public class YueduService extends IntentService {
     }
 
     private boolean prepareToPlay() {
-        int focus = getmAudioManager().requestAudioFocus(getmFocusListener(), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        if (focus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            StreamingDownloadMediaPlayer player = getmPlayer();
-            try {
-                sendWillPrepareBroadcast();
-                player.prepareAsync();
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
+        AudioManager audioMgr = getmAudioManager();
+        if (audioMgr != null) {
+            int focus = audioMgr.requestAudioFocus(getmFocusListener(), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            if (focus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                StreamingDownloadMediaPlayer player = getmPlayer();
+                try {
+                    sendWillPrepareBroadcast();
+                    player.prepareAsync();
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //request audio focus failed
             }
-        } else {
-            //request audio focus failed
         }
         return false;
     }
@@ -386,12 +441,18 @@ public class YueduService extends IntentService {
 
     private void prepareToStop() {
         unregisterReceiver(getmNoisyAudioStreamReceiver());
-        getmAudioManager().unregisterMediaButtonEventReceiver(REMOTE_CONTROL_RECEIVER_NAME);
-        getmAudioManager().abandonAudioFocus(getmFocusListener());
+        AudioManager audioMgr = getmAudioManager();
+        if (audioMgr != null) {
+            audioMgr.unregisterMediaButtonEventReceiver(REMOTE_CONTROL_RECEIVER_NAME);
+            audioMgr.abandonAudioFocus(getmFocusListener());
+        }
     }
 
     private void prepareToPause() {
-        getmAudioManager().abandonAudioFocus(getmFocusListener());
+        AudioManager audioMgr = getmAudioManager();
+        if (audioMgr != null) {
+            audioMgr.abandonAudioFocus(getmFocusListener());
+        }
     }
 
     private class NoisyAudioStreamReceiver extends BroadcastReceiver {
