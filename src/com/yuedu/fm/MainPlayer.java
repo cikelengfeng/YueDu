@@ -93,17 +93,13 @@ public class MainPlayer extends FragmentActivity {
     };
 
     private void showLoading() {
-        if (!getmProgressBar().isIndeterminate()) {
-            Log.d("yuedu","set progress bar indeterminate!!!!");
-            getmProgressBar().setIndeterminate(true);
-        }
+        Log.d("yuedu","set progress bar indeterminate!!!!");
+        getmProgressBar().setIndeterminate(true);
     }
 
     private void hideLoading() {
-        if (getmProgressBar().isIndeterminate()) {
-            Log.d("yuedu","set progress bar determinate!!!!");
-            getmProgressBar().setIndeterminate(false);
-        }
+        Log.d("yuedu","set progress bar determinate!!!!");
+        getmProgressBar().setIndeterminate(false);
     }
 
     private void setCurrentPosition(int currentPosition) {
@@ -274,6 +270,7 @@ public class MainPlayer extends FragmentActivity {
         getmImageFetcher().loadImage(url, getmImageView());
         getmTitleView().setText(title);
         getmInfoView().setText(info);
+        getmProgressBar().setIndeterminate(false);
         getmProgressBar().setMax(getCurrentPlayingTuneDuration());
         getmProgressBar().setProgress(0);
         getmPlayedTimeTextView().setText("00:00");
