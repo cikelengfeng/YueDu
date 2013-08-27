@@ -399,7 +399,7 @@ public class StreamingDownloadMediaPlayer {
                     if (connection != null) {
                         connection.disconnect();
                     }
-                    if (!isStopped && mState != PlayerState.ERROR) {
+                    if (!isStopped && mState == PlayerState.ERROR) {//中途出错 直接stop
                         StreamingDownloadMediaPlayer.this.stop();
                     }
                     isStopped = true;
