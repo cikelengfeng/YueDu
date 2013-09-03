@@ -12,13 +12,36 @@ import java.util.Collection;
 public class JSONObjectAndStringCollectionCoder {
 
     public static final Collection<String> JSONObjectCollectionToString(@NotNull Collection<JSONObject> jsonObjects) {
-        if (jsonObjects.isEmpty()) {
+        return convertCollection(jsonObjects,new Converter<String, JSONObject>() {
+            @Override
+            public String convert(JSONObject from) {
+                return from.toString();
+            }
+        });
+    }
+
+    public static final Collection<JSONObject> StringionToJSONObjectCollect(@NotNull Collection<String> jsonStrings) {
+        return convertCollection(jsonStrings,new Converter<JSONObject, String>() {
+            @Override
+            public JSONObject convert(String from) {
+                try {
+                    return new JSONObject(from);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
+    }
+
+    public static final <E,T> Collection<E> convertCollection(@NotNull Collection<T> from,@NotNull Converter<E,T> converter){
+        if (from.isEmpty()) {
             return null;
         }
         try {
-            Collection<String> result = jsonObjects.getClass().newInstance();
-            for (JSONObject json : jsonObjects) {
-                result.add(json.toString());
+            Collection<E> result = from.getClass().newInstance();
+            for (T t : from) {
+                result.add(converter.convert(t));
             }
             return result;
         } catch (InstantiationException e) {
@@ -29,23 +52,7 @@ public class JSONObjectAndStringCollectionCoder {
         return null;
     }
 
-    public static final Collection<JSONObject> StringionToJSONObjectCollect(@NotNull Collection<String> jsonStrings) {
-        if (jsonStrings.isEmpty()) {
-            return null;
-        }
-        try {
-            Collection<JSONObject> result = jsonStrings.getClass().newInstance();
-            for (String jsonStr : jsonStrings) {
-                result.add(new JSONObject(jsonStr));
-            }
-            return result;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static interface Converter<E,T> {
+        abstract E convert(T from);
     }
 }
