@@ -2,6 +2,8 @@ package com.yuedu.fm;
 
 import android.annotation.TargetApi;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +20,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.yuedu.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,6 +58,7 @@ public class YueduService extends IntentService {
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED = "player_service_category_player_stopped";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED = "player_service_category_player_error_occurred";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE = "player_service_category_player_complete";
+    private static final int ONGOING_NOTIFICATION_ID = 0x77<<7;
 
 
     private void sendPreparedBroadcast() {
@@ -361,13 +366,29 @@ public class YueduService extends IntentService {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d("yuedu","on bind ");
+        return mBinder;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("yuedu","on start command ");
+        return START_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         registerLocalBroadcastReceiver();
         TelephonyManager telMgr = getmTelephonyManager();
         if (telMgr != null) {
             Log.d("yuedu","start listen phone state");
             telMgr.listen(getmPhoneStateListener(),PhoneStateListener.LISTEN_CALL_STATE);
         }
-        return mBinder;
+        Intent notificationIntent = new Intent(this, MainPlayer.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Notification notification = new Notification.Builder(this).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_launcher).build();
+        startForeground(ONGOING_NOTIFICATION_ID, notification);
     }
 
     private YueduBinder mBinder = new YueduBinder();
@@ -471,6 +492,7 @@ public class YueduService extends IntentService {
         if (mPlayer != null) {
             mPlayer.release();
         }
+        stopForeground(true);
     }
 
     static class PausableThreadPoolExecutor extends ScheduledThreadPoolExecutor {

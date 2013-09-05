@@ -1,15 +1,12 @@
 package com.yuedu.fm;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -276,26 +273,6 @@ public class MainPlayer extends FragmentActivity {
         getmPlayedTimeTextView().setText("00:00");
     }
 
-    private YueduServiceConnection mServiceConnection = new YueduServiceConnection();
-
-    class YueduServiceConnection implements ServiceConnection {
-
-        private IBinder mServiceBinder;
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mServiceBinder = service;
-            Log.d("yuedu","service connected "+mServiceBinder);
-            IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(mNetworkStateReceiver, filter);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    }
-
     private BroadcastReceiver mNetworkStateReceiver = new BroadcastReceiver() {
 
         @Override
@@ -318,8 +295,10 @@ public class MainPlayer extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+        startService(intent);
         registerLocalBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mNetworkStateReceiver, filter);
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {
 
@@ -387,7 +366,6 @@ public class MainPlayer extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
         unregisterLocalBroadcastReceiver();
     }
 
