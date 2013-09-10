@@ -10,11 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.Binder;
 import android.os.Build;
-import android.os.IBinder;
-import android.os.Parcel;
-import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -36,6 +32,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javazoom.jl.decoder.JavaLayerException;
 
 /**
+ *
  * Created by xudong on 13-5-19.
  */
 public class YueduService extends IntentService {
@@ -136,28 +133,15 @@ public class YueduService extends IntentService {
     private PhoneStateListener mPhoneStateListener;
     static private final ComponentName REMOTE_CONTROL_RECEIVER_NAME = new ComponentName("com.yuedu.fm", "RemoteControlReceiver");
     private NoisyAudioStreamReceiver mNoisyAudioStreamReceiver;
+
     private BroadcastReceiver mActivityBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Set<String> categories = intent.getCategories();
             if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
-                String path = intent.getStringExtra(MainPlayer.PLAY_TUNE_INTENT_EXTRA_PATH_KEY);
+                String path = DataAccessor.SINGLE_INSTANCE.getPlayingTune().mp3URL;
                 if (!TextUtils.isEmpty(path) && (getCurrentDataSource() == null || !path.equals(getCurrentDataSource()))) {
-                    if (mScheduler != null) {
-                        getmScheduler().purge();
-                        getmScheduler().pause();
-                    }
-                    try {
-                        if (getmPlayer().isPlaying() || getmPlayer().isPaused() || getmPlayer().isCompleted() || getmPlayer().isPreparing()) {
-                            sendWillStopBroadcast();
-                            getmPlayer().stop();
-                            sendStoppedBroadcast();
-                        }
-                        setTunePath(path);
-                        prepareToPlay();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    prepareForPath(path);
                 } else {
                     try {
                         play();
@@ -170,6 +154,24 @@ public class YueduService extends IntentService {
             }
         }
     };
+
+    private void prepareForPath(String path) {
+        if (mScheduler != null) {
+            getmScheduler().purge();
+            getmScheduler().pause();
+        }
+        try {
+            if (getmPlayer().isPlaying() || getmPlayer().isPaused() || getmPlayer().isCompleted() || getmPlayer().isPreparing()) {
+                sendWillStopBroadcast();
+                getmPlayer().stop();
+                sendStoppedBroadcast();
+            }
+            setTunePath(path);
+            prepareToPlay();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private String getCurrentDataSource() {
         return getmPlayer().getDataSource()==null?null:getmPlayer().getDataSource().toString();
@@ -224,6 +226,8 @@ public class YueduService extends IntentService {
                         getmScheduler().pause();
                     }
                     sendCompletionBroadcast();
+                    DataAccessor.SINGLE_INSTANCE.playNextTune();
+                    prepareForPath(DataAccessor.SINGLE_INSTANCE.getPlayingTune().mp3URL);
                 }
             });
             mPlayer.setOnErrorListener(new StreamingDownloadMediaPlayer.OnErrorListener() {
@@ -365,12 +369,6 @@ public class YueduService extends IntentService {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.d("yuedu","on bind ");
-        return mBinder;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("yuedu","on start command ");
         return START_STICKY;
@@ -379,6 +377,7 @@ public class YueduService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        DataAccessor.SINGLE_INSTANCE.downloadData(this);
         registerLocalBroadcastReceiver();
         TelephonyManager telMgr = getmTelephonyManager();
         if (telMgr != null) {
@@ -387,17 +386,11 @@ public class YueduService extends IntentService {
         }
         Intent notificationIntent = new Intent(this, MainPlayer.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        Notification notification = new Notification.Builder(this).setContentIntent(pendingIntent).setSmallIcon(R.drawable.ic_launcher).build();
+//        Notification notification = new Notification();
+//        notification.contentIntent = pendingIntent;
+//        notification.icon = R.drawable.ic_launcher;
+        Notification notification = new Notification.Builder(this).setSmallIcon(R.drawable.ic_launcher).setContentIntent(pendingIntent).build();
         startForeground(ONGOING_NOTIFICATION_ID, notification);
-    }
-
-    private YueduBinder mBinder = new YueduBinder();
-
-    class YueduBinder extends Binder {
-        @Override
-        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            return false;
-        }
     }
 
     private void setTunePath(final String tunePath) throws IOException, JavaLayerException {
