@@ -56,13 +56,14 @@ public class MainPlayer extends FragmentActivity {
                 }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_STOP)) {
                     Log.d("yuedu","media player will stop!!!!");
                 }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PLAY)) {
-                    updateCover();
                     Log.d("yuedu","media player will play!!!!");
                 }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE)) {
                     Log.d("yuedu","media player will pause!!!!");
                 }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
                     Log.d("yuedu","media player will prepare!!!!");
                     setPlayButtonPlaying(true);
+                    updateCover();
+                    updateListViewSelection();
                     showLoading();
                 }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                     setPlayButtonPlaying(false);
@@ -244,6 +245,13 @@ public class MainPlayer extends FragmentActivity {
 
     private void updateListView() {
         getmListView().setAdapter(getAdapter());
+        updateListViewSelection();
+    }
+
+    private void updateListViewSelection() {
+        int playingIndex = DataAccessor.SINGLE_INSTANCE.getPlayingTuneIndex();
+        getmListView().setSelection(playingIndex);
+        getmListView().setItemChecked(playingIndex,true);
     }
 
     private void updateUI() {
