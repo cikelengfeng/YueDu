@@ -34,52 +34,47 @@ import java.util.Set;
 
 public class MainPlayer extends FragmentActivity {
 
-    protected static final String PLAYER_ACTIVITY_BROADCAST = "player_activity_broadcast";
-    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY = "player_activity_broadcast_category_play";
-    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE = "player_activity_broadcast_category_pause";
-    protected static final String PLAYER_ACTIVITY_BROADCAST_CATEGORY_REQUEST_PLAYSTATE = "player_activity_broadcast_category_request_paystate";
-
 
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Set<String> categories = intent.getCategories();
-            if (YueduService.PLAYER_SERVICE_BROADCAST.equals(action)) {
-                if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING)) {
+            if (YueduService.PLAYER_SENDING_BROADCAST_ACTION.equals(action)) {
+                if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PLAYING)) {
                     setPlayButtonPlaying(true);
                     Log.d("yuedu","media player is playing!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_CURRENT_POSITION)) {
                     long currentPosition = intent.getLongExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY,0);
                     setCurrentPosition((int) currentPosition);
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PAUSED)) {
                     setPlayButtonPlaying(false);
                     Log.d("yuedu","media player is paused!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STOPPED)) {
                     setPlayButtonPlaying(false);
                     Log.d("yuedu","media player is stopped!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_STOP)) {
                     Log.d("yuedu","media player will stop!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PLAY)) {
                     updateCover();
                     Log.d("yuedu","media player will play!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE)) {
                     Log.d("yuedu","media player will pause!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE)) {
                     Log.d("yuedu","media player will prepare!!!!");
                     setPlayButtonPlaying(true);
                     showLoading();
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED)) {
                     setPlayButtonPlaying(false);
                     hideLoading();
                     Toast.makeText(getApplicationContext(),intent.getStringExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY),Toast.LENGTH_LONG).show();
                     Log.d("yuedu","media player error occurred!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_COMPLETE)) {
                     Log.d("yuedu","media player complete!!!!");
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PREPARED)) {
                     Log.d("yuedu","media player prepared!!!!");
                     hideLoading();
-                }else if (categories.contains(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT)) {
+                }else if (categories.contains(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STATE_REPORT)) {
                     boolean isPlaying = intent.getBooleanExtra(YueduService.PLAYER_SERVICE_BROADCAST_EXTRA_PLAYSTATE_KEY,false);
                     Log.d("yuedu","media player state report " + isPlaying +" !!!!");
                     setPlayButtonPlaying(isPlaying);
@@ -337,15 +332,15 @@ public class MainPlayer extends FragmentActivity {
     }
 
     private void play() {
-        Intent intent = new Intent(PLAYER_ACTIVITY_BROADCAST);
-        intent.addCategory(PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
+        Intent intent = new Intent(YueduService.PLAYER_RECEIVING_BROADCAST_ACTION);
+        intent.addCategory(YueduService.PLAYER_RECEIVING_BROADCAST_CATEGORY_PLAY);
         sendLocalBroadcast(intent);
         setPlayButtonPlaying(true);
     }
 
     private void pausePlay() {
-        Intent intent = new Intent(PLAYER_ACTIVITY_BROADCAST);
-        intent.addCategory(PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
+        Intent intent = new Intent(YueduService.PLAYER_RECEIVING_BROADCAST_ACTION);
+        intent.addCategory(YueduService.PLAYER_RECEIVING_BROADCAST_CATEGORY_PAUSE);
         sendLocalBroadcast(intent);
     }
 
@@ -366,19 +361,19 @@ public class MainPlayer extends FragmentActivity {
 
     private void registerLocalBroadcastReceiver() {
         assert mServiceBroadcastReceiver != null;
-        IntentFilter filter = new IntentFilter(YueduService.PLAYER_SERVICE_BROADCAST);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE);
-        filter.addCategory(YueduService.PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT);
+        IntentFilter filter = new IntentFilter(YueduService.PLAYER_SENDING_BROADCAST_ACTION);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_CURRENT_POSITION);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PLAYING);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STOPPED);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PAUSED);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_COMPLETE);
+        filter.addCategory(YueduService.PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STATE_REPORT);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver,filter);
         IntentFilter dataReceivedFilter = new IntentFilter(DataAccessor.DATA_ACCESSOR_DOWNLOAD_COMPLETE_ACTION);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mServiceBroadcastReceiver, dataReceivedFilter);

@@ -38,92 +38,105 @@ import javazoom.jl.decoder.JavaLayerException;
 public class YueduService extends IntentService {
 
     /**
-     * intent action
+     * intent action which YueduService can send
      */
-    protected static final String PLAYER_SERVICE_BROADCAST = "player_service_broadcast";
+    protected static final String PLAYER_SENDING_BROADCAST_ACTION = "player_sending_broadcast";
     /**
-     * intent category
+     * intent action which YueduService can receive and handle
+     * */
+    protected static final String PLAYER_RECEIVING_BROADCAST_ACTION = "player_receiving_broadcast";
+
+    /**
+     * intent categories that YueduService can send
      */
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION = "player_service_category_current_position";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE = "player_service_category_player_will_prepare";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED = "player_service_category_player_prepared";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY = "player_service_category_player_will_play";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING = "player_service_category_player_playing";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE = "player_service_category_player_will_pause";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED = "player_service_category_player_paused";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP = "player_service_category_player_will_stop";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED = "player_service_category_player_stopped";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED = "player_service_category_player_error_occurred";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE = "player_service_category_player_complete";
-    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT = "player_service_category_player_state_report";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_CURRENT_POSITION = "player_sending_category_current_position";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE = "player_sending_category_player_will_prepare";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PREPARED = "player_sending_category_player_prepared";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PLAY = "player_sending_category_player_will_play";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PLAYING = "player_sending_category_player_playing";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE = "player_sending_category_player_will_pause";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PAUSED = "player_sending_category_player_paused";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_STOP = "player_sending_category_player_will_stop";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STOPPED = "player_sending_category_player_stopped";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED = "player_sending_category_player_error_occurred";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_COMPLETE = "player_sending_category_player_complete";
+    protected static final String PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STATE_REPORT = "player_sending_category_player_state_report";
+
+    /**
+     * intent categories that YueduService can handle
+     */
+
+    protected static final String PLAYER_RECEIVING_BROADCAST_CATEGORY_PLAY = "player_receiving_broadcast_category_play";
+    protected static final String PLAYER_RECEIVING_BROADCAST_CATEGORY_PAUSE = "player_receiving_broadcast_category_pause";
+    protected static final String PLAYER_RECEIVING_BROADCAST_CATEGORY_REQUEST_PLAYSTATE = "player_receiving_broadcast_category_request_paystate";
 
     private static final int ONGOING_NOTIFICATION_ID = 0x77<<7;
 
 
     private void sendPreparedBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PREPARED);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PREPARED);
         sendLocalBroadcast(intent);
     }
 
     private void sendWillPrepareBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PREPARE);
         sendLocalBroadcast(intent);
     }
 
     private void sendWillPlayBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PLAY);
         sendLocalBroadcast(intent);
     }
 
     private void sendPlayingBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PLAYING);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PLAYING);
         sendLocalBroadcast(intent);
     }
 
     private void sendWillPauseBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_PAUSE);
         sendLocalBroadcast(intent);
     }
 
     private void sendPausedBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_PAUSED);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_PAUSED);
         sendLocalBroadcast(intent);
     }
 
     private void sendWillStopBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_WILL_STOP);
         sendLocalBroadcast(intent);
     }
 
     private void sendStoppedBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STOPPED);
         sendLocalBroadcast(intent);
     }
 
     private void sendErrorOccurredBroadcast(String error) {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED);
         intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY, error);
         sendLocalBroadcast(intent);
     }
 
     private void sendCompletionBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_COMPLETE);
         sendLocalBroadcast(intent);
     }
 
     private void sendPlayStateBroadcast() {
-        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT);
+        Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+        intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_PLAYER_STATE_REPORT);
         intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_PLAYSTATE_KEY,getmPlayer().isPlaying());
         sendLocalBroadcast(intent);
     }
@@ -148,7 +161,7 @@ public class YueduService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             Set<String> categories = intent.getCategories();
-            if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY)) {
+            if (categories.contains(PLAYER_RECEIVING_BROADCAST_CATEGORY_PLAY)) {
                 String path = DataAccessor.SINGLE_INSTANCE.getPlayingTune().mp3URL;
                 if (!TextUtils.isEmpty(path) && (getCurrentDataSource() == null || !path.equals(getCurrentDataSource()))) {
                     prepareForPath(path);
@@ -159,9 +172,9 @@ public class YueduService extends IntentService {
                         e.printStackTrace();
                     }
                 }
-            } else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
+            } else if (categories.contains(PLAYER_RECEIVING_BROADCAST_CATEGORY_PAUSE)) {
                 pause();
-            } else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_REQUEST_PLAYSTATE)) {
+            } else if (categories.contains(PLAYER_RECEIVING_BROADCAST_CATEGORY_REQUEST_PLAYSTATE)) {
                 Log.d("yuedu","some one sent request for playing state!!!!");
 //                sendPlayStateBroadcast();
             }
@@ -202,8 +215,8 @@ public class YueduService extends IntentService {
                 public void run() {
                     long currentPosition = getmPlayer().getCurrentPosition();
                     long duration = getmPlayer().getDuration();
-                    Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
-                    intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_CURRENT_POSITION);
+                    Intent intent = new Intent(PLAYER_SENDING_BROADCAST_ACTION);
+                    intent.addCategory(PLAYER_SENDING_BROADCAST_CATEGORY_CURRENT_POSITION);
                     intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY, currentPosition);
                     intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY, duration);
                     sendLocalBroadcast(intent);
@@ -271,10 +284,10 @@ public class YueduService extends IntentService {
 
     private void registerLocalBroadcastReceiver() {
         assert mActivityBroadcastReceiver != null;
-        IntentFilter filter = new IntentFilter(MainPlayer.PLAYER_ACTIVITY_BROADCAST);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
-        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_REQUEST_PLAYSTATE);
+        IntentFilter filter = new IntentFilter(PLAYER_RECEIVING_BROADCAST_ACTION);
+        filter.addCategory(PLAYER_RECEIVING_BROADCAST_CATEGORY_PAUSE);
+        filter.addCategory(PLAYER_RECEIVING_BROADCAST_CATEGORY_PLAY);
+        filter.addCategory(PLAYER_RECEIVING_BROADCAST_CATEGORY_REQUEST_PLAYSTATE);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver, filter);
     }
 
