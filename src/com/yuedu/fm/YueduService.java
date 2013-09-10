@@ -55,6 +55,8 @@ public class YueduService extends IntentService {
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STOPPED = "player_service_category_player_stopped";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_ERROR_OCCURRED = "player_service_category_player_error_occurred";
     protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_COMPLETE = "player_service_category_player_complete";
+    protected static final String PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT = "player_service_category_player_state_report";
+
     private static final int ONGOING_NOTIFICATION_ID = 0x77<<7;
 
 
@@ -119,12 +121,20 @@ public class YueduService extends IntentService {
         sendLocalBroadcast(intent);
     }
 
+    private void sendPlayStateBroadcast() {
+        Intent intent = new Intent(PLAYER_SERVICE_BROADCAST);
+        intent.addCategory(PLAYER_SERVICE_BROADCAST_CATEGORY_PLAYER_STATE_REPORT);
+        intent.putExtra(PLAYER_SERVICE_BROADCAST_EXTRA_PLAYSTATE_KEY,getmPlayer().isPlaying());
+        sendLocalBroadcast(intent);
+    }
+
     /**
      * intent extra key
      */
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_CURRENT_POSITION_KEY = "player_service_category_extra_current_position_key";
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_DURATION_KEY = "player_service_category_extra_current_duration_key";
     protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_ERROR_KEY = "player_service_category_extra_tune_path_key";
+    protected static final String PLAYER_SERVICE_BROADCAST_EXTRA_PLAYSTATE_KEY = "player_service_category_extra_playstate_key";
 
     private AudioManager mAudioManager;
     private TelephonyManager mTelephonyManager;
@@ -151,6 +161,9 @@ public class YueduService extends IntentService {
                 }
             } else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE)) {
                 pause();
+            } else if (categories.contains(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_REQUEST_PLAYSTATE)) {
+                Log.d("yuedu","some one sent request for playing state!!!!");
+//                sendPlayStateBroadcast();
             }
         }
     };
@@ -261,6 +274,7 @@ public class YueduService extends IntentService {
         IntentFilter filter = new IntentFilter(MainPlayer.PLAYER_ACTIVITY_BROADCAST);
         filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PAUSE);
         filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_PLAY);
+        filter.addCategory(MainPlayer.PLAYER_ACTIVITY_BROADCAST_CATEGORY_REQUEST_PLAYSTATE);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityBroadcastReceiver, filter);
     }
 
@@ -371,6 +385,7 @@ public class YueduService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("yuedu","on start command ");
+        sendPlayStateBroadcast();
         return START_STICKY;
     }
 
