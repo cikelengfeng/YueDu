@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <ImageView android:id="@+id/notification_icon"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            />
+
+    <ImageButton android:id="@+id/notification_next"
+                 android:layout_width="65dp"
+                 android:layout_height="match_parent"
+                 android:src="@drawable/next"
+                 android:layout_alignParentRight="true"
+                 android:background="@null"
+            />
+    <ImageButton android:id="@+id/notification_pause_or_play"
+                 android:layout_width="65dp"
+                 android:layout_height="match_parent"
+                 android:src="@drawable/play_button_selector"
+                 android:layout_toLeftOf="@id/notification_next"
+                 android:layout_marginRight="5dp"
+                 android:background="@null"
+            />
+    <TextView
+            android:id="@+id/notification_tune_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/notification_pause_or_play"
+            android:layout_toRightOf="@id/notification_icon"
+            android:layout_centerVertical="true"
+            android:paddingLeft="20dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            />
+
+</RelativeLayout>
