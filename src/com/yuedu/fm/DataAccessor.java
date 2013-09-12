@@ -48,8 +48,12 @@ public enum  DataAccessor {
         }
     }
 
-    public synchronized void playNextTune() {
+    public synchronized TuneInfo playNextTune() {
+        if (mDataList == null ||mPlayingTuneIndex + 1 >= mDataList.size()) {
+            return null;
+        }
         mPlayingTuneIndex += 1;
+        return getPlayingTune();
     }
 
     private AsyncHttpClient getClient() {
