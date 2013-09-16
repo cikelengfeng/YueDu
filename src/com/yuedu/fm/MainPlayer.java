@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -279,6 +282,7 @@ public class MainPlayer extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main_player);
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
         startService(intent);
@@ -311,6 +315,7 @@ public class MainPlayer extends FragmentActivity {
             }
         });
         getmTitleView().setSelected(true);
+        getmProgressBar().getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         if (DataAccessor.SINGLE_INSTANCE.getDataList().size() > 0) {
             updateUI();
         }
