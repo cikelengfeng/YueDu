@@ -103,7 +103,7 @@
         android:layout_height="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@id/tune_cover_iv"
-        android:background="#000000"
+        android:progressDrawable="@drawable/progressbar"
         />
 	
     <RelativeLayout

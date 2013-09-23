@@ -94,12 +94,14 @@ public class MainPlayer extends FragmentActivity {
 
     private void showLoading() {
         Log.d("yuedu","set progress bar indeterminate!!!!");
-        getmProgressBar().setIndeterminate(true);
+//        getmProgressBar().setIndeterminate(true);
+        //do not show progressbar progress animation 2013/09/23
     }
 
     private void hideLoading() {
         Log.d("yuedu","set progress bar determinate!!!!");
-        getmProgressBar().setIndeterminate(false);
+//        getmProgressBar().setIndeterminate(false);
+        //do not show progressbar progress animation 2013/09/23
     }
 
     private void setCurrentPosition(int currentPosition) {
@@ -315,7 +317,6 @@ public class MainPlayer extends FragmentActivity {
             }
         });
         getmTitleView().setSelected(true);
-        getmProgressBar().getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         if (DataAccessor.SINGLE_INSTANCE.getDataList().size() > 0) {
             updateUI();
         }
