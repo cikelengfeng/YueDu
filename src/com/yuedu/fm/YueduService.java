@@ -359,26 +359,30 @@ public class YueduService extends IntentService {
     public PhoneStateListener getmPhoneStateListener() {
         if (mPhoneStateListener == null) {
             mPhoneStateListener = new PhoneStateListener() {
+
+                boolean isPausedByCall;
                 @Override
                 public void onCallStateChanged(int state, String incomingNumber) {
                     if (state == TelephonyManager.CALL_STATE_RINGING) {
                         //Incoming call: Pause music
                         if (getmPlayer().isPlaying()) {
                             pause();
+                            isPausedByCall = true;
                         }
                         Log.d("yuedu", "incoming call!!!! number is "+incomingNumber);
                     } else if(state == TelephonyManager.CALL_STATE_IDLE) {
                         //Not in call: Play music
-                        if (getmPlayer().isPaused()) {
+                        if (getmPlayer().isPaused() && isPausedByCall) {
                             play();
+                            isPausedByCall = false;
                         }
                         Log.d("yuedu", "not in call!!!!");
                     } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                         //A call is dialing, active or on hold
                         if (getmPlayer().isPlaying()) {
                             pause();
+                            isPausedByCall = true;
                         }
-                        Log.d("yuedu", "A call is dialing, active or on hold!!!!" +incomingNumber);
                     }
                     super.onCallStateChanged(state, incomingNumber);
                 }
