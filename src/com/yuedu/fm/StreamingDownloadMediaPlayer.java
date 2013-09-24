@@ -92,6 +92,7 @@ public class StreamingDownloadMediaPlayer {
         boolean isPlaying = false;
         ReentrantLock pauseLock = new ReentrantLock();
         Condition unpaused = pauseLock.newCondition();
+        float playedTimeInMS;
 
         public void pause() {
             pauseLock.lock();
@@ -128,6 +129,10 @@ public class StreamingDownloadMediaPlayer {
             } finally {
                 pauseLock.unlock();
             }
+        }
+
+        public float getPlayedTimeInMS() {
+            return playedTimeInMS;
         }
     }
 
@@ -354,7 +359,8 @@ public class StreamingDownloadMediaPlayer {
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
                         mAudioTrack.write(copyBuffer, 0, decoderBuffer.getBufferLength());
                         totalBytes += oneshootBytes;
-                        totalFrameSize += header.calculate_framesize();
+                        totalFrameSize += 1;
+                        playedTimeInMS += header.ms_per_frame();
                         bitstream.closeFrame();
                     }
 
@@ -473,7 +479,7 @@ public class StreamingDownloadMediaPlayer {
     }
 
     public long getCurrentPosition() {
-        return Math.round(mAudioTrack.getPlaybackHeadPosition()/mAudioTrack.getPlaybackRate())*1000;
+        return Math.round(mStreamingTask.getPlayedTimeInMS());
     }
 
     public long getDuration() {
