@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yuedu.R;
 import com.yuedu.image.ImageCache.ImageCacheParams;
 import com.yuedu.image.ImageFetcher;
@@ -401,6 +402,10 @@ public class MainPlayer extends FragmentActivity {
     }
 
     private void quit() {
+
+        stopService(new Intent(getApplicationContext(),YueduService.class));
+        finish();
+        MobclickAgent.onKillProcess(this);
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
@@ -479,4 +484,15 @@ public class MainPlayer extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

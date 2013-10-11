@@ -481,7 +481,6 @@ public class YueduService extends IntentService {
             sendWillStopBroadcast();
             getmPlayer().stop();
             sendStoppedBroadcast();
-            YueduNotificationManager.SINGLE_INSTANCE.setPlayButtonPlaying(this,false);
             return true;
         }
         return false;

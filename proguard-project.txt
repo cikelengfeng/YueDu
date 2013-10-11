@@ -23,3 +23,9 @@
 -dontwarn javazoom.jl.**
 -keep class javazoom.jl.** { *; }
 -dontwarn com.loopj.android.http.**
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+-keep public class com.yuedu.R$*{
+    public static final int *;
+}

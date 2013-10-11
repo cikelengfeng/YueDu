@@ -30,6 +30,8 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </service>
+        <meta-data android:value="5257f07956240b9cf000992f" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="original" android:name="UMENG_CHANNEL"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
