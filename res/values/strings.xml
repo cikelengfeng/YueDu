@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">YueDu</string>
+    <string name="app_name">悦读FM</string>
     <string name="action_quit">退出</string>
     <string name="author">作者：</string>
     <string name="player">主播：</string>

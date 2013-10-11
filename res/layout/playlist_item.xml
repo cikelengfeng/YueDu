@@ -25,7 +25,7 @@
                 android:layout_alignTop="@id/tune_item_thumb_iv"
                 android:layout_toRightOf="@id/tune_item_thumb_iv"
                 android:textColor="@android:color/white"
-                android:textSize="14sp"/>
+                android:textSize="15sp"/>
 
         <TextView
                 android:id="@+id/tune_item_time_tv"
@@ -34,7 +34,7 @@
                 android:layout_marginBottom="2dp"
                 android:layout_alignBottom="@id/tune_item_thumb_iv"
                 android:layout_alignParentRight="true"
-                android:textColor="#e9e7e8"
+                android:textColor="#f4f4ec"
                 android:textSize="12sp"
                 android:gravity="left"/>
 
@@ -46,7 +46,7 @@
                 android:layout_alignBottom="@id/tune_item_time_tv"
                 android:layout_toRightOf="@id/tune_item_thumb_iv"
                 android:layout_toLeftOf="@id/tune_item_time_tv"
-                android:textColor="#e9e7e8"
+                android:textColor="#f4f4ec"
                 android:textSize="12sp"/>
     </RelativeLayout>
 </RelativeLayout>
