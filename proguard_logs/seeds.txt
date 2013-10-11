@@ -63,8 +63,23 @@ android.support.v4.widget.SlidingPaneLayout: void setShadowDrawable(android.grap
 android.support.v4.widget.SlidingPaneLayout: void setShadowResource(int)
 android.support.v4.widget.SlidingPaneLayout$SavedState
 android.support.v4.widget.SlidingPaneLayout$SavedState: android.os.Parcelable$Creator CREATOR
+com.umeng.analytics.Gender: com.umeng.analytics.Gender[] values()
+com.umeng.analytics.Gender: com.umeng.analytics.Gender valueOf(java.lang.String)
+com.umeng.analytics.onlineconfig.b: b(org.json.JSONObject)
+com.umeng.common.net.p: p(org.json.JSONObject)
+com.umeng.common.net.p$a: com.umeng.common.net.p$a[] values()
+com.umeng.common.net.p$a: com.umeng.common.net.p$a valueOf(java.lang.String)
+com.umeng.common.net.q$b: com.umeng.common.net.q$b[] values()
+com.umeng.common.net.q$b: com.umeng.common.net.q$b valueOf(java.lang.String)
+com.umeng.common.net.u: u(org.json.JSONObject)
+com.umeng.common.util.DeltaUpdate
+com.umeng.common.util.DeltaUpdate: int bspatch(java.lang.String,java.lang.String,java.lang.String)
+com.umeng.update.UpdateResponse: UpdateResponse(org.json.JSONObject)
+com.yuedu.R$attr
+com.yuedu.R$dimen
 com.yuedu.R$dimen: int activity_horizontal_margin
 com.yuedu.R$dimen: int activity_vertical_margin
+com.yuedu.R$drawable
 com.yuedu.R$drawable: int down
 com.yuedu.R$drawable: int ic_launcher
 com.yuedu.R$drawable: int list
@@ -73,6 +88,7 @@ com.yuedu.R$drawable: int pause
 com.yuedu.R$drawable: int play
 com.yuedu.R$drawable: int play_button_selector
 com.yuedu.R$drawable: int progressbar
+com.yuedu.R$id
 com.yuedu.R$id: int nexttune_ib
 com.yuedu.R$id: int notification_icon
 com.yuedu.R$id: int notification_next
@@ -92,14 +108,18 @@ com.yuedu.R$id: int tune_item_title_tv
 com.yuedu.R$id: int tune_name_tv
 com.yuedu.R$id: int tune_played_time_tv
 com.yuedu.R$id: int tune_progress_pb
+com.yuedu.R$layout
 com.yuedu.R$layout: int activity_main_player
 com.yuedu.R$layout: int notification_layout
 com.yuedu.R$layout: int playlist_item
+com.yuedu.R$menu
 com.yuedu.R$menu: int main_player
+com.yuedu.R$string
 com.yuedu.R$string: int action_quit
 com.yuedu.R$string: int app_name
 com.yuedu.R$string: int author
 com.yuedu.R$string: int player
+com.yuedu.R$style
 com.yuedu.R$style: int AppBaseTheme
 com.yuedu.R$style: int AppTheme
 com.yuedu.fm.DataAccessor: com.yuedu.fm.DataAccessor[] values()
@@ -108,6 +128,7 @@ com.yuedu.fm.MainPlayer
 com.yuedu.fm.MainPlayer: MainPlayer()
 com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState: com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState[] values()
 com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState: com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState valueOf(java.lang.String)
+com.yuedu.fm.TuneInfo: TuneInfo(org.json.JSONObject)
 com.yuedu.fm.YueduNotificationManager: com.yuedu.fm.YueduNotificationManager[] values()
 com.yuedu.fm.YueduNotificationManager: com.yuedu.fm.YueduNotificationManager valueOf(java.lang.String)
 com.yuedu.fm.YueduService

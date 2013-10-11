@@ -1457,6 +1457,474 @@ com.loopj.android.http.RetryHandler -> com.a.a.a.k:
     int maxRetries -> c
     boolean retryRequest(java.io.IOException,int,org.apache.http.protocol.HttpContext) -> retryRequest
     boolean isInList(java.util.HashSet,java.lang.Throwable) -> a
+com.umeng.analytics.MobclickAgent -> com.b.a.a:
+    com.umeng.analytics.b a -> a
+    com.umeng.analytics.onlineconfig.a b -> b
+    void onPause(android.content.Context) -> a
+    void onResume(android.content.Context) -> b
+    void onKillProcess(android.content.Context) -> c
+com.umeng.analytics.a -> com.b.a.b:
+    java.lang.Thread$UncaughtExceptionHandler a -> a
+    com.umeng.analytics.i b -> b
+    android.content.Context c -> c
+    void a(android.content.Context) -> a
+    void a(com.umeng.analytics.i) -> a
+    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
+    void a(java.lang.Throwable) -> a
+com.umeng.analytics.a.a -> com.b.a.a.a:
+    java.util.HashMap a -> a
+    java.lang.String b -> b
+    long c -> c
+    long d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    void c(org.json.JSONObject) -> c
+    void d(org.json.JSONObject) -> d
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+com.umeng.analytics.a.b -> com.b.a.a.b:
+    java.lang.String a -> a
+    java.util.ArrayList b -> b
+    void c(org.json.JSONObject) -> c
+    void d(org.json.JSONObject) -> d
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+    void a(com.umeng.analytics.a.b) -> a
+com.umeng.analytics.a.c -> com.b.a.a.c:
+    com.umeng.analytics.a.b a -> a
+com.umeng.analytics.a.d -> com.b.a.a.d:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String a(java.lang.Throwable) -> a
+    boolean a() -> a
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+com.umeng.analytics.a.e -> com.b.a.a.e:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    int c -> c
+    long d -> d
+    java.lang.String k -> j
+    java.lang.String l -> k
+    java.lang.String m -> l
+    java.lang.String n -> m
+    boolean a() -> a
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+com.umeng.analytics.a.f -> com.b.a.a.f:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    long f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    java.lang.String j -> j
+    java.lang.String k -> k
+    java.lang.String l -> l
+    java.lang.String m -> m
+    java.lang.String n -> n
+    java.lang.String o -> o
+    long p -> p
+    java.lang.String q -> q
+    java.lang.String r -> r
+    java.lang.String s -> s
+    java.lang.String t -> t
+    java.lang.String u -> u
+    java.lang.String v -> v
+    java.lang.String w -> w
+    java.lang.String x -> x
+    int y -> y
+    java.lang.String z -> z
+    java.lang.String A -> A
+    java.lang.String B -> B
+    java.lang.String C -> C
+    java.lang.String D -> D
+    java.lang.String E -> E
+    java.lang.String F -> F
+    java.lang.String G -> G
+    java.lang.String H -> H
+    java.lang.String I -> I
+    java.lang.String J -> J
+    java.lang.String K -> K
+    java.lang.String L -> L
+    java.lang.String M -> M
+    java.lang.String N -> N
+    java.lang.String O -> O
+    java.lang.String P -> P
+    java.lang.String Q -> Q
+    java.lang.String R -> R
+    java.lang.String S -> S
+    java.lang.String T -> T
+    java.lang.String U -> U
+    java.lang.String V -> V
+    java.lang.String W -> W
+    java.lang.String X -> X
+    java.lang.String Y -> Y
+    java.lang.String Z -> Z
+    java.lang.String aa -> aa
+    java.lang.String ab -> ab
+    java.lang.String ac -> ac
+    java.lang.String ad -> ad
+    java.lang.String ae -> ae
+    java.lang.String af -> af
+    java.lang.String ag -> ag
+    java.lang.String ah -> ah
+    java.lang.String ai -> ai
+    java.lang.String aj -> aj
+    java.lang.String ak -> ak
+    java.lang.String al -> al
+    void j(org.json.JSONObject) -> a
+    void k(org.json.JSONObject) -> c
+    void l(org.json.JSONObject) -> d
+    void m(org.json.JSONObject) -> e
+    void n(org.json.JSONObject) -> f
+    void o(org.json.JSONObject) -> g
+    void p(org.json.JSONObject) -> h
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+    void a(android.content.Context,java.lang.String[]) -> a
+    void a(android.content.Context) -> a
+    void b(android.content.Context) -> b
+    void c(android.content.Context) -> c
+    void d(android.content.Context) -> d
+    void e(android.content.Context) -> e
+    void b(android.content.Context,java.lang.String[]) -> b
+    boolean b() -> b
+com.umeng.analytics.a.g -> com.b.a.a.g:
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+com.umeng.analytics.a.h -> com.b.a.a.h:
+    com.umeng.analytics.a.o a -> a
+    void c(org.json.JSONObject) -> c
+    void d(org.json.JSONObject) -> d
+    boolean a() -> a
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+com.umeng.analytics.a.i -> com.b.a.a.i:
+    java.util.ArrayList a -> a
+    java.util.ArrayList b -> b
+    java.util.ArrayList c -> c
+    java.util.ArrayList d -> d
+    java.util.ArrayList e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    java.lang.String j -> j
+    void a(com.umeng.analytics.a.h) -> a
+    void a(com.umeng.analytics.a.m) -> a
+    void a(com.umeng.analytics.a.d) -> a
+    void a(com.umeng.analytics.a.e) -> a
+    void a(com.umeng.analytics.a.b) -> a
+    void c(org.json.JSONObject) -> c
+    void d(org.json.JSONObject) -> d
+    void e(org.json.JSONObject) -> e
+    void f(org.json.JSONObject) -> f
+    void g(org.json.JSONObject) -> g
+    void a(org.json.JSONObject) -> a
+    org.json.JSONArray a(java.util.ArrayList) -> a
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+    void a(com.umeng.analytics.a.i) -> a
+    void b(java.util.ArrayList) -> b
+    int b() -> b
+    void c() -> c
+com.umeng.analytics.a.j -> com.b.a.a.j:
+    com.umeng.analytics.a.i a -> a
+com.umeng.analytics.a.k -> com.b.a.a.k:
+    java.lang.String a -> a
+    int b -> b
+com.umeng.analytics.a.l -> com.b.a.a.l:
+    java.lang.String e -> e
+    boolean a() -> a
+    void b(org.json.JSONObject) -> b
+    void a(org.json.JSONObject) -> a
+com.umeng.analytics.a.m -> com.b.a.a.m:
+    com.umeng.analytics.a.o a -> a
+    com.umeng.analytics.a.p b -> b
+    long c -> c
+    java.util.ArrayList d -> d
+    com.umeng.analytics.a.m a(android.content.Context) -> a
+    void a(android.content.SharedPreferences) -> a
+    java.lang.String[] b(android.content.SharedPreferences) -> b
+    java.util.ArrayList c(android.content.SharedPreferences) -> c
+    long d(android.content.SharedPreferences) -> d
+    android.content.SharedPreferences$Editor a(android.content.SharedPreferences,java.lang.String,long,long) -> a
+    android.content.SharedPreferences$Editor a(android.content.SharedPreferences,java.util.ArrayList,long,long) -> a
+    boolean a() -> a
+    void c(org.json.JSONObject) -> c
+    void d(org.json.JSONObject) -> d
+    void e(org.json.JSONObject) -> e
+    void f(org.json.JSONObject) -> f
+    void g(org.json.JSONObject) -> g
+    void h(org.json.JSONObject) -> h
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+com.umeng.analytics.a.n -> com.b.a.a.n:
+    java.lang.String g -> f
+    java.lang.String h -> g
+    java.lang.String i -> h
+    java.lang.String j -> i
+    boolean a() -> a
+    void b(org.json.JSONObject) -> b
+    void a(org.json.JSONObject) -> a
+com.umeng.analytics.a.o -> com.b.a.a.o:
+    double a -> a
+    double b -> b
+    long c -> c
+    com.umeng.analytics.a.o a(android.content.Context) -> a
+    com.umeng.analytics.a.o b(android.content.Context) -> b
+    android.content.SharedPreferences$Editor a(android.content.Context,android.content.SharedPreferences) -> a
+    boolean a(android.location.Location,android.content.SharedPreferences) -> a
+    void b(org.json.JSONObject) -> b
+    void a(org.json.JSONObject) -> a
+    boolean a() -> a
+com.umeng.analytics.a.p -> com.b.a.a.p:
+    long a -> a
+    long b -> b
+    void a(org.json.JSONObject) -> a
+    void b(org.json.JSONObject) -> b
+    boolean a() -> a
+    com.umeng.analytics.a.p a(android.content.Context) -> a
+    long[] b(android.content.Context) -> b
+com.umeng.analytics.b -> com.b.a.c:
+    java.util.concurrent.ExecutorService a -> a
+    java.lang.String m -> m
+    java.lang.String n -> n
+    int o -> o
+    int p -> p
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String q -> q
+    java.lang.String r -> r
+    java.lang.String s -> s
+    long t -> t
+    int u -> u
+    int v -> v
+    java.util.Stack w -> w
+    java.util.ArrayList x -> x
+    void b(java.lang.String) -> a
+    void a(android.content.Context) -> a
+    void h(android.content.Context) -> f
+    void b(android.content.Context) -> b
+    void i(android.content.Context) -> g
+    void j(android.content.Context) -> h
+    void a(android.content.Context,android.content.SharedPreferences) -> a
+    boolean a(android.content.SharedPreferences) -> a
+    java.lang.String b(android.content.Context,android.content.SharedPreferences) -> b
+    java.lang.String a(android.content.Context,long) -> a
+    java.lang.String c(android.content.Context,android.content.SharedPreferences) -> c
+    void d(android.content.Context) -> c
+    void b(android.content.Context,java.lang.Throwable) -> a
+    void a(com.umeng.analytics.b,android.content.Context) -> a
+    void b(com.umeng.analytics.b,android.content.Context) -> b
+com.umeng.analytics.b$a -> com.b.a.d:
+    java.lang.Object b -> b
+    android.content.Context c -> c
+    int d -> d
+    com.umeng.analytics.b a -> a
+    void run() -> run
+com.umeng.analytics.c -> com.b.a.e:
+    com.umeng.analytics.a.i a -> a
+    java.util.HashMap b -> b
+    java.util.HashMap c -> c
+    int d -> d
+    int a() -> a
+    boolean b() -> b
+    void a(com.umeng.analytics.a.d) -> a
+    void a(com.umeng.analytics.a.h) -> a
+    void a(com.umeng.analytics.a.m) -> a
+    boolean c() -> c
+    void a(android.content.Context) -> a
+    void b(android.content.Context) -> b
+    org.json.JSONObject d() -> d
+    void e() -> e
+com.umeng.analytics.d -> com.b.a.f:
+    com.umeng.analytics.a a -> a
+    java.lang.Object b -> b
+    android.os.Handler c -> c
+    com.umeng.analytics.c d -> d
+    com.umeng.analytics.a.f e -> e
+    int f -> f
+    int g -> g
+    int h -> h
+    int i -> i
+    int j -> j
+    java.lang.String m -> m
+    java.lang.String n -> n
+    int o -> o
+    long p -> p
+    long q -> q
+    long r -> r
+    java.lang.String k -> k
+    java.lang.String l -> l
+    boolean s -> s
+    void a(android.content.Context,int) -> a
+    void a(android.content.Context) -> a
+    void f(android.content.Context) -> d
+    void b(android.content.Context) -> b
+    boolean b(android.content.Context,int) -> b
+    java.lang.String c(android.content.Context) -> c
+    void d(android.content.Context) -> f
+    org.json.JSONObject g(android.content.Context) -> e
+    java.lang.String a(java.io.InputStream) -> a
+    java.lang.String a(android.content.Context,org.json.JSONObject,java.lang.String) -> a
+    java.lang.Object a(com.umeng.analytics.d) -> a
+    void a(com.umeng.analytics.d,android.content.Context) -> a
+com.umeng.analytics.d$a -> com.b.a.g:
+    android.content.Context b -> b
+    com.umeng.analytics.d a -> a
+    void run() -> run
+com.umeng.analytics.d$b -> com.b.a.h:
+    android.content.Context b -> b
+    com.umeng.analytics.d a -> a
+    void run() -> run
+com.umeng.analytics.e -> com.b.a.i:
+    com.umeng.analytics.d a -> a
+com.umeng.analytics.f -> com.b.a.j:
+    java.lang.String a -> a
+    long b -> b
+com.umeng.analytics.g -> com.b.a.k:
+    long d -> a
+    long g -> b
+    int h -> c
+    boolean i -> d
+    boolean j -> e
+    boolean k -> f
+    boolean l -> g
+    boolean m -> h
+    java.lang.Object p -> i
+    java.lang.String[] r -> j
+    java.lang.String[] s -> k
+    boolean t -> l
+com.umeng.analytics.h -> com.b.a.l:
+    java.lang.String a -> a
+    java.lang.String a(android.content.Context) -> a
+com.umeng.analytics.i -> com.b.a.m:
+    void b(android.content.Context,java.lang.Throwable) -> a
+com.umeng.analytics.j -> com.b.a.n:
+    long a -> a
+    long b -> b
+    android.content.SharedPreferences b(android.content.Context) -> a
+    android.content.SharedPreferences c(android.content.Context) -> b
+    android.content.SharedPreferences e(android.content.Context) -> c
+    java.lang.String f(android.content.Context) -> d
+    java.lang.String g(android.content.Context) -> e
+    int[] i(android.content.Context) -> f
+    boolean a(java.io.File) -> a
+    org.json.JSONObject a(android.content.Context,java.lang.String) -> a
+    java.lang.String a(java.io.InputStream) -> a
+    void a(android.content.Context,org.json.JSONObject,java.lang.String) -> a
+    void a(android.content.Context,com.umeng.analytics.a.g,java.lang.String) -> a
+    void b(android.content.Context,org.json.JSONObject,java.lang.String) -> b
+    void j(android.content.Context) -> g
+com.umeng.analytics.onlineconfig.UmengOnlineConfigureListener -> com.b.a.b.a:
+com.umeng.analytics.onlineconfig.a -> com.b.a.b.b:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    com.umeng.analytics.onlineconfig.UmengOnlineConfigureListener f -> f
+    com.umeng.analytics.onlineconfig.c g -> g
+    void a(com.umeng.analytics.onlineconfig.c) -> a
+com.umeng.analytics.onlineconfig.c -> com.b.a.b.c:
+com.umeng.common.Log -> com.b.b.a:
+    boolean LOG -> a
+    void a(java.lang.String,java.lang.String) -> a
+    void a(java.lang.String,java.lang.String,java.lang.Exception) -> a
+    void b(java.lang.String,java.lang.String) -> b
+    void b(java.lang.String,java.lang.String,java.lang.Exception) -> b
+    void c(java.lang.String,java.lang.String) -> c
+    void e(java.lang.String,java.lang.String) -> d
+    void e(java.lang.String,java.lang.String,java.lang.Exception) -> c
+com.umeng.common.b -> com.b.b.b:
+    java.lang.String a -> a
+    java.lang.String d(android.content.Context) -> a
+    java.lang.String e(android.content.Context) -> b
+    boolean a(android.content.Context,java.lang.String) -> a
+    java.lang.String a() -> a
+    java.lang.String g(android.content.Context) -> c
+    java.lang.String h(android.content.Context) -> d
+    java.lang.String[] k(android.content.Context) -> e
+    boolean l(android.content.Context) -> f
+    android.location.Location m(android.content.Context) -> g
+    boolean n(android.content.Context) -> h
+    int o(android.content.Context) -> i
+    java.lang.String[] p(android.content.Context) -> j
+    java.util.Locale y(android.content.Context) -> q
+    java.lang.String q(android.content.Context) -> k
+    java.lang.String r(android.content.Context) -> l
+    java.lang.String s(android.content.Context) -> m
+    int a(java.lang.Object,java.lang.String) -> a
+    java.lang.String t(android.content.Context) -> n
+    java.lang.String a(java.util.Date) -> a
+    java.lang.String u(android.content.Context) -> o
+    java.lang.String v(android.content.Context) -> p
+com.umeng.common.util.f -> com.b.b.a.a:
+    int a -> a
+    byte[] a(java.lang.String,java.lang.String) -> a
+com.umeng.common.util.h -> com.b.b.a.b:
+    java.lang.String a -> a
+    java.lang.String a(java.lang.String) -> a
+    java.lang.String b(java.lang.String) -> b
+    boolean d(java.lang.String) -> c
+    java.lang.String a() -> a
+    java.lang.String a(java.util.Date) -> a
+com.yuedu.R -> com.yuedu.R:
+com.yuedu.R$attr -> com.yuedu.R$attr:
+com.yuedu.R$dimen -> com.yuedu.R$dimen:
+    int activity_horizontal_margin -> activity_horizontal_margin
+    int activity_vertical_margin -> activity_vertical_margin
+com.yuedu.R$drawable -> com.yuedu.R$drawable:
+    int down -> down
+    int ic_launcher -> ic_launcher
+    int list -> list
+    int next -> next
+    int pause -> pause
+    int play -> play
+    int play_button_selector -> play_button_selector
+    int progressbar -> progressbar
+com.yuedu.R$id -> com.yuedu.R$id:
+    int nexttune_ib -> nexttune_ib
+    int notification_icon -> notification_icon
+    int notification_next -> notification_next
+    int notification_pause_or_play -> notification_pause_or_play
+    int notification_tune_name -> notification_tune_name
+    int options_menu_quit -> options_menu_quit
+    int play_ib -> play_ib
+    int playlist_ib -> playlist_ib
+    int playlist_ll -> playlist_ll
+    int playlist_lv -> playlist_lv
+    int tune_cover_iv -> tune_cover_iv
+    int tune_info_tv -> tune_info_tv
+    int tune_item_info_tv -> tune_item_info_tv
+    int tune_item_thumb_iv -> tune_item_thumb_iv
+    int tune_item_time_tv -> tune_item_time_tv
+    int tune_item_title_tv -> tune_item_title_tv
+    int tune_name_tv -> tune_name_tv
+    int tune_played_time_tv -> tune_played_time_tv
+    int tune_progress_pb -> tune_progress_pb
+com.yuedu.R$layout -> com.yuedu.R$layout:
+    int activity_main_player -> activity_main_player
+    int notification_layout -> notification_layout
+    int playlist_item -> playlist_item
+com.yuedu.R$menu -> com.yuedu.R$menu:
+    int main_player -> main_player
+com.yuedu.R$string -> com.yuedu.R$string:
+    int action_quit -> action_quit
+    int app_name -> app_name
+    int author -> author
+    int player -> player
+com.yuedu.R$style -> com.yuedu.R$style:
+    int AppBaseTheme -> AppBaseTheme
+    int AppTheme -> AppTheme
 com.yuedu.fm.DataAccessor -> com.yuedu.fm.a:
     com.yuedu.fm.DataAccessor SINGLE_INSTANCE -> a
     java.util.List mDataList -> b
@@ -1531,6 +1999,8 @@ com.yuedu.fm.MainPlayer -> com.yuedu.fm.MainPlayer:
     void quit() -> F
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    void onResume() -> onResume
+    void onPause() -> onPause
     void access$000(com.yuedu.fm.MainPlayer,boolean) -> a
     void access$100(com.yuedu.fm.MainPlayer,int) -> a
     void access$200(com.yuedu.fm.MainPlayer) -> a

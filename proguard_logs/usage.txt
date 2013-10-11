@@ -969,16 +969,294 @@ com.loopj.android.http.SerializableCookie
 com.loopj.android.http.SimpleMultipartEntity
 com.loopj.android.http.SyncHttpClient
 com.loopj.android.http.SyncHttpClient$1
+com.umeng.analytics.Gender
+com.umeng.analytics.MobclickAgent:
+    private static synthetic int[] c
+    20:20:public MobclickAgent()
+    34:35:public static void setAutoLocation(boolean)
+    38:39:public static void setWrapper(java.lang.String,java.lang.String)
+    45:46:public static void setSessionContinueMillis(long)
+    52:53:public static void setEnableEventBuffer(boolean)
+    59:60:public static void setOnlineConfigureListener(com.umeng.analytics.onlineconfig.UmengOnlineConfigureListener)
+    63:63:static com.umeng.analytics.b a()
+    71:78:public static void setOpenGLContext(javax.microedition.khronos.opengles.GL10)
+    85:86:public static void openActivityDurationTrack(boolean)
+    93:98:public static void onPageStart(java.lang.String)
+    104:109:public static void onPageEnd(java.lang.String)
+    116:117:public static void setDebugMode(boolean)
+    128:129:public static void setDefaultReportPolicy(android.content.Context,int)
+    157:170:public static void onResume(android.content.Context,java.lang.String,java.lang.String)
+    180:180:public static void onError(android.content.Context)
+    188:194:public static void onError(android.content.Context,java.lang.String)
+    202:203:public static void reportError(android.content.Context,java.lang.String)
+    210:211:public static void reportError(android.content.Context,java.lang.Throwable)
+    219:220:public static void flush(android.content.Context)
+    229:230:public static void onEvent(android.content.Context,java.lang.String)
+    238:239:public static void onEvent(android.content.Context,java.lang.String,int)
+    248:254:public static void onEvent(android.content.Context,java.lang.String,java.lang.String,int)
+    263:269:public static void onEvent(android.content.Context,java.lang.String,java.lang.String)
+    279:280:public static void onEvent(android.content.Context,java.lang.String,java.util.HashMap)
+    290:295:public static void onEventDuration(android.content.Context,java.lang.String,long)
+    304:313:public static void onEventDuration(android.content.Context,java.lang.String,java.lang.String,long)
+    322:327:public static void onEventDuration(android.content.Context,java.lang.String,java.util.HashMap,long)
+    334:335:public static void onEventBegin(android.content.Context,java.lang.String)
+    343:344:public static void onEventEnd(android.content.Context,java.lang.String)
+    352:353:public static void onEventBegin(android.content.Context,java.lang.String,java.lang.String)
+    361:362:public static void onEventEnd(android.content.Context,java.lang.String,java.lang.String)
+    371:372:public static void onKVEventBegin(android.content.Context,java.lang.String,java.util.HashMap,java.lang.String)
+    380:381:public static void onKVEventEnd(android.content.Context,java.lang.String,java.lang.String)
+    392:393:public static java.lang.String getConfigParams(android.content.Context,java.lang.String)
+    404:410:public static void updateOnlineConfig(android.content.Context,java.lang.String,java.lang.String)
+    416:417:public static void updateOnlineConfig(android.content.Context)
+    428:443:public void setGender(android.content.Context,com.umeng.analytics.Gender)
+    451:458:public void setAge(android.content.Context,int)
+    467:479:public void setUserID(android.content.Context,java.lang.String,java.lang.String)
+    20:20:static synthetic int[] b()
+com.umeng.analytics.MobclickAgentJSInterface
+com.umeng.analytics.MobclickAgentJSInterface$a
+com.umeng.analytics.ReportPolicy
+com.umeng.analytics.a.a:
+    31:37:public a(java.lang.String,java.util.HashMap,long)
+    40:61:private java.util.HashMap a(java.util.HashMap)
+    65:65:private long b()
+com.umeng.analytics.a.b:
+    18:21:public b(java.lang.String,com.umeng.analytics.a.a)
+com.umeng.analytics.a.d:
+    25:27:public d(java.lang.String)
+com.umeng.analytics.a.e:
+    32:40:public e(java.lang.String,java.lang.String,java.lang.String,int,long)
+com.umeng.analytics.a.f:
+    104:107:public f(java.lang.String,java.lang.String)
+    111:127:private void c(org.json.JSONObject)
+    130:145:private void d(org.json.JSONObject)
+    148:151:private void e(org.json.JSONObject)
+    154:156:private void f(org.json.JSONObject)
+    159:162:private void g(org.json.JSONObject)
+    165:168:private void h(org.json.JSONObject)
+    171:173:private void i(org.json.JSONObject)
+    177:187:public void a(org.json.JSONObject)
+com.umeng.analytics.a.g:
+    public abstract void a(org.json.JSONObject)
+com.umeng.analytics.a.h:
+    25:26:public void a(com.umeng.analytics.a.o)
+    68:76:public org.json.JSONObject b()
+com.umeng.analytics.a.i:
+    62:74:public void a(java.lang.String,com.umeng.analytics.a.a)
+com.umeng.analytics.a.l:
+    public static final java.lang.String f
+    18:19:public void a(java.lang.String)
+com.umeng.analytics.a.m:
+    private static final java.lang.String k
+    private static final java.lang.String l
+    private static final java.lang.String m
+com.umeng.analytics.a.o:
+    public static final java.lang.String d
+    public static final java.lang.String e
+    public static final java.lang.String f
+    private static final java.lang.String g
+com.umeng.analytics.a.p:
+    private static final java.lang.String c
+    private static final java.lang.String d
+com.umeng.analytics.b:
+    59:63:void a(java.lang.String)
+    83:85:void a(java.lang.String,java.lang.String)
+    106:119:void a(android.content.Context,java.lang.String)
+    122:129:void a(android.content.Context,java.lang.Throwable)
+    191:195:void c(android.content.Context)
+    199:220:void a(android.content.Context,java.lang.String,java.lang.String,long,int)
+    224:246:void a(android.content.Context,java.lang.String,java.util.HashMap,long)
+    377:387:private void d(android.content.Context,java.lang.String)
+    390:408:private int e(android.content.Context,java.lang.String)
+    412:418:void b(android.content.Context,java.lang.String)
+    421:432:void c(android.content.Context,java.lang.String)
+    435:440:void a(android.content.Context,java.lang.String,java.lang.String)
+    443:453:void b(android.content.Context,java.lang.String,java.lang.String)
+    462:481:void a(android.content.Context,java.lang.String,java.util.HashMap,java.lang.String)
+    484:499:void c(android.content.Context,java.lang.String,java.lang.String)
+    509:519:boolean a(java.lang.String,int)
+    523:535:boolean a(java.util.Map)
+com.umeng.analytics.c:
+    38:39:public void a(int)
+    49:56:public void a(java.lang.String)
+    59:62:public long b(java.lang.String)
+    66:67:public void a(java.lang.String,java.util.HashMap)
+    70:73:public java.util.HashMap c(java.lang.String)
+    78:79:public synchronized void a(java.lang.String,java.lang.String,java.lang.String,long,int)
+    82:83:public synchronized void a(java.lang.String,java.lang.String,java.util.HashMap,long)
+com.umeng.analytics.d:
+    82:83:public void e(android.content.Context)
+    459:461:public void a(int,long)
+com.umeng.analytics.f:
+    7:10:public f(java.lang.String,long)
+com.umeng.analytics.g:
+    public static final java.lang.String a
+    public static final java.lang.String b
+    public static final java.lang.String c
+    static final int e
+    static final int f
+    static final java.lang.String n
+    static final java.lang.String o
+    public static final java.lang.String q
+    static final java.lang.String u
+    static final java.lang.String v
+    static final java.lang.String w
+    static final java.lang.String x
+    static final java.lang.String y
+    static final java.lang.String z
+    public static final java.lang.String A
+    public static final java.lang.String B
+    public static final java.lang.String C
+    public static final java.lang.String D
+    public static final java.lang.String E
+    public static final java.lang.String F
+    public static final java.lang.String G
+    public static final java.lang.String H
+    8:8:public g()
+com.umeng.analytics.j:
+    private static final java.lang.String c
+    private static final java.lang.String d
+    private static final java.lang.String e
+    private static final java.lang.String f
+    private static final java.lang.String g
+    private static final java.lang.String h
+    private static final java.lang.String i
+    private static final java.lang.String j
+    27:27:public j()
+    40:40:static android.content.SharedPreferences a(android.content.Context)
+    52:52:static android.content.SharedPreferences d(android.content.Context)
+    68:92:static org.json.JSONObject h(android.content.Context)
+com.umeng.analytics.k
+com.umeng.analytics.onlineconfig.UmengOnlineConfigureListener:
+    public abstract void onDataReceived(org.json.JSONObject)
+com.umeng.analytics.onlineconfig.a:
+    46:56:public void a(android.content.Context)
+    60:64:public void a(android.content.Context,java.lang.String,java.lang.String)
+    67:68:public void a(com.umeng.analytics.onlineconfig.UmengOnlineConfigureListener)
+    71:72:public void a()
+    79:80:public void b()
+    83:84:private void a(org.json.JSONObject)
+    87:96:private java.lang.String b(android.content.Context)
+    100:100:private java.lang.String c(android.content.Context)
+    105:125:private org.json.JSONObject d(android.content.Context)
+    130:131:private java.lang.String e(android.content.Context)
+    135:150:private void a(android.content.Context,com.umeng.analytics.onlineconfig.b)
+    153:178:private void b(android.content.Context,com.umeng.analytics.onlineconfig.b)
+    82:82:static synthetic void a(com.umeng.analytics.onlineconfig.a,org.json.JSONObject)
+    103:103:static synthetic org.json.JSONObject a(com.umeng.analytics.onlineconfig.a,android.content.Context)
+    36:36:static synthetic com.umeng.analytics.onlineconfig.c a(com.umeng.analytics.onlineconfig.a)
+    134:134:static synthetic void a(com.umeng.analytics.onlineconfig.a,android.content.Context,com.umeng.analytics.onlineconfig.b)
+    152:152:static synthetic void b(com.umeng.analytics.onlineconfig.a,android.content.Context,com.umeng.analytics.onlineconfig.b)
+com.umeng.analytics.onlineconfig.a$a
+com.umeng.analytics.onlineconfig.a$b
+com.umeng.analytics.onlineconfig.b
+com.umeng.analytics.onlineconfig.c:
+    public abstract void a(int,long)
+com.umeng.common.Log:
+    8:8:public Log()
+    50:53:public static void c(java.lang.String,java.lang.String,java.lang.Exception)
+    56:59:public static void d(java.lang.String,java.lang.String)
+    62:65:public static void d(java.lang.String,java.lang.String,java.lang.Exception)
+com.umeng.common.a
+com.umeng.common.a.a
+com.umeng.common.a.b
+com.umeng.common.a.c
+com.umeng.common.b:
+    protected static final java.lang.String b
+    private static final java.lang.String d
+    private static final java.lang.String e
+    public static final int c
+    62:70:public static boolean a(java.lang.String,android.content.Context)
+    81:82:public static boolean a(android.content.Context)
+    93:100:public static java.util.Set b(android.content.Context)
+    110:113:public static boolean c(android.content.Context)
+    173:182:public static java.lang.String f(android.content.Context)
+    192:200:public static java.lang.String[] a(javax.microedition.khronos.opengles.GL10)
+    292:301:public static java.lang.String i(android.content.Context)
+    313:326:public static java.lang.String j(android.content.Context)
+    458:462:public static boolean b()
+    673:676:public static java.lang.String c()
+    685:689:public static java.util.Date a(java.lang.String)
+    700:708:public static int a(java.util.Date,java.util.Date)
+    757:757:public static java.lang.String w(android.content.Context)
+    767:769:public static boolean x(android.content.Context)
+com.umeng.common.c
+com.umeng.common.net.DownloadingService
+com.umeng.common.net.DownloadingService$a
+com.umeng.common.net.DownloadingService$b
+com.umeng.common.net.DownloadingService$c
+com.umeng.common.net.a
+com.umeng.common.net.a$a
+com.umeng.common.net.a$b
+com.umeng.common.net.b
+com.umeng.common.net.c
+com.umeng.common.net.c$a
+com.umeng.common.net.c$b
+com.umeng.common.net.d
+com.umeng.common.net.d$a
+com.umeng.common.net.d$b
+com.umeng.common.net.e
+com.umeng.common.net.f
+com.umeng.common.net.g
+com.umeng.common.net.h
+com.umeng.common.net.i
+com.umeng.common.net.j
+com.umeng.common.net.k
+com.umeng.common.net.l
+com.umeng.common.net.m
+com.umeng.common.net.n
+com.umeng.common.net.n$a
+com.umeng.common.net.n$b
+com.umeng.common.net.o
+com.umeng.common.net.p
+com.umeng.common.net.p$a
+com.umeng.common.net.q
+com.umeng.common.net.q$a
+com.umeng.common.net.q$b
+com.umeng.common.net.q$c
+com.umeng.common.net.r
+com.umeng.common.net.s
+com.umeng.common.net.t
+com.umeng.common.net.u
+com.umeng.common.util.DeltaUpdate
+com.umeng.common.util.a
+com.umeng.common.util.b
+com.umeng.common.util.c
+com.umeng.common.util.d
+com.umeng.common.util.e
+com.umeng.common.util.f:
+    16:16:public f()
+    60:71:public static java.lang.String a(byte[],java.lang.String)
+com.umeng.common.util.g
+com.umeng.common.util.h:
+    private static final java.lang.String b
+    27:27:public h()
+    98:117:public static java.lang.String a(java.io.File)
+    139:151:public static java.lang.String a(android.content.Context,long)
+    155:174:public static java.lang.String c(java.lang.String)
+    185:188:public static void a(android.content.Context,java.lang.String)
+    200:206:public static boolean b(android.content.Context,java.lang.String)
+    230:234:public static boolean e(java.lang.String)
+com.umeng.common.util.i
+com.umeng.common.util.j
+com.umeng.update.UmengDialogButtonListener
+com.umeng.update.UmengDownloadListener
+com.umeng.update.UmengUpdateAgent
+com.umeng.update.UmengUpdateAgent$a
+com.umeng.update.UmengUpdateListener
+com.umeng.update.UpdateResponse
+com.umeng.update.UpdateStatus
+com.umeng.update.a
+com.umeng.update.b
+com.umeng.update.c
+com.umeng.update.d
+com.umeng.update.e
+com.umeng.update.f
+com.umeng.update.g
+com.umeng.update.h
+com.umeng.update.i
 com.yuedu.BuildConfig
-com.yuedu.R
-com.yuedu.R$attr
-com.yuedu.R$dimen
-com.yuedu.R$drawable
-com.yuedu.R$id
-com.yuedu.R$layout
-com.yuedu.R$menu
-com.yuedu.R$string
-com.yuedu.R$style
+com.yuedu.R:
+    10:68:public R()
 com.yuedu.fm.DataAccessor:
     public static final java.lang.String DATA_ACCESSOR_DOWNLOAD_COMPLETE_ACTION
     public static final java.lang.String DATA_ACCESSOR_DOWNLOAD_FAILED_ACTION
