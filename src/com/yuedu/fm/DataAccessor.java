@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,18 @@ public enum  DataAccessor {
     private List<TuneInfo> mDataList;
     private int mPlayingTuneIndex;
     private AsyncHttpClient mHTTPClient;
+    private WeakReference<DataAccessorHandler> mDataHandler;
 
     public static final String DATA_ACCESSOR_DOWNLOAD_COMPLETE_ACTION = "download_complete";
     public static final String DATA_ACCESSOR_DOWNLOAD_FAILED_ACTION = "download_failed";
+
+    public DataAccessorHandler getmDataHandler() {
+        return  mDataHandler == null ? null : mDataHandler.get();
+    }
+
+    public void setmDataHandler(DataAccessorHandler mDataHandler) {
+        this.mDataHandler = new WeakReference<DataAccessorHandler>(mDataHandler);
+    }
 
     public List<TuneInfo> getDataList() {
         return mDataList;
@@ -90,18 +100,29 @@ public enum  DataAccessor {
                 super.onSuccess(jsonObject);
                 JSONArray al = jsonObject.optJSONArray("list");
                 setDataList(al,context);
+                if (mDataHandler.get() != null) {
+                    mDataHandler.get().onSuccess(jsonObject);
+                }
             }
 
             @Override
             public void onFailure(Throwable throwable, JSONObject jsonObject) {
                 super.onFailure(throwable, jsonObject);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(DATA_ACCESSOR_DOWNLOAD_FAILED_ACTION));
+                if (mDataHandler.get() != null) {
+                    mDataHandler.get().onFailure(throwable,jsonObject);
+                }
             }
         });
     }
 
     private DataAccessor() {
         mDataList = new ArrayList<TuneInfo>(200);
+    }
+
+    public static interface DataAccessorHandler {
+        public void onSuccess(final JSONObject jsonObject);
+        public void onFailure(final Throwable throwable, final JSONObject jsonObject);
     }
 
 }

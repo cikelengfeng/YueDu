@@ -32,10 +32,12 @@ import com.yuedu.R;
 import com.yuedu.image.ImageCache.ImageCacheParams;
 import com.yuedu.image.ImageFetcher;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Set;
 
-public class MainPlayer extends FragmentActivity {
+public class MainPlayer extends FragmentActivity implements DataAccessor.DataAccessorHandler {
 
 
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
@@ -286,6 +288,9 @@ public class MainPlayer extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main_player);
+        if (DataAccessor.SINGLE_INSTANCE.getmDataHandler() != this) {
+            DataAccessor.SINGLE_INSTANCE.setmDataHandler(this);
+        }
         Intent intent = new Intent(getApplicationContext(), YueduService.class);
         startService(intent);
         registerLocalBroadcastReceiver();
@@ -318,8 +323,24 @@ public class MainPlayer extends FragmentActivity {
         });
         getmTitleView().setSelected(true);
         if (DataAccessor.SINGLE_INSTANCE.getDataList().size() > 0) {
+            hideGreetingView();
             updateUI();
         }
+    }
+
+    @Override
+    public void onSuccess(JSONObject jsonObject) {
+        hideGreetingView();
+    }
+
+    @Override
+    public void onFailure(Throwable throwable, JSONObject jsonObject) {
+        hideGreetingView();
+        Toast.makeText(this,"获取数据失败",Toast.LENGTH_SHORT).show();
+    }
+
+    private void hideGreetingView() {
+         findViewById(R.id.greeting_view).setVisibility(View.GONE);
     }
 
     private void setPlaylistViewVisible(boolean visible) {

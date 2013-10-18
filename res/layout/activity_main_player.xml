@@ -138,4 +138,17 @@
         
     </RelativeLayout>
 
+    <ImageView
+            android:id="@+id/greeting_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ee5043"
+            android:src="@drawable/greeting"
+            android:paddingRight="80dp"
+            android:paddingLeft="80dp"
+            android:paddingTop="100dp"
+            android:paddingBottom="200dp"
+            android:cropToPadding="true"
+            />
+
 </RelativeLayout>
