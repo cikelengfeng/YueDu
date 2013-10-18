@@ -1884,6 +1884,7 @@ com.yuedu.R$dimen -> com.yuedu.R$dimen:
     int activity_vertical_margin -> activity_vertical_margin
 com.yuedu.R$drawable -> com.yuedu.R$drawable:
     int down -> down
+    int greeting -> greeting
     int ic_launcher -> ic_launcher
     int list -> list
     int next -> next
@@ -1892,6 +1893,7 @@ com.yuedu.R$drawable -> com.yuedu.R$drawable:
     int play_button_selector -> play_button_selector
     int progressbar -> progressbar
 com.yuedu.R$id -> com.yuedu.R$id:
+    int greeting_view -> greeting_view
     int nexttune_ib -> nexttune_ib
     int notification_icon -> notification_icon
     int notification_next -> notification_next
@@ -1930,21 +1932,28 @@ com.yuedu.fm.DataAccessor -> com.yuedu.fm.a:
     java.util.List mDataList -> b
     int mPlayingTuneIndex -> c
     com.loopj.android.http.AsyncHttpClient mHTTPClient -> d
-    com.yuedu.fm.DataAccessor[] $VALUES -> e
+    java.lang.ref.WeakReference mDataHandler -> e
+    com.yuedu.fm.DataAccessor[] $VALUES -> f
     com.yuedu.fm.DataAccessor[] values() -> values
     com.yuedu.fm.DataAccessor valueOf(java.lang.String) -> valueOf
-    java.util.List getDataList() -> a
-    com.yuedu.fm.TuneInfo getPlayingTune() -> b
-    int getPlayingTuneIndex() -> c
+    com.yuedu.fm.DataAccessor$DataAccessorHandler getmDataHandler() -> a
+    void setmDataHandler(com.yuedu.fm.DataAccessor$DataAccessorHandler) -> a
+    java.util.List getDataList() -> b
+    com.yuedu.fm.TuneInfo getPlayingTune() -> c
+    int getPlayingTuneIndex() -> d
     void playTuneAtIndex(int) -> a
-    com.yuedu.fm.TuneInfo playNextTune() -> d
-    com.loopj.android.http.AsyncHttpClient getClient() -> e
+    com.yuedu.fm.TuneInfo playNextTune() -> e
+    com.loopj.android.http.AsyncHttpClient getClient() -> f
     void setDataList(org.json.JSONArray,android.content.Context) -> a
     void downloadData(android.content.Context) -> a
     void access$000(com.yuedu.fm.DataAccessor,org.json.JSONArray,android.content.Context) -> a
+    java.lang.ref.WeakReference access$100(com.yuedu.fm.DataAccessor) -> a
 com.yuedu.fm.DataAccessor$1 -> com.yuedu.fm.b:
     android.content.Context val$context -> a
     com.yuedu.fm.DataAccessor this$0 -> b
+    void onSuccess(org.json.JSONObject) -> a
+    void onFailure(java.lang.Throwable,org.json.JSONObject) -> a
+com.yuedu.fm.DataAccessor$DataAccessorHandler -> com.yuedu.fm.c:
     void onSuccess(org.json.JSONObject) -> a
     void onFailure(java.lang.Throwable,org.json.JSONObject) -> a
 com.yuedu.fm.MainPlayer -> com.yuedu.fm.MainPlayer:
@@ -1984,19 +1993,22 @@ com.yuedu.fm.MainPlayer -> com.yuedu.fm.MainPlayer:
     void updateListViewSelection() -> w
     void updateUI() -> x
     void onCreate(android.os.Bundle) -> onCreate
+    void onSuccess(org.json.JSONObject) -> a
+    void onFailure(java.lang.Throwable,org.json.JSONObject) -> a
+    void hideGreetingView() -> y
     void setPlaylistViewVisible(boolean) -> b
-    boolean isPlaylistViewVisible() -> y
-    boolean playButtonIsPlayingState() -> z
+    boolean isPlaylistViewVisible() -> z
+    boolean playButtonIsPlayingState() -> A
     void setPlayButtonPlaying(boolean) -> c
     void onDestroy() -> onDestroy
-    void play() -> A
-    void pausePlay() -> B
-    void playNextTune() -> C
+    void play() -> B
+    void pausePlay() -> C
+    void playNextTune() -> D
     void playTuneAtIndex(int) -> b
     void sendLocalBroadcast(android.content.Intent) -> a
-    void registerLocalBroadcastReceiver() -> D
-    void unregisterLocalBroadcastReceiver() -> E
-    void quit() -> F
+    void registerLocalBroadcastReceiver() -> E
+    void unregisterLocalBroadcastReceiver() -> F
+    void quit() -> G
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void onResume() -> onResume
@@ -2015,30 +2027,30 @@ com.yuedu.fm.MainPlayer -> com.yuedu.fm.MainPlayer:
     boolean access$1100(com.yuedu.fm.MainPlayer) -> h
     void access$1200(com.yuedu.fm.MainPlayer) -> i
     void access$1300(com.yuedu.fm.MainPlayer) -> j
-com.yuedu.fm.MainPlayer$1 -> com.yuedu.fm.c:
+com.yuedu.fm.MainPlayer$1 -> com.yuedu.fm.d:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.yuedu.fm.MainPlayer$2 -> com.yuedu.fm.d:
+com.yuedu.fm.MainPlayer$2 -> com.yuedu.fm.e:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-com.yuedu.fm.MainPlayer$3 -> com.yuedu.fm.e:
+com.yuedu.fm.MainPlayer$3 -> com.yuedu.fm.f:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.yuedu.fm.MainPlayer$4 -> com.yuedu.fm.f:
+com.yuedu.fm.MainPlayer$4 -> com.yuedu.fm.g:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onClick(android.view.View) -> onClick
-com.yuedu.fm.MainPlayer$5 -> com.yuedu.fm.g:
+com.yuedu.fm.MainPlayer$5 -> com.yuedu.fm.h:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onClick(android.view.View) -> onClick
-com.yuedu.fm.MainPlayer$6 -> com.yuedu.fm.h:
+com.yuedu.fm.MainPlayer$6 -> com.yuedu.fm.i:
     com.yuedu.fm.MainPlayer this$0 -> a
     void onClick(android.view.View) -> onClick
-com.yuedu.fm.MainPlayer$PlaylistAdapter -> com.yuedu.fm.i:
+com.yuedu.fm.MainPlayer$PlaylistAdapter -> com.yuedu.fm.j:
     android.view.LayoutInflater inflater -> b
     com.yuedu.image.ImageFetcher imageFetcher -> c
     boolean $assertionsDisabled -> a
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-com.yuedu.fm.StreamingDownloadMediaPlayer -> com.yuedu.fm.j:
+com.yuedu.fm.StreamingDownloadMediaPlayer -> com.yuedu.fm.k:
     java.net.URL mURL -> a
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState mState -> b
     boolean mLooping -> c
@@ -2082,33 +2094,33 @@ com.yuedu.fm.StreamingDownloadMediaPlayer -> com.yuedu.fm.j:
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState access$802(com.yuedu.fm.StreamingDownloadMediaPlayer,com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState) -> a
     com.yuedu.fm.StreamingDownloadMediaPlayer$OnErrorListener access$900(com.yuedu.fm.StreamingDownloadMediaPlayer) -> g
     com.yuedu.fm.StreamingDownloadMediaPlayer$OnPreparedListener access$1000(com.yuedu.fm.StreamingDownloadMediaPlayer) -> h
-com.yuedu.fm.StreamingDownloadMediaPlayer$1 -> com.yuedu.fm.k:
+com.yuedu.fm.StreamingDownloadMediaPlayer$1 -> com.yuedu.fm.l:
     com.yuedu.fm.StreamingDownloadMediaPlayer this$0 -> a
     void onMarkerReached(android.media.AudioTrack) -> onMarkerReached
     void onPeriodicNotification(android.media.AudioTrack) -> onPeriodicNotification
-com.yuedu.fm.StreamingDownloadMediaPlayer$1$1 -> com.yuedu.fm.l:
+com.yuedu.fm.StreamingDownloadMediaPlayer$1$1 -> com.yuedu.fm.m:
     com.yuedu.fm.StreamingDownloadMediaPlayer$1 this$1 -> a
     void run() -> run
-com.yuedu.fm.StreamingDownloadMediaPlayer$2 -> com.yuedu.fm.m:
+com.yuedu.fm.StreamingDownloadMediaPlayer$2 -> com.yuedu.fm.n:
     java.net.URL val$url -> a
     javazoom.jl.decoder.Decoder val$decoder -> b
     com.yuedu.fm.StreamingDownloadMediaPlayer this$0 -> c
     java.lang.Void doInBackground(java.net.URL[]) -> a
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.yuedu.fm.StreamingDownloadMediaPlayer$2$1 -> com.yuedu.fm.n:
+com.yuedu.fm.StreamingDownloadMediaPlayer$2$1 -> com.yuedu.fm.o:
     java.lang.Exception val$e -> a
     com.yuedu.fm.StreamingDownloadMediaPlayer$2 this$1 -> b
     void run() -> run
-com.yuedu.fm.StreamingDownloadMediaPlayer$3 -> com.yuedu.fm.o:
+com.yuedu.fm.StreamingDownloadMediaPlayer$3 -> com.yuedu.fm.p:
     com.yuedu.fm.StreamingDownloadMediaPlayer this$0 -> a
     void run() -> run
-com.yuedu.fm.StreamingDownloadMediaPlayer$OnCompletionListener -> com.yuedu.fm.p:
+com.yuedu.fm.StreamingDownloadMediaPlayer$OnCompletionListener -> com.yuedu.fm.q:
     void onCompletion(com.yuedu.fm.StreamingDownloadMediaPlayer) -> a
-com.yuedu.fm.StreamingDownloadMediaPlayer$OnErrorListener -> com.yuedu.fm.q:
+com.yuedu.fm.StreamingDownloadMediaPlayer$OnErrorListener -> com.yuedu.fm.r:
     void onError(com.yuedu.fm.StreamingDownloadMediaPlayer,java.lang.Throwable) -> a
-com.yuedu.fm.StreamingDownloadMediaPlayer$OnPreparedListener -> com.yuedu.fm.r:
+com.yuedu.fm.StreamingDownloadMediaPlayer$OnPreparedListener -> com.yuedu.fm.s:
     void onPrepared(com.yuedu.fm.StreamingDownloadMediaPlayer) -> a
-com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState -> com.yuedu.fm.s:
+com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState -> com.yuedu.fm.t:
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState IDLE -> a
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState INITIALIZED -> b
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState PREPARING -> c
@@ -2123,7 +2135,7 @@ com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState -> com.yuedu.fm.s:
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState[] values() -> values
     com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState valueOf(java.lang.String) -> valueOf
     java.lang.String toString() -> toString
-com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingAsyncTask -> com.yuedu.fm.t:
+com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingAsyncTask -> com.yuedu.fm.u:
     boolean isPaused -> d
     boolean isStopped -> e
     boolean isPlaying -> f
@@ -2136,7 +2148,7 @@ com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingAsyncTask -> com.yuedu.fm.t:
     void stop() -> c
     void resume() -> d
     float getPlayedTimeInMS() -> e
-com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingPipe -> com.yuedu.fm.u:
+com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingPipe -> com.yuedu.fm.v:
     java.io.InputStream inputStream -> a
     java.io.OutputStream outputStream -> b
     int available() -> available
@@ -2147,7 +2159,7 @@ com.yuedu.fm.StreamingDownloadMediaPlayer$StreamingPipe -> com.yuedu.fm.u:
     void reset() -> reset
     long skip(long) -> skip
     int read() -> read
-com.yuedu.fm.TuneInfo -> com.yuedu.fm.v:
+com.yuedu.fm.TuneInfo -> com.yuedu.fm.w:
     int min -> a
     int sec -> b
     java.lang.String bgURL -> c
@@ -2158,7 +2170,7 @@ com.yuedu.fm.TuneInfo -> com.yuedu.fm.v:
     java.lang.String authorURL -> h
     java.lang.String sid -> i
     java.lang.String mp3URL -> j
-com.yuedu.fm.YueduNotificationManager -> com.yuedu.fm.w:
+com.yuedu.fm.YueduNotificationManager -> com.yuedu.fm.x:
     com.yuedu.fm.YueduNotificationManager SINGLE_INSTANCE -> a
     com.yuedu.fm.YueduNotificationManager[] $VALUES -> b
     com.yuedu.fm.YueduNotificationManager[] values() -> values
@@ -2232,32 +2244,32 @@ com.yuedu.fm.YueduService -> com.yuedu.fm.YueduService:
     void access$900(com.yuedu.fm.YueduService) -> g
     void access$1000(com.yuedu.fm.YueduService,java.lang.String) -> c
     boolean access$1100(com.yuedu.fm.YueduService) -> h
-com.yuedu.fm.YueduService$1 -> com.yuedu.fm.x:
+com.yuedu.fm.YueduService$1 -> com.yuedu.fm.y:
     com.yuedu.fm.YueduService this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.yuedu.fm.YueduService$2 -> com.yuedu.fm.y:
+com.yuedu.fm.YueduService$2 -> com.yuedu.fm.z:
     com.yuedu.fm.YueduService this$0 -> a
     void run() -> run
-com.yuedu.fm.YueduService$3 -> com.yuedu.fm.z:
+com.yuedu.fm.YueduService$3 -> com.yuedu.fm.aa:
     com.yuedu.fm.YueduService this$0 -> a
     void onPrepared(com.yuedu.fm.StreamingDownloadMediaPlayer) -> a
-com.yuedu.fm.YueduService$4 -> com.yuedu.fm.aa:
+com.yuedu.fm.YueduService$4 -> com.yuedu.fm.ab:
     com.yuedu.fm.YueduService this$0 -> a
     void onCompletion(com.yuedu.fm.StreamingDownloadMediaPlayer) -> a
-com.yuedu.fm.YueduService$5 -> com.yuedu.fm.ab:
+com.yuedu.fm.YueduService$5 -> com.yuedu.fm.ac:
     com.yuedu.fm.YueduService this$0 -> a
     void onError(com.yuedu.fm.StreamingDownloadMediaPlayer,java.lang.Throwable) -> a
-com.yuedu.fm.YueduService$6 -> com.yuedu.fm.ac:
+com.yuedu.fm.YueduService$6 -> com.yuedu.fm.ad:
     com.yuedu.fm.YueduService this$0 -> a
     void onAudioFocusChange(int) -> onAudioFocusChange
-com.yuedu.fm.YueduService$7 -> com.yuedu.fm.ad:
+com.yuedu.fm.YueduService$7 -> com.yuedu.fm.ae:
     boolean isPausedByCall -> a
     com.yuedu.fm.YueduService this$0 -> b
     void onCallStateChanged(int,java.lang.String) -> onCallStateChanged
-com.yuedu.fm.YueduService$NoisyAudioStreamReceiver -> com.yuedu.fm.ae:
+com.yuedu.fm.YueduService$NoisyAudioStreamReceiver -> com.yuedu.fm.af:
     com.yuedu.fm.YueduService this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.yuedu.fm.YueduService$PausableThreadPoolExecutor -> com.yuedu.fm.af:
+com.yuedu.fm.YueduService$PausableThreadPoolExecutor -> com.yuedu.fm.ag:
     boolean isPaused -> a
     java.util.concurrent.locks.ReentrantLock pauseLock -> b
     java.util.concurrent.locks.Condition unpaused -> c

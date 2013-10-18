@@ -1256,7 +1256,7 @@ com.umeng.update.h
 com.umeng.update.i
 com.yuedu.BuildConfig
 com.yuedu.R:
-    10:68:public R()
+    10:70:public R()
 com.yuedu.fm.DataAccessor:
     public static final java.lang.String DATA_ACCESSOR_DOWNLOAD_COMPLETE_ACTION
     public static final java.lang.String DATA_ACCESSOR_DOWNLOAD_FAILED_ACTION

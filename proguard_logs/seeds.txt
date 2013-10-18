@@ -81,6 +81,7 @@ com.yuedu.R$dimen: int activity_horizontal_margin
 com.yuedu.R$dimen: int activity_vertical_margin
 com.yuedu.R$drawable
 com.yuedu.R$drawable: int down
+com.yuedu.R$drawable: int greeting
 com.yuedu.R$drawable: int ic_launcher
 com.yuedu.R$drawable: int list
 com.yuedu.R$drawable: int next
@@ -89,6 +90,7 @@ com.yuedu.R$drawable: int play
 com.yuedu.R$drawable: int play_button_selector
 com.yuedu.R$drawable: int progressbar
 com.yuedu.R$id
+com.yuedu.R$id: int greeting_view
 com.yuedu.R$id: int nexttune_ib
 com.yuedu.R$id: int notification_icon
 com.yuedu.R$id: int notification_next
