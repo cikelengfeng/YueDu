@@ -1,0 +1,1144 @@
+android.support.v4.app.BackStackState
+android.support.v4.app.BackStackState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.Fragment$SavedState
+android.support.v4.app.Fragment$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentActivity: FragmentActivity()
+android.support.v4.app.FragmentManagerState
+android.support.v4.app.FragmentManagerState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentState
+android.support.v4.app.FragmentState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentTabHost: void setOnTabChangedListener(android.widget.TabHost$OnTabChangeListener)
+android.support.v4.app.FragmentTabHost$SavedState
+android.support.v4.app.FragmentTabHost$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status[] values()
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColor(int)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColorResource(int)
+android.support.v4.view.PagerTabStrip: int getTabIndicatorColor()
+android.support.v4.view.PagerTabStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.PagerTabStrip: void setBackgroundColor(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundResource(int)
+android.support.v4.view.PagerTabStrip: void setDrawFullUnderline(boolean)
+android.support.v4.view.PagerTabStrip: boolean getDrawFullUnderline()
+android.support.v4.view.PagerTabStrip: int getMinHeight()
+android.support.v4.view.PagerTitleStrip: void setSingleLineAllCaps(android.widget.TextView)
+android.support.v4.view.PagerTitleStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTitleStrip: int getTextSpacing()
+android.support.v4.view.PagerTitleStrip: void setNonPrimaryAlpha(float)
+android.support.v4.view.PagerTitleStrip: void setTextColor(int)
+android.support.v4.view.PagerTitleStrip: void setGravity(int)
+android.support.v4.view.PagerTitleStrip: int getMinHeight()
+android.support.v4.view.ViewPager: void setScrollState(int)
+android.support.v4.view.ViewPager: void setAdapter(android.support.v4.view.PagerAdapter)
+android.support.v4.view.ViewPager: android.support.v4.view.PagerAdapter getAdapter()
+android.support.v4.view.ViewPager: void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener)
+android.support.v4.view.ViewPager: int getClientWidth()
+android.support.v4.view.ViewPager: void setCurrentItem(int)
+android.support.v4.view.ViewPager: int getCurrentItem()
+android.support.v4.view.ViewPager: void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
+android.support.v4.view.ViewPager: void setChildrenDrawingOrderEnabledCompat(boolean)
+android.support.v4.view.ViewPager: int getOffscreenPageLimit()
+android.support.v4.view.ViewPager: void setOffscreenPageLimit(int)
+android.support.v4.view.ViewPager: void setPageMargin(int)
+android.support.v4.view.ViewPager: int getPageMargin()
+android.support.v4.view.ViewPager: void setPageMarginDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.ViewPager: void setPageMarginDrawable(int)
+android.support.v4.view.ViewPager: void setScrollingCacheEnabled(boolean)
+android.support.v4.view.ViewPager$SavedState
+android.support.v4.view.ViewPager$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.DrawerLayout: void setScrimColor(int)
+android.support.v4.widget.DrawerLayout: void setDrawerListener(android.support.v4.widget.DrawerLayout$DrawerListener)
+android.support.v4.widget.DrawerLayout: void setDrawerLockMode(int)
+android.support.v4.widget.DrawerLayout$SavedState
+android.support.v4.widget.DrawerLayout$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.SlidingPaneLayout: void setParallaxDistance(int)
+android.support.v4.widget.SlidingPaneLayout: int getParallaxDistance()
+android.support.v4.widget.SlidingPaneLayout: void setSliderFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getSliderFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setCoveredFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getCoveredFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setPanelSlideListener(android.support.v4.widget.SlidingPaneLayout$PanelSlideListener)
+android.support.v4.widget.SlidingPaneLayout: void setShadowDrawable(android.graphics.drawable.Drawable)
+android.support.v4.widget.SlidingPaneLayout: void setShadowResource(int)
+android.support.v4.widget.SlidingPaneLayout$SavedState
+android.support.v4.widget.SlidingPaneLayout$SavedState: android.os.Parcelable$Creator CREATOR
+com.umeng.analytics.Gender: com.umeng.analytics.Gender[] values()
+com.umeng.analytics.Gender: com.umeng.analytics.Gender valueOf(java.lang.String)
+com.umeng.analytics.onlineconfig.b: b(org.json.JSONObject)
+com.umeng.common.net.p: p(org.json.JSONObject)
+com.umeng.common.net.p$a: com.umeng.common.net.p$a[] values()
+com.umeng.common.net.p$a: com.umeng.common.net.p$a valueOf(java.lang.String)
+com.umeng.common.net.q$b: com.umeng.common.net.q$b[] values()
+com.umeng.common.net.q$b: com.umeng.common.net.q$b valueOf(java.lang.String)
+com.umeng.common.net.u: u(org.json.JSONObject)
+com.umeng.common.util.DeltaUpdate
+com.umeng.common.util.DeltaUpdate: int bspatch(java.lang.String,java.lang.String,java.lang.String)
+com.umeng.update.UpdateResponse: UpdateResponse(org.json.JSONObject)
+com.yuedu.R$attr
+com.yuedu.R$dimen
+com.yuedu.R$dimen: int activity_horizontal_margin
+com.yuedu.R$dimen: int activity_vertical_margin
+com.yuedu.R$drawable
+com.yuedu.R$drawable: int down
+com.yuedu.R$drawable: int greeting
+com.yuedu.R$drawable: int ic_launcher
+com.yuedu.R$drawable: int list
+com.yuedu.R$drawable: int next
+com.yuedu.R$drawable: int pause
+com.yuedu.R$drawable: int play
+com.yuedu.R$drawable: int play_button_selector
+com.yuedu.R$drawable: int progressbar
+com.yuedu.R$id
+com.yuedu.R$id: int greeting_view
+com.yuedu.R$id: int nexttune_ib
+com.yuedu.R$id: int notification_icon
+com.yuedu.R$id: int notification_next
+com.yuedu.R$id: int notification_pause_or_play
+com.yuedu.R$id: int notification_tune_name
+com.yuedu.R$id: int options_menu_quit
+com.yuedu.R$id: int play_ib
+com.yuedu.R$id: int playlist_ib
+com.yuedu.R$id: int playlist_ll
+com.yuedu.R$id: int playlist_lv
+com.yuedu.R$id: int tune_cover_iv
+com.yuedu.R$id: int tune_info_tv
+com.yuedu.R$id: int tune_item_info_tv
+com.yuedu.R$id: int tune_item_thumb_iv
+com.yuedu.R$id: int tune_item_time_tv
+com.yuedu.R$id: int tune_item_title_tv
+com.yuedu.R$id: int tune_name_tv
+com.yuedu.R$id: int tune_played_time_tv
+com.yuedu.R$id: int tune_progress_pb
+com.yuedu.R$layout
+com.yuedu.R$layout: int activity_main_player
+com.yuedu.R$layout: int notification_layout
+com.yuedu.R$layout: int playlist_item
+com.yuedu.R$menu
+com.yuedu.R$menu: int main_player
+com.yuedu.R$string
+com.yuedu.R$string: int action_quit
+com.yuedu.R$string: int app_name
+com.yuedu.R$string: int author
+com.yuedu.R$string: int player
+com.yuedu.R$style
+com.yuedu.R$style: int AppBaseTheme
+com.yuedu.R$style: int AppTheme
+com.yuedu.fm.DataAccessor: com.yuedu.fm.DataAccessor[] values()
+com.yuedu.fm.DataAccessor: com.yuedu.fm.DataAccessor valueOf(java.lang.String)
+com.yuedu.fm.MainPlayer
+com.yuedu.fm.MainPlayer: MainPlayer()
+com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState: com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState[] values()
+com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState: com.yuedu.fm.StreamingDownloadMediaPlayer$PlayerState valueOf(java.lang.String)
+com.yuedu.fm.TuneInfo: TuneInfo(org.json.JSONObject)
+com.yuedu.fm.YueduNotificationManager: com.yuedu.fm.YueduNotificationManager[] values()
+com.yuedu.fm.YueduNotificationManager: com.yuedu.fm.YueduNotificationManager valueOf(java.lang.String)
+com.yuedu.fm.YueduService
+com.yuedu.fm.YueduService: YueduService()
+com.yuedu.image.AsyncTask$Status: com.yuedu.image.AsyncTask$Status[] values()
+com.yuedu.image.AsyncTask$Status: com.yuedu.image.AsyncTask$Status valueOf(java.lang.String)
+com.yuedu.image.RecyclingImageView: void setImageDrawable(android.graphics.drawable.Drawable)
+javazoom.jl.converter.Converter
+javazoom.jl.converter.Converter: Converter()
+javazoom.jl.converter.Converter: void convert(java.lang.String,java.lang.String)
+javazoom.jl.converter.Converter: void convert(java.lang.String,java.lang.String,javazoom.jl.converter.Converter$ProgressListener)
+javazoom.jl.converter.Converter: void convert(java.lang.String,java.lang.String,javazoom.jl.converter.Converter$ProgressListener,javazoom.jl.decoder.Decoder$Params)
+javazoom.jl.converter.Converter: void convert(java.io.InputStream,java.lang.String,javazoom.jl.converter.Converter$ProgressListener,javazoom.jl.decoder.Decoder$Params)
+javazoom.jl.converter.Converter: int countFrames(java.io.InputStream)
+javazoom.jl.converter.Converter: java.io.InputStream openInput(java.lang.String)
+javazoom.jl.converter.Converter$PrintWriterProgressListener
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int NO_DETAIL
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int EXPERT_DETAIL
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int VERBOSE_DETAIL
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int DEBUG_DETAIL
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int MAX_DETAIL
+javazoom.jl.converter.Converter$PrintWriterProgressListener: java.io.PrintWriter pw
+javazoom.jl.converter.Converter$PrintWriterProgressListener: int detailLevel
+javazoom.jl.converter.Converter$PrintWriterProgressListener: javazoom.jl.converter.Converter$PrintWriterProgressListener newStdOut(int)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: Converter$PrintWriterProgressListener(java.io.PrintWriter,int)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: boolean isDetail(int)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: void converterUpdate(int,int,int)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: void parsedFrame(int,javazoom.jl.decoder.Header)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: void readFrame(int,javazoom.jl.decoder.Header)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: void decodedFrame(int,javazoom.jl.decoder.Header,javazoom.jl.decoder.Obuffer)
+javazoom.jl.converter.Converter$PrintWriterProgressListener: boolean converterException(java.lang.Throwable)
+javazoom.jl.converter.Converter$ProgressListener
+javazoom.jl.converter.Converter$ProgressListener: int UPDATE_FRAME_COUNT
+javazoom.jl.converter.Converter$ProgressListener: int UPDATE_CONVERT_COMPLETE
+javazoom.jl.converter.Converter$ProgressListener: void converterUpdate(int,int,int)
+javazoom.jl.converter.Converter$ProgressListener: void parsedFrame(int,javazoom.jl.decoder.Header)
+javazoom.jl.converter.Converter$ProgressListener: void readFrame(int,javazoom.jl.decoder.Header)
+javazoom.jl.converter.Converter$ProgressListener: void decodedFrame(int,javazoom.jl.decoder.Header,javazoom.jl.decoder.Obuffer)
+javazoom.jl.converter.Converter$ProgressListener: boolean converterException(java.lang.Throwable)
+javazoom.jl.converter.RiffFile
+javazoom.jl.converter.RiffFile: int DDC_SUCCESS
+javazoom.jl.converter.RiffFile: int DDC_FAILURE
+javazoom.jl.converter.RiffFile: int DDC_OUT_OF_MEMORY
+javazoom.jl.converter.RiffFile: int DDC_FILE_ERROR
+javazoom.jl.converter.RiffFile: int DDC_INVALID_CALL
+javazoom.jl.converter.RiffFile: int DDC_USER_ABORT
+javazoom.jl.converter.RiffFile: int DDC_INVALID_FILE
+javazoom.jl.converter.RiffFile: int RFM_UNKNOWN
+javazoom.jl.converter.RiffFile: int RFM_WRITE
+javazoom.jl.converter.RiffFile: int RFM_READ
+javazoom.jl.converter.RiffFile: javazoom.jl.converter.RiffFile$RiffChunkHeader riff_header
+javazoom.jl.converter.RiffFile: int fmode
+javazoom.jl.converter.RiffFile: java.io.RandomAccessFile file
+javazoom.jl.converter.RiffFile: RiffFile()
+javazoom.jl.converter.RiffFile: int CurrentFileMode()
+javazoom.jl.converter.RiffFile: int Open(java.lang.String,int)
+javazoom.jl.converter.RiffFile: int Write(byte[],int)
+javazoom.jl.converter.RiffFile: int Write(short[],int)
+javazoom.jl.converter.RiffFile: int Write(javazoom.jl.converter.RiffFile$RiffChunkHeader,int)
+javazoom.jl.converter.RiffFile: int Write(short,int)
+javazoom.jl.converter.RiffFile: int Write(int,int)
+javazoom.jl.converter.RiffFile: int Read(byte[],int)
+javazoom.jl.converter.RiffFile: int Expect(java.lang.String,int)
+javazoom.jl.converter.RiffFile: int Close()
+javazoom.jl.converter.RiffFile: long CurrentFilePosition()
+javazoom.jl.converter.RiffFile: int Backpatch(long,javazoom.jl.converter.RiffFile$RiffChunkHeader,int)
+javazoom.jl.converter.RiffFile: int Backpatch(long,byte[],int)
+javazoom.jl.converter.RiffFile: int Seek(long)
+javazoom.jl.converter.RiffFile: java.lang.String DDCRET_String(int)
+javazoom.jl.converter.RiffFile: int FourCC(java.lang.String)
+javazoom.jl.converter.RiffFile$RiffChunkHeader
+javazoom.jl.converter.RiffFile$RiffChunkHeader: int ckID
+javazoom.jl.converter.RiffFile$RiffChunkHeader: int ckSize
+javazoom.jl.converter.RiffFile$RiffChunkHeader: javazoom.jl.converter.RiffFile this$0
+javazoom.jl.converter.RiffFile$RiffChunkHeader: RiffFile$RiffChunkHeader(javazoom.jl.converter.RiffFile)
+javazoom.jl.converter.WaveFile
+javazoom.jl.converter.WaveFile: int MAX_WAVE_CHANNELS
+javazoom.jl.converter.WaveFile: javazoom.jl.converter.WaveFile$WaveFormat_Chunk wave_format
+javazoom.jl.converter.WaveFile: javazoom.jl.converter.RiffFile$RiffChunkHeader pcm_data
+javazoom.jl.converter.WaveFile: long pcm_data_offset
+javazoom.jl.converter.WaveFile: int num_samples
+javazoom.jl.converter.WaveFile: WaveFile()
+javazoom.jl.converter.WaveFile: int OpenForWrite(java.lang.String,int,short,short)
+javazoom.jl.converter.WaveFile: int WriteData(short[],int)
+javazoom.jl.converter.WaveFile: int Close()
+javazoom.jl.converter.WaveFile: int SamplingRate()
+javazoom.jl.converter.WaveFile: short BitsPerSample()
+javazoom.jl.converter.WaveFile: short NumChannels()
+javazoom.jl.converter.WaveFile: int NumSamples()
+javazoom.jl.converter.WaveFile: int OpenForWrite(java.lang.String,javazoom.jl.converter.WaveFile)
+javazoom.jl.converter.WaveFile: long CurrentFilePosition()
+javazoom.jl.converter.WaveFile$WaveFileSample
+javazoom.jl.converter.WaveFile$WaveFileSample: short[] chan
+javazoom.jl.converter.WaveFile$WaveFileSample: javazoom.jl.converter.WaveFile this$0
+javazoom.jl.converter.WaveFile$WaveFileSample: WaveFile$WaveFileSample(javazoom.jl.converter.WaveFile)
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk: javazoom.jl.converter.RiffFile$RiffChunkHeader header
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk: javazoom.jl.converter.WaveFile$WaveFormat_ChunkData data
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk: javazoom.jl.converter.WaveFile this$0
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk: WaveFile$WaveFormat_Chunk(javazoom.jl.converter.WaveFile)
+javazoom.jl.converter.WaveFile$WaveFormat_Chunk: int VerifyValidity()
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: short wFormatTag
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: short nChannels
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: int nSamplesPerSec
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: int nAvgBytesPerSec
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: short nBlockAlign
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: short nBitsPerSample
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: javazoom.jl.converter.WaveFile this$0
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: WaveFile$WaveFormat_ChunkData(javazoom.jl.converter.WaveFile)
+javazoom.jl.converter.WaveFile$WaveFormat_ChunkData: void Config(int,short,short)
+javazoom.jl.converter.WaveFileObuffer
+javazoom.jl.converter.WaveFileObuffer: short[] buffer
+javazoom.jl.converter.WaveFileObuffer: short[] bufferp
+javazoom.jl.converter.WaveFileObuffer: int channels
+javazoom.jl.converter.WaveFileObuffer: javazoom.jl.converter.WaveFile outWave
+javazoom.jl.converter.WaveFileObuffer: short[] myBuffer
+javazoom.jl.converter.WaveFileObuffer: WaveFileObuffer(int,int,java.lang.String)
+javazoom.jl.converter.WaveFileObuffer: void append(int,short)
+javazoom.jl.converter.WaveFileObuffer: void write_buffer(int)
+javazoom.jl.converter.WaveFileObuffer: void close()
+javazoom.jl.converter.WaveFileObuffer: void clear_buffer()
+javazoom.jl.converter.WaveFileObuffer: void set_stop_flag()
+javazoom.jl.converter.jlc
+javazoom.jl.converter.jlc: jlc()
+javazoom.jl.converter.jlc: void main(java.lang.String[])
+javazoom.jl.converter.jlc$jlcArgs
+javazoom.jl.converter.jlc$jlcArgs: int which_c
+javazoom.jl.converter.jlc$jlcArgs: int output_mode
+javazoom.jl.converter.jlc$jlcArgs: boolean use_own_scalefactor
+javazoom.jl.converter.jlc$jlcArgs: float scalefactor
+javazoom.jl.converter.jlc$jlcArgs: java.lang.String output_filename
+javazoom.jl.converter.jlc$jlcArgs: java.lang.String filename
+javazoom.jl.converter.jlc$jlcArgs: boolean verbose_mode
+javazoom.jl.converter.jlc$jlcArgs: int verbose_level
+javazoom.jl.converter.jlc$jlcArgs: jlc$jlcArgs()
+javazoom.jl.converter.jlc$jlcArgs: boolean processArgs(java.lang.String[])
+javazoom.jl.converter.jlc$jlcArgs: boolean Usage()
+javazoom.jl.decoder.BitReserve
+javazoom.jl.decoder.BitReserve: int BUFSIZE
+javazoom.jl.decoder.BitReserve: int BUFSIZE_MASK
+javazoom.jl.decoder.BitReserve: int offset
+javazoom.jl.decoder.BitReserve: int totbit
+javazoom.jl.decoder.BitReserve: int buf_byte_idx
+javazoom.jl.decoder.BitReserve: int[] buf
+javazoom.jl.decoder.BitReserve: int buf_bit_idx
+javazoom.jl.decoder.BitReserve: BitReserve()
+javazoom.jl.decoder.BitReserve: int hsstell()
+javazoom.jl.decoder.BitReserve: int hgetbits(int)
+javazoom.jl.decoder.BitReserve: int hget1bit()
+javazoom.jl.decoder.BitReserve: void hputbuf(int)
+javazoom.jl.decoder.BitReserve: void rewindNbits(int)
+javazoom.jl.decoder.BitReserve: void rewindNbytes(int)
+javazoom.jl.decoder.Bitstream
+javazoom.jl.decoder.Bitstream: byte INITIAL_SYNC
+javazoom.jl.decoder.Bitstream: byte STRICT_SYNC
+javazoom.jl.decoder.Bitstream: int BUFFER_INT_SIZE
+javazoom.jl.decoder.Bitstream: int[] framebuffer
+javazoom.jl.decoder.Bitstream: int framesize
+javazoom.jl.decoder.Bitstream: byte[] frame_bytes
+javazoom.jl.decoder.Bitstream: int wordpointer
+javazoom.jl.decoder.Bitstream: int bitindex
+javazoom.jl.decoder.Bitstream: int syncword
+javazoom.jl.decoder.Bitstream: int header_pos
+javazoom.jl.decoder.Bitstream: boolean single_ch_mode
+javazoom.jl.decoder.Bitstream: int[] bitmask
+javazoom.jl.decoder.Bitstream: java.io.PushbackInputStream source
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.Header header
+javazoom.jl.decoder.Bitstream: byte[] syncbuf
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.Crc16[] crc
+javazoom.jl.decoder.Bitstream: byte[] rawid3v2
+javazoom.jl.decoder.Bitstream: boolean firstframe
+javazoom.jl.decoder.Bitstream: Bitstream(java.io.InputStream)
+javazoom.jl.decoder.Bitstream: int header_pos()
+javazoom.jl.decoder.Bitstream: void loadID3v2(java.io.InputStream)
+javazoom.jl.decoder.Bitstream: int readID3v2Header(java.io.InputStream)
+javazoom.jl.decoder.Bitstream: java.io.InputStream getRawID3v2()
+javazoom.jl.decoder.Bitstream: void close()
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.Header readFrame()
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.Header readNextFrame()
+javazoom.jl.decoder.Bitstream: void nextFrame()
+javazoom.jl.decoder.Bitstream: void unreadFrame()
+javazoom.jl.decoder.Bitstream: void closeFrame()
+javazoom.jl.decoder.Bitstream: boolean isSyncCurrentPosition(int)
+javazoom.jl.decoder.Bitstream: int readBits(int)
+javazoom.jl.decoder.Bitstream: int readCheckedBits(int)
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.BitstreamException newBitstreamException(int)
+javazoom.jl.decoder.Bitstream: javazoom.jl.decoder.BitstreamException newBitstreamException(int,java.lang.Throwable)
+javazoom.jl.decoder.Bitstream: int syncHeader(byte)
+javazoom.jl.decoder.Bitstream: boolean isSyncMark(int,int,int)
+javazoom.jl.decoder.Bitstream: int read_frame_data(int)
+javazoom.jl.decoder.Bitstream: void parse_frame()
+javazoom.jl.decoder.Bitstream: int get_bits(int)
+javazoom.jl.decoder.Bitstream: void set_syncword(int)
+javazoom.jl.decoder.Bitstream: int readFully(byte[],int,int)
+javazoom.jl.decoder.Bitstream: int readBytes(byte[],int,int)
+javazoom.jl.decoder.Bitstream: void <clinit>()
+javazoom.jl.decoder.BitstreamErrors
+javazoom.jl.decoder.BitstreamErrors: int UNKNOWN_ERROR
+javazoom.jl.decoder.BitstreamErrors: int UNKNOWN_SAMPLE_RATE
+javazoom.jl.decoder.BitstreamErrors: int STREAM_ERROR
+javazoom.jl.decoder.BitstreamErrors: int UNEXPECTED_EOF
+javazoom.jl.decoder.BitstreamErrors: int STREAM_EOF
+javazoom.jl.decoder.BitstreamErrors: int INVALIDFRAME
+javazoom.jl.decoder.BitstreamErrors: int BITSTREAM_LAST
+javazoom.jl.decoder.BitstreamException
+javazoom.jl.decoder.BitstreamException: int errorcode
+javazoom.jl.decoder.BitstreamException: BitstreamException(java.lang.String,java.lang.Throwable)
+javazoom.jl.decoder.BitstreamException: BitstreamException(int,java.lang.Throwable)
+javazoom.jl.decoder.BitstreamException: int getErrorCode()
+javazoom.jl.decoder.BitstreamException: java.lang.String getErrorString(int)
+javazoom.jl.decoder.Control
+javazoom.jl.decoder.Control: void start()
+javazoom.jl.decoder.Control: void stop()
+javazoom.jl.decoder.Control: boolean isPlaying()
+javazoom.jl.decoder.Control: void pause()
+javazoom.jl.decoder.Control: boolean isRandomAccess()
+javazoom.jl.decoder.Control: double getPosition()
+javazoom.jl.decoder.Control: void setPosition(double)
+javazoom.jl.decoder.Crc16
+javazoom.jl.decoder.Crc16: short polynomial
+javazoom.jl.decoder.Crc16: short crc
+javazoom.jl.decoder.Crc16: Crc16()
+javazoom.jl.decoder.Crc16: void add_bits(int,int)
+javazoom.jl.decoder.Crc16: short checksum()
+javazoom.jl.decoder.Crc16: void <clinit>()
+javazoom.jl.decoder.Decoder
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Decoder$Params DEFAULT_PARAMS
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Obuffer output
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.SynthesisFilter filter1
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.SynthesisFilter filter2
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.LayerIIIDecoder l3decoder
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.LayerIIDecoder l2decoder
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.LayerIDecoder l1decoder
+javazoom.jl.decoder.Decoder: int outputFrequency
+javazoom.jl.decoder.Decoder: int outputChannels
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Equalizer equalizer
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Decoder$Params params
+javazoom.jl.decoder.Decoder: boolean initialized
+javazoom.jl.decoder.Decoder: Decoder()
+javazoom.jl.decoder.Decoder: Decoder(javazoom.jl.decoder.Decoder$Params)
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Decoder$Params getDefaultParams()
+javazoom.jl.decoder.Decoder: void setEqualizer(javazoom.jl.decoder.Equalizer)
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.Obuffer decodeFrame(javazoom.jl.decoder.Header,javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.Decoder: void setOutputBuffer(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.Decoder: int getOutputFrequency()
+javazoom.jl.decoder.Decoder: int getOutputChannels()
+javazoom.jl.decoder.Decoder: int getOutputBlockSize()
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.DecoderException newDecoderException(int)
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.DecoderException newDecoderException(int,java.lang.Throwable)
+javazoom.jl.decoder.Decoder: javazoom.jl.decoder.FrameDecoder retrieveDecoder(javazoom.jl.decoder.Header,javazoom.jl.decoder.Bitstream,int)
+javazoom.jl.decoder.Decoder: void initialize(javazoom.jl.decoder.Header)
+javazoom.jl.decoder.Decoder: void <clinit>()
+javazoom.jl.decoder.Decoder$Params
+javazoom.jl.decoder.Decoder$Params: javazoom.jl.decoder.OutputChannels outputChannels
+javazoom.jl.decoder.Decoder$Params: javazoom.jl.decoder.Equalizer equalizer
+javazoom.jl.decoder.Decoder$Params: Decoder$Params()
+javazoom.jl.decoder.Decoder$Params: java.lang.Object clone()
+javazoom.jl.decoder.Decoder$Params: void setOutputChannels(javazoom.jl.decoder.OutputChannels)
+javazoom.jl.decoder.Decoder$Params: javazoom.jl.decoder.OutputChannels getOutputChannels()
+javazoom.jl.decoder.Decoder$Params: javazoom.jl.decoder.Equalizer getInitialEqualizerSettings()
+javazoom.jl.decoder.DecoderErrors
+javazoom.jl.decoder.DecoderErrors: int UNKNOWN_ERROR
+javazoom.jl.decoder.DecoderErrors: int UNSUPPORTED_LAYER
+javazoom.jl.decoder.DecoderErrors: int ILLEGAL_SUBBAND_ALLOCATION
+javazoom.jl.decoder.DecoderException
+javazoom.jl.decoder.DecoderException: int errorcode
+javazoom.jl.decoder.DecoderException: DecoderException(java.lang.String,java.lang.Throwable)
+javazoom.jl.decoder.DecoderException: DecoderException(int,java.lang.Throwable)
+javazoom.jl.decoder.DecoderException: int getErrorCode()
+javazoom.jl.decoder.DecoderException: java.lang.String getErrorString(int)
+javazoom.jl.decoder.Equalizer
+javazoom.jl.decoder.Equalizer: float BAND_NOT_PRESENT
+javazoom.jl.decoder.Equalizer: javazoom.jl.decoder.Equalizer PASS_THRU_EQ
+javazoom.jl.decoder.Equalizer: int BANDS
+javazoom.jl.decoder.Equalizer: float[] settings
+javazoom.jl.decoder.Equalizer: Equalizer()
+javazoom.jl.decoder.Equalizer: Equalizer(float[])
+javazoom.jl.decoder.Equalizer: Equalizer(javazoom.jl.decoder.Equalizer$EQFunction)
+javazoom.jl.decoder.Equalizer: void setFrom(float[])
+javazoom.jl.decoder.Equalizer: void setFrom(javazoom.jl.decoder.Equalizer$EQFunction)
+javazoom.jl.decoder.Equalizer: void setFrom(javazoom.jl.decoder.Equalizer)
+javazoom.jl.decoder.Equalizer: void reset()
+javazoom.jl.decoder.Equalizer: int getBandCount()
+javazoom.jl.decoder.Equalizer: float setBand(int,float)
+javazoom.jl.decoder.Equalizer: float getBand(int)
+javazoom.jl.decoder.Equalizer: float limit(float)
+javazoom.jl.decoder.Equalizer: float[] getBandFactors()
+javazoom.jl.decoder.Equalizer: float getBandFactor(float)
+javazoom.jl.decoder.Equalizer: void <clinit>()
+javazoom.jl.decoder.Equalizer$EQFunction
+javazoom.jl.decoder.Equalizer$EQFunction: Equalizer$EQFunction()
+javazoom.jl.decoder.Equalizer$EQFunction: float getBand(int)
+javazoom.jl.decoder.FrameDecoder
+javazoom.jl.decoder.FrameDecoder: void decodeFrame()
+javazoom.jl.decoder.Header
+javazoom.jl.decoder.Header: int[][] frequencies
+javazoom.jl.decoder.Header: int MPEG2_LSF
+javazoom.jl.decoder.Header: int MPEG25_LSF
+javazoom.jl.decoder.Header: int MPEG1
+javazoom.jl.decoder.Header: int STEREO
+javazoom.jl.decoder.Header: int JOINT_STEREO
+javazoom.jl.decoder.Header: int DUAL_CHANNEL
+javazoom.jl.decoder.Header: int SINGLE_CHANNEL
+javazoom.jl.decoder.Header: int FOURTYFOUR_POINT_ONE
+javazoom.jl.decoder.Header: int FOURTYEIGHT
+javazoom.jl.decoder.Header: int THIRTYTWO
+javazoom.jl.decoder.Header: int h_layer
+javazoom.jl.decoder.Header: int h_protection_bit
+javazoom.jl.decoder.Header: int h_bitrate_index
+javazoom.jl.decoder.Header: int h_padding_bit
+javazoom.jl.decoder.Header: int h_mode_extension
+javazoom.jl.decoder.Header: int h_version
+javazoom.jl.decoder.Header: int h_mode
+javazoom.jl.decoder.Header: int h_sample_frequency
+javazoom.jl.decoder.Header: int h_number_of_subbands
+javazoom.jl.decoder.Header: int h_intensity_stereo_bound
+javazoom.jl.decoder.Header: boolean h_copyright
+javazoom.jl.decoder.Header: boolean h_original
+javazoom.jl.decoder.Header: double[] h_vbr_time_per_frame
+javazoom.jl.decoder.Header: boolean h_vbr
+javazoom.jl.decoder.Header: int h_vbr_frames
+javazoom.jl.decoder.Header: int h_vbr_scale
+javazoom.jl.decoder.Header: int h_vbr_bytes
+javazoom.jl.decoder.Header: byte[] h_vbr_toc
+javazoom.jl.decoder.Header: byte syncmode
+javazoom.jl.decoder.Header: javazoom.jl.decoder.Crc16 crc
+javazoom.jl.decoder.Header: short checksum
+javazoom.jl.decoder.Header: int framesize
+javazoom.jl.decoder.Header: int nSlots
+javazoom.jl.decoder.Header: int _headerstring
+javazoom.jl.decoder.Header: int[][][] bitrates
+javazoom.jl.decoder.Header: java.lang.String[][][] bitrate_str
+javazoom.jl.decoder.Header: Header()
+javazoom.jl.decoder.Header: java.lang.String toString()
+javazoom.jl.decoder.Header: void read_header(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Crc16[])
+javazoom.jl.decoder.Header: void parseVBR(byte[])
+javazoom.jl.decoder.Header: int version()
+javazoom.jl.decoder.Header: int layer()
+javazoom.jl.decoder.Header: int bitrate_index()
+javazoom.jl.decoder.Header: int sample_frequency()
+javazoom.jl.decoder.Header: int frequency()
+javazoom.jl.decoder.Header: int mode()
+javazoom.jl.decoder.Header: boolean checksums()
+javazoom.jl.decoder.Header: boolean copyright()
+javazoom.jl.decoder.Header: boolean original()
+javazoom.jl.decoder.Header: boolean vbr()
+javazoom.jl.decoder.Header: int vbr_scale()
+javazoom.jl.decoder.Header: byte[] vbr_toc()
+javazoom.jl.decoder.Header: boolean checksum_ok()
+javazoom.jl.decoder.Header: boolean padding()
+javazoom.jl.decoder.Header: int slots()
+javazoom.jl.decoder.Header: int mode_extension()
+javazoom.jl.decoder.Header: int calculate_framesize()
+javazoom.jl.decoder.Header: int max_number_of_frames(int)
+javazoom.jl.decoder.Header: int min_number_of_frames(int)
+javazoom.jl.decoder.Header: float ms_per_frame()
+javazoom.jl.decoder.Header: float total_ms(int)
+javazoom.jl.decoder.Header: int getSyncHeader()
+javazoom.jl.decoder.Header: java.lang.String layer_string()
+javazoom.jl.decoder.Header: java.lang.String bitrate_string()
+javazoom.jl.decoder.Header: int bitrate()
+javazoom.jl.decoder.Header: int bitrate_instant()
+javazoom.jl.decoder.Header: java.lang.String sample_frequency_string()
+javazoom.jl.decoder.Header: java.lang.String mode_string()
+javazoom.jl.decoder.Header: java.lang.String version_string()
+javazoom.jl.decoder.Header: int number_of_subbands()
+javazoom.jl.decoder.Header: int intensity_stereo_bound()
+javazoom.jl.decoder.Header: void <clinit>()
+javazoom.jl.decoder.InputStreamSource
+javazoom.jl.decoder.InputStreamSource: java.io.InputStream in
+javazoom.jl.decoder.InputStreamSource: InputStreamSource(java.io.InputStream)
+javazoom.jl.decoder.InputStreamSource: int read(byte[],int,int)
+javazoom.jl.decoder.InputStreamSource: boolean willReadBlock()
+javazoom.jl.decoder.InputStreamSource: boolean isSeekable()
+javazoom.jl.decoder.InputStreamSource: long tell()
+javazoom.jl.decoder.InputStreamSource: long seek(long)
+javazoom.jl.decoder.InputStreamSource: long length()
+javazoom.jl.decoder.JavaLayerError
+javazoom.jl.decoder.JavaLayerError: JavaLayerError()
+javazoom.jl.decoder.JavaLayerErrors
+javazoom.jl.decoder.JavaLayerErrors: int BITSTREAM_ERROR
+javazoom.jl.decoder.JavaLayerErrors: int DECODER_ERROR
+javazoom.jl.decoder.JavaLayerException
+javazoom.jl.decoder.JavaLayerException: java.lang.Throwable exception
+javazoom.jl.decoder.JavaLayerException: JavaLayerException()
+javazoom.jl.decoder.JavaLayerException: JavaLayerException(java.lang.String)
+javazoom.jl.decoder.JavaLayerException: JavaLayerException(java.lang.String,java.lang.Throwable)
+javazoom.jl.decoder.JavaLayerException: java.lang.Throwable getException()
+javazoom.jl.decoder.JavaLayerException: void printStackTrace()
+javazoom.jl.decoder.JavaLayerException: void printStackTrace(java.io.PrintStream)
+javazoom.jl.decoder.JavaLayerHook
+javazoom.jl.decoder.JavaLayerHook: java.io.InputStream getResourceAsStream(java.lang.String)
+javazoom.jl.decoder.JavaLayerUtils
+javazoom.jl.decoder.JavaLayerUtils: javazoom.jl.decoder.JavaLayerHook hook
+javazoom.jl.decoder.JavaLayerUtils: JavaLayerUtils()
+javazoom.jl.decoder.JavaLayerUtils: java.lang.Object deserialize(java.io.InputStream,java.lang.Class)
+javazoom.jl.decoder.JavaLayerUtils: java.lang.Object deserialize(java.io.InputStream)
+javazoom.jl.decoder.JavaLayerUtils: java.lang.Object deserializeArray(java.io.InputStream,java.lang.Class,int)
+javazoom.jl.decoder.JavaLayerUtils: java.lang.Object deserializeArrayResource(java.lang.String,java.lang.Class,int)
+javazoom.jl.decoder.JavaLayerUtils: void serialize(java.io.OutputStream,java.lang.Object)
+javazoom.jl.decoder.JavaLayerUtils: void setHook(javazoom.jl.decoder.JavaLayerHook)
+javazoom.jl.decoder.JavaLayerUtils: javazoom.jl.decoder.JavaLayerHook getHook()
+javazoom.jl.decoder.JavaLayerUtils: java.io.InputStream getResourceAsStream(java.lang.String)
+javazoom.jl.decoder.JavaLayerUtils: void <clinit>()
+javazoom.jl.decoder.LayerIDecoder
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.Bitstream stream
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.Header header
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.SynthesisFilter filter1
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.SynthesisFilter filter2
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.Obuffer buffer
+javazoom.jl.decoder.LayerIDecoder: int which_channels
+javazoom.jl.decoder.LayerIDecoder: int mode
+javazoom.jl.decoder.LayerIDecoder: int num_subbands
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.LayerIDecoder$Subband[] subbands
+javazoom.jl.decoder.LayerIDecoder: javazoom.jl.decoder.Crc16 crc
+javazoom.jl.decoder.LayerIDecoder: LayerIDecoder()
+javazoom.jl.decoder.LayerIDecoder: void create(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.Obuffer,int)
+javazoom.jl.decoder.LayerIDecoder: void decodeFrame()
+javazoom.jl.decoder.LayerIDecoder: void createSubbands()
+javazoom.jl.decoder.LayerIDecoder: void readAllocation()
+javazoom.jl.decoder.LayerIDecoder: void readScaleFactorSelection()
+javazoom.jl.decoder.LayerIDecoder: void readScaleFactors()
+javazoom.jl.decoder.LayerIDecoder: void readSampleData()
+javazoom.jl.decoder.LayerIDecoder$Subband
+javazoom.jl.decoder.LayerIDecoder$Subband: float[] scalefactors
+javazoom.jl.decoder.LayerIDecoder$Subband: LayerIDecoder$Subband()
+javazoom.jl.decoder.LayerIDecoder$Subband: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIDecoder$Subband: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIDecoder$Subband: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIDecoder$Subband: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIDecoder$Subband: void <clinit>()
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float[] table_factor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float[] table_offset
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: int subbandnumber
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: int samplenumber
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: int allocation
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float scalefactor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: int samplelength
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float sample
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float factor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: float offset
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: LayerIDecoder$SubbandLayer1(int)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1: void <clinit>()
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: float channel2_scalefactor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: LayerIDecoder$SubbandLayer1IntensityStereo(int)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1IntensityStereo: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: int channel2_allocation
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: float channel2_scalefactor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: int channel2_samplelength
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: float channel2_sample
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: float channel2_factor
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: float channel2_offset
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: LayerIDecoder$SubbandLayer1Stereo(int)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIDecoder$SubbandLayer1Stereo: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIIDecoder
+javazoom.jl.decoder.LayerIIDecoder: LayerIIDecoder()
+javazoom.jl.decoder.LayerIIDecoder: void createSubbands()
+javazoom.jl.decoder.LayerIIDecoder: void readScaleFactorSelection()
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] grouping_5bits
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] grouping_7bits
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] grouping_10bits
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] table_ab1_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[][] table_ab1_groupingtables
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab1_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab1_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab1_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[][] table_ab234_groupingtables
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] table_ab2_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab2_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab2_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab2_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] table_ab3_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab3_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab3_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab3_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] table_ab4_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab4_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab4_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_ab4_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] table_cd_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[][] table_cd_groupingtables
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_cd_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_cd_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] table_cd_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int subbandnumber
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int allocation
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int scfsi
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float scalefactor1
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float scalefactor2
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float scalefactor3
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int[] codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[][] groupingtable
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int groupnumber
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int samplenumber
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] samples
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: float[] d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: LayerIIDecoder$SubbandLayer2(int)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: int get_allocationlength(javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: void prepare_sample_reading(javazoom.jl.decoder.Header,int,int,float[],int[],float[],float[])
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: void read_scalefactor_selection(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2: void <clinit>()
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: int channel2_scfsi
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: float channel2_scalefactor1
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: float channel2_scalefactor2
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: float channel2_scalefactor3
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: LayerIIDecoder$SubbandLayer2IntensityStereo(int)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: void read_scalefactor_selection(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2IntensityStereo: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: int channel2_allocation
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: int channel2_scfsi
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float channel2_scalefactor1
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float channel2_scalefactor2
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float channel2_scalefactor3
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: int[] channel2_codelength
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float[] channel2_factor
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float[] channel2_samples
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float[] channel2_c
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: float[] channel2_d
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: LayerIIDecoder$SubbandLayer2Stereo(int)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: void read_allocation(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: void read_scalefactor_selection(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Crc16)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: void read_scalefactor(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: boolean read_sampledata(javazoom.jl.decoder.Bitstream)
+javazoom.jl.decoder.LayerIIDecoder$SubbandLayer2Stereo: boolean put_next_sample(int,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter)
+javazoom.jl.decoder.LayerIIIDecoder
+javazoom.jl.decoder.LayerIIIDecoder: double d43
+javazoom.jl.decoder.LayerIIIDecoder: int[] scalefac_buffer
+javazoom.jl.decoder.LayerIIIDecoder: int CheckSumHuff
+javazoom.jl.decoder.LayerIIIDecoder: int[] is_1d
+javazoom.jl.decoder.LayerIIIDecoder: float[][][] ro
+javazoom.jl.decoder.LayerIIIDecoder: float[][][] lr
+javazoom.jl.decoder.LayerIIIDecoder: float[] out_1d
+javazoom.jl.decoder.LayerIIIDecoder: float[][] prevblck
+javazoom.jl.decoder.LayerIIIDecoder: float[][] k
+javazoom.jl.decoder.LayerIIIDecoder: int[] nonzero
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.Bitstream stream
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.Header header
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.SynthesisFilter filter1
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.SynthesisFilter filter2
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.Obuffer buffer
+javazoom.jl.decoder.LayerIIIDecoder: int which_channels
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.BitReserve br
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t si
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.LayerIIIDecoder$temporaire2[] III_scalefac_t
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.LayerIIIDecoder$temporaire2[] scalefac
+javazoom.jl.decoder.LayerIIIDecoder: int max_gr
+javazoom.jl.decoder.LayerIIIDecoder: int frame_start
+javazoom.jl.decoder.LayerIIIDecoder: int part2_start
+javazoom.jl.decoder.LayerIIIDecoder: int channels
+javazoom.jl.decoder.LayerIIIDecoder: int first_channel
+javazoom.jl.decoder.LayerIIIDecoder: int last_channel
+javazoom.jl.decoder.LayerIIIDecoder: int sfreq
+javazoom.jl.decoder.LayerIIIDecoder: float[] samples1
+javazoom.jl.decoder.LayerIIIDecoder: float[] samples2
+javazoom.jl.decoder.LayerIIIDecoder: int[] new_slen
+javazoom.jl.decoder.LayerIIIDecoder: int[] x
+javazoom.jl.decoder.LayerIIIDecoder: int[] y
+javazoom.jl.decoder.LayerIIIDecoder: int[] v
+javazoom.jl.decoder.LayerIIIDecoder: int[] w
+javazoom.jl.decoder.LayerIIIDecoder: int[] is_pos
+javazoom.jl.decoder.LayerIIIDecoder: float[] is_ratio
+javazoom.jl.decoder.LayerIIIDecoder: float[] tsOutCopy
+javazoom.jl.decoder.LayerIIIDecoder: float[] rawout
+javazoom.jl.decoder.LayerIIIDecoder: int counter
+javazoom.jl.decoder.LayerIIIDecoder: int SSLIMIT
+javazoom.jl.decoder.LayerIIIDecoder: int SBLIMIT
+javazoom.jl.decoder.LayerIIIDecoder: int[][] slen
+javazoom.jl.decoder.LayerIIIDecoder: int[] pretab
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.LayerIIIDecoder$SBI[] sfBandIndex
+javazoom.jl.decoder.LayerIIIDecoder: float[] two_to_negative_half_pow
+javazoom.jl.decoder.LayerIIIDecoder: float[] t_43
+javazoom.jl.decoder.LayerIIIDecoder: float[][] io
+javazoom.jl.decoder.LayerIIIDecoder: float[] TAN12
+javazoom.jl.decoder.LayerIIIDecoder: int[][] reorder_table
+javazoom.jl.decoder.LayerIIIDecoder: float[] cs
+javazoom.jl.decoder.LayerIIIDecoder: float[] ca
+javazoom.jl.decoder.LayerIIIDecoder: float[][] win
+javazoom.jl.decoder.LayerIIIDecoder: javazoom.jl.decoder.LayerIIIDecoder$Sftable sftable
+javazoom.jl.decoder.LayerIIIDecoder: int[][][] nr_of_sfb_block
+javazoom.jl.decoder.LayerIIIDecoder: LayerIIIDecoder(javazoom.jl.decoder.Bitstream,javazoom.jl.decoder.Header,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.SynthesisFilter,javazoom.jl.decoder.Obuffer,int)
+javazoom.jl.decoder.LayerIIIDecoder: void seek_notify()
+javazoom.jl.decoder.LayerIIIDecoder: void decodeFrame()
+javazoom.jl.decoder.LayerIIIDecoder: void decode()
+javazoom.jl.decoder.LayerIIIDecoder: boolean get_side_info()
+javazoom.jl.decoder.LayerIIIDecoder: void get_scale_factors(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void get_LSF_scale_data(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void get_LSF_scale_factors(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void huffman_decode(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void i_stereo_k_values(int,int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void dequantize_sample(float[][],int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void reorder(float[][],int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void stereo(int)
+javazoom.jl.decoder.LayerIIIDecoder: void antialias(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void hybrid(int,int)
+javazoom.jl.decoder.LayerIIIDecoder: void do_downmix()
+javazoom.jl.decoder.LayerIIIDecoder: void inv_mdct(float[],float[],int)
+javazoom.jl.decoder.LayerIIIDecoder: float[] create_t_43()
+javazoom.jl.decoder.LayerIIIDecoder: int[] reorder(int[])
+javazoom.jl.decoder.LayerIIIDecoder: void <clinit>()
+javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t
+javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t: int main_data_begin
+javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t: int private_bits
+javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t: javazoom.jl.decoder.LayerIIIDecoder$temporaire[] ch
+javazoom.jl.decoder.LayerIIIDecoder$III_side_info_t: LayerIIIDecoder$III_side_info_t()
+javazoom.jl.decoder.LayerIIIDecoder$SBI
+javazoom.jl.decoder.LayerIIIDecoder$SBI: int[] l
+javazoom.jl.decoder.LayerIIIDecoder$SBI: int[] s
+javazoom.jl.decoder.LayerIIIDecoder$SBI: LayerIIIDecoder$SBI()
+javazoom.jl.decoder.LayerIIIDecoder$SBI: LayerIIIDecoder$SBI(int[],int[])
+javazoom.jl.decoder.LayerIIIDecoder$Sftable
+javazoom.jl.decoder.LayerIIIDecoder$Sftable: int[] l
+javazoom.jl.decoder.LayerIIIDecoder$Sftable: int[] s
+javazoom.jl.decoder.LayerIIIDecoder$Sftable: javazoom.jl.decoder.LayerIIIDecoder this$0
+javazoom.jl.decoder.LayerIIIDecoder$Sftable: LayerIIIDecoder$Sftable(javazoom.jl.decoder.LayerIIIDecoder)
+javazoom.jl.decoder.LayerIIIDecoder$Sftable: LayerIIIDecoder$Sftable(javazoom.jl.decoder.LayerIIIDecoder,int[],int[])
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int part2_3_length
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int big_values
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int global_gain
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int scalefac_compress
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int window_switching_flag
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int block_type
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int mixed_block_flag
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int[] table_select
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int[] subblock_gain
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int region0_count
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int region1_count
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int preflag
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int scalefac_scale
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: int count1table_select
+javazoom.jl.decoder.LayerIIIDecoder$gr_info_s: LayerIIIDecoder$gr_info_s()
+javazoom.jl.decoder.LayerIIIDecoder$temporaire
+javazoom.jl.decoder.LayerIIIDecoder$temporaire: int[] scfsi
+javazoom.jl.decoder.LayerIIIDecoder$temporaire: javazoom.jl.decoder.LayerIIIDecoder$gr_info_s[] gr
+javazoom.jl.decoder.LayerIIIDecoder$temporaire: LayerIIIDecoder$temporaire()
+javazoom.jl.decoder.LayerIIIDecoder$temporaire2
+javazoom.jl.decoder.LayerIIIDecoder$temporaire2: int[] l
+javazoom.jl.decoder.LayerIIIDecoder$temporaire2: int[][] s
+javazoom.jl.decoder.LayerIIIDecoder$temporaire2: LayerIIIDecoder$temporaire2()
+javazoom.jl.decoder.Manager
+javazoom.jl.decoder.Manager: Manager()
+javazoom.jl.decoder.Manager: void addControl(javazoom.jl.decoder.Control)
+javazoom.jl.decoder.Manager: void removeControl(javazoom.jl.decoder.Control)
+javazoom.jl.decoder.Manager: void removeAll()
+javazoom.jl.decoder.Obuffer
+javazoom.jl.decoder.Obuffer: int OBUFFERSIZE
+javazoom.jl.decoder.Obuffer: int MAXCHANNELS
+javazoom.jl.decoder.Obuffer: Obuffer()
+javazoom.jl.decoder.Obuffer: void append(int,short)
+javazoom.jl.decoder.Obuffer: void appendSamples(int,float[])
+javazoom.jl.decoder.Obuffer: short clip(float)
+javazoom.jl.decoder.Obuffer: void write_buffer(int)
+javazoom.jl.decoder.Obuffer: void close()
+javazoom.jl.decoder.Obuffer: void clear_buffer()
+javazoom.jl.decoder.Obuffer: void set_stop_flag()
+javazoom.jl.decoder.OutputChannels
+javazoom.jl.decoder.OutputChannels: int BOTH_CHANNELS
+javazoom.jl.decoder.OutputChannels: int LEFT_CHANNEL
+javazoom.jl.decoder.OutputChannels: int RIGHT_CHANNEL
+javazoom.jl.decoder.OutputChannels: int DOWNMIX_CHANNELS
+javazoom.jl.decoder.OutputChannels: javazoom.jl.decoder.OutputChannels LEFT
+javazoom.jl.decoder.OutputChannels: javazoom.jl.decoder.OutputChannels RIGHT
+javazoom.jl.decoder.OutputChannels: javazoom.jl.decoder.OutputChannels BOTH
+javazoom.jl.decoder.OutputChannels: javazoom.jl.decoder.OutputChannels DOWNMIX
+javazoom.jl.decoder.OutputChannels: int outputChannels
+javazoom.jl.decoder.OutputChannels: javazoom.jl.decoder.OutputChannels fromInt(int)
+javazoom.jl.decoder.OutputChannels: OutputChannels(int)
+javazoom.jl.decoder.OutputChannels: int getChannelsOutputCode()
+javazoom.jl.decoder.OutputChannels: int getChannelCount()
+javazoom.jl.decoder.OutputChannels: boolean equals(java.lang.Object)
+javazoom.jl.decoder.OutputChannels: int hashCode()
+javazoom.jl.decoder.OutputChannels: void <clinit>()
+javazoom.jl.decoder.SampleBuffer
+javazoom.jl.decoder.SampleBuffer: short[] buffer
+javazoom.jl.decoder.SampleBuffer: int[] bufferp
+javazoom.jl.decoder.SampleBuffer: int channels
+javazoom.jl.decoder.SampleBuffer: int frequency
+javazoom.jl.decoder.SampleBuffer: SampleBuffer(int,int)
+javazoom.jl.decoder.SampleBuffer: int getChannelCount()
+javazoom.jl.decoder.SampleBuffer: int getSampleFrequency()
+javazoom.jl.decoder.SampleBuffer: short[] getBuffer()
+javazoom.jl.decoder.SampleBuffer: int getBufferLength()
+javazoom.jl.decoder.SampleBuffer: void append(int,short)
+javazoom.jl.decoder.SampleBuffer: void appendSamples(int,float[])
+javazoom.jl.decoder.SampleBuffer: void write_buffer(int)
+javazoom.jl.decoder.SampleBuffer: void close()
+javazoom.jl.decoder.SampleBuffer: void clear_buffer()
+javazoom.jl.decoder.SampleBuffer: void set_stop_flag()
+javazoom.jl.decoder.Source
+javazoom.jl.decoder.Source: long LENGTH_UNKNOWN
+javazoom.jl.decoder.Source: int read(byte[],int,int)
+javazoom.jl.decoder.Source: boolean willReadBlock()
+javazoom.jl.decoder.Source: boolean isSeekable()
+javazoom.jl.decoder.Source: long length()
+javazoom.jl.decoder.Source: long tell()
+javazoom.jl.decoder.Source: long seek(long)
+javazoom.jl.decoder.SynthesisFilter
+javazoom.jl.decoder.SynthesisFilter: float[] v1
+javazoom.jl.decoder.SynthesisFilter: float[] v2
+javazoom.jl.decoder.SynthesisFilter: float[] actual_v
+javazoom.jl.decoder.SynthesisFilter: int actual_write_pos
+javazoom.jl.decoder.SynthesisFilter: float[] samples
+javazoom.jl.decoder.SynthesisFilter: int channel
+javazoom.jl.decoder.SynthesisFilter: float scalefactor
+javazoom.jl.decoder.SynthesisFilter: float[] eq
+javazoom.jl.decoder.SynthesisFilter: float[] _tmpOut
+javazoom.jl.decoder.SynthesisFilter: double MY_PI
+javazoom.jl.decoder.SynthesisFilter: float cos1_64
+javazoom.jl.decoder.SynthesisFilter: float cos3_64
+javazoom.jl.decoder.SynthesisFilter: float cos5_64
+javazoom.jl.decoder.SynthesisFilter: float cos7_64
+javazoom.jl.decoder.SynthesisFilter: float cos9_64
+javazoom.jl.decoder.SynthesisFilter: float cos11_64
+javazoom.jl.decoder.SynthesisFilter: float cos13_64
+javazoom.jl.decoder.SynthesisFilter: float cos15_64
+javazoom.jl.decoder.SynthesisFilter: float cos17_64
+javazoom.jl.decoder.SynthesisFilter: float cos19_64
+javazoom.jl.decoder.SynthesisFilter: float cos21_64
+javazoom.jl.decoder.SynthesisFilter: float cos23_64
+javazoom.jl.decoder.SynthesisFilter: float cos25_64
+javazoom.jl.decoder.SynthesisFilter: float cos27_64
+javazoom.jl.decoder.SynthesisFilter: float cos29_64
+javazoom.jl.decoder.SynthesisFilter: float cos31_64
+javazoom.jl.decoder.SynthesisFilter: float cos1_32
+javazoom.jl.decoder.SynthesisFilter: float cos3_32
+javazoom.jl.decoder.SynthesisFilter: float cos5_32
+javazoom.jl.decoder.SynthesisFilter: float cos7_32
+javazoom.jl.decoder.SynthesisFilter: float cos9_32
+javazoom.jl.decoder.SynthesisFilter: float cos11_32
+javazoom.jl.decoder.SynthesisFilter: float cos13_32
+javazoom.jl.decoder.SynthesisFilter: float cos15_32
+javazoom.jl.decoder.SynthesisFilter: float cos1_16
+javazoom.jl.decoder.SynthesisFilter: float cos3_16
+javazoom.jl.decoder.SynthesisFilter: float cos5_16
+javazoom.jl.decoder.SynthesisFilter: float cos7_16
+javazoom.jl.decoder.SynthesisFilter: float cos1_8
+javazoom.jl.decoder.SynthesisFilter: float cos3_8
+javazoom.jl.decoder.SynthesisFilter: float cos1_4
+javazoom.jl.decoder.SynthesisFilter: float[] d
+javazoom.jl.decoder.SynthesisFilter: float[][] d16
+javazoom.jl.decoder.SynthesisFilter: SynthesisFilter(int,float,float[])
+javazoom.jl.decoder.SynthesisFilter: void setEQ(float[])
+javazoom.jl.decoder.SynthesisFilter: void reset()
+javazoom.jl.decoder.SynthesisFilter: void input_sample(float,int)
+javazoom.jl.decoder.SynthesisFilter: void input_samples(float[])
+javazoom.jl.decoder.SynthesisFilter: void compute_new_v()
+javazoom.jl.decoder.SynthesisFilter: void compute_new_v_old()
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples0(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples1(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples2(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples3(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples4(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples5(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples6(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples7(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples8(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples9(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples10(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples11(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples12(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples13(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples14(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples15(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void compute_pcm_samples(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: void calculate_pcm_samples(javazoom.jl.decoder.Obuffer)
+javazoom.jl.decoder.SynthesisFilter: float[] load_d()
+javazoom.jl.decoder.SynthesisFilter: float[][] splitArray(float[],int)
+javazoom.jl.decoder.SynthesisFilter: float[] subArray(float[],int,int)
+javazoom.jl.decoder.SynthesisFilter: void <clinit>()
+javazoom.jl.decoder.huffcodetab
+javazoom.jl.decoder.huffcodetab: int MXOFF
+javazoom.jl.decoder.huffcodetab: int HTN
+javazoom.jl.decoder.huffcodetab: char tablename0
+javazoom.jl.decoder.huffcodetab: char tablename1
+javazoom.jl.decoder.huffcodetab: char tablename2
+javazoom.jl.decoder.huffcodetab: int xlen
+javazoom.jl.decoder.huffcodetab: int ylen
+javazoom.jl.decoder.huffcodetab: int linbits
+javazoom.jl.decoder.huffcodetab: int linmax
+javazoom.jl.decoder.huffcodetab: int ref
+javazoom.jl.decoder.huffcodetab: int[] table
+javazoom.jl.decoder.huffcodetab: int[] hlen
+javazoom.jl.decoder.huffcodetab: int[][] val
+javazoom.jl.decoder.huffcodetab: int treelen
+javazoom.jl.decoder.huffcodetab: int[][] ValTab0
+javazoom.jl.decoder.huffcodetab: int[][] ValTab1
+javazoom.jl.decoder.huffcodetab: int[][] ValTab2
+javazoom.jl.decoder.huffcodetab: int[][] ValTab3
+javazoom.jl.decoder.huffcodetab: int[][] ValTab4
+javazoom.jl.decoder.huffcodetab: int[][] ValTab5
+javazoom.jl.decoder.huffcodetab: int[][] ValTab6
+javazoom.jl.decoder.huffcodetab: int[][] ValTab7
+javazoom.jl.decoder.huffcodetab: int[][] ValTab8
+javazoom.jl.decoder.huffcodetab: int[][] ValTab9
+javazoom.jl.decoder.huffcodetab: int[][] ValTab10
+javazoom.jl.decoder.huffcodetab: int[][] ValTab11
+javazoom.jl.decoder.huffcodetab: int[][] ValTab12
+javazoom.jl.decoder.huffcodetab: int[][] ValTab13
+javazoom.jl.decoder.huffcodetab: int[][] ValTab14
+javazoom.jl.decoder.huffcodetab: int[][] ValTab15
+javazoom.jl.decoder.huffcodetab: int[][] ValTab16
+javazoom.jl.decoder.huffcodetab: int[][] ValTab24
+javazoom.jl.decoder.huffcodetab: int[][] ValTab32
+javazoom.jl.decoder.huffcodetab: int[][] ValTab33
+javazoom.jl.decoder.huffcodetab: javazoom.jl.decoder.huffcodetab[] ht
+javazoom.jl.decoder.huffcodetab: int[] bitbuf
+javazoom.jl.decoder.huffcodetab: huffcodetab(java.lang.String,int,int,int,int,int,int[],int[],int[][],int)
+javazoom.jl.decoder.huffcodetab: int huffman_decoder(javazoom.jl.decoder.huffcodetab,int[],int[],int[],int[],javazoom.jl.decoder.BitReserve)
+javazoom.jl.decoder.huffcodetab: void inithuff()
+javazoom.jl.decoder.huffcodetab: void <clinit>()
+javazoom.jl.player.AudioDevice
+javazoom.jl.player.AudioDevice: void open(javazoom.jl.decoder.Decoder)
+javazoom.jl.player.AudioDevice: boolean isOpen()
+javazoom.jl.player.AudioDevice: void write(short[],int,int)
+javazoom.jl.player.AudioDevice: void close()
+javazoom.jl.player.AudioDevice: void flush()
+javazoom.jl.player.AudioDevice: int getPosition()
+javazoom.jl.player.AudioDeviceBase
+javazoom.jl.player.AudioDeviceBase: boolean open
+javazoom.jl.player.AudioDeviceBase: javazoom.jl.decoder.Decoder decoder
+javazoom.jl.player.AudioDeviceBase: AudioDeviceBase()
+javazoom.jl.player.AudioDeviceBase: void open(javazoom.jl.decoder.Decoder)
+javazoom.jl.player.AudioDeviceBase: void openImpl()
+javazoom.jl.player.AudioDeviceBase: void setOpen(boolean)
+javazoom.jl.player.AudioDeviceBase: boolean isOpen()
+javazoom.jl.player.AudioDeviceBase: void close()
+javazoom.jl.player.AudioDeviceBase: void closeImpl()
+javazoom.jl.player.AudioDeviceBase: void write(short[],int,int)
+javazoom.jl.player.AudioDeviceBase: void writeImpl(short[],int,int)
+javazoom.jl.player.AudioDeviceBase: void flush()
+javazoom.jl.player.AudioDeviceBase: void flushImpl()
+javazoom.jl.player.AudioDeviceBase: javazoom.jl.decoder.Decoder getDecoder()
+javazoom.jl.player.AudioDeviceFactory
+javazoom.jl.player.AudioDeviceFactory: AudioDeviceFactory()
+javazoom.jl.player.AudioDeviceFactory: javazoom.jl.player.AudioDevice createAudioDevice()
+javazoom.jl.player.AudioDeviceFactory: javazoom.jl.player.AudioDevice instantiate(java.lang.ClassLoader,java.lang.String)
+javazoom.jl.player.FactoryRegistry
+javazoom.jl.player.FactoryRegistry: javazoom.jl.player.FactoryRegistry instance
+javazoom.jl.player.FactoryRegistry: java.util.Hashtable factories
+javazoom.jl.player.FactoryRegistry: FactoryRegistry()
+javazoom.jl.player.FactoryRegistry: javazoom.jl.player.FactoryRegistry systemRegistry()
+javazoom.jl.player.FactoryRegistry: void addFactory(javazoom.jl.player.AudioDeviceFactory)
+javazoom.jl.player.FactoryRegistry: void removeFactoryType(java.lang.Class)
+javazoom.jl.player.FactoryRegistry: void removeFactory(javazoom.jl.player.AudioDeviceFactory)
+javazoom.jl.player.FactoryRegistry: javazoom.jl.player.AudioDevice createAudioDevice()
+javazoom.jl.player.FactoryRegistry: javazoom.jl.player.AudioDeviceFactory[] getFactoriesPriority()
+javazoom.jl.player.FactoryRegistry: void registerDefaultFactories()
+javazoom.jl.player.FactoryRegistry: void <clinit>()
+javazoom.jl.player.JavaSoundAudioDevice
+javazoom.jl.player.JavaSoundAudioDevice: javax.sound.sampled.SourceDataLine source
+javazoom.jl.player.JavaSoundAudioDevice: javax.sound.sampled.AudioFormat fmt
+javazoom.jl.player.JavaSoundAudioDevice: byte[] byteBuf
+javazoom.jl.player.JavaSoundAudioDevice: JavaSoundAudioDevice()
+javazoom.jl.player.JavaSoundAudioDevice: void setAudioFormat(javax.sound.sampled.AudioFormat)
+javazoom.jl.player.JavaSoundAudioDevice: javax.sound.sampled.AudioFormat getAudioFormat()
+javazoom.jl.player.JavaSoundAudioDevice: javax.sound.sampled.DataLine$Info getSourceLineInfo()
+javazoom.jl.player.JavaSoundAudioDevice: void open(javax.sound.sampled.AudioFormat)
+javazoom.jl.player.JavaSoundAudioDevice: void openImpl()
+javazoom.jl.player.JavaSoundAudioDevice: void createSource()
+javazoom.jl.player.JavaSoundAudioDevice: int millisecondsToBytes(javax.sound.sampled.AudioFormat,int)
+javazoom.jl.player.JavaSoundAudioDevice: void closeImpl()
+javazoom.jl.player.JavaSoundAudioDevice: void writeImpl(short[],int,int)
+javazoom.jl.player.JavaSoundAudioDevice: byte[] getByteArray(int)
+javazoom.jl.player.JavaSoundAudioDevice: byte[] toByteArray(short[],int,int)
+javazoom.jl.player.JavaSoundAudioDevice: void flushImpl()
+javazoom.jl.player.JavaSoundAudioDevice: int getPosition()
+javazoom.jl.player.JavaSoundAudioDevice: void test()
+javazoom.jl.player.JavaSoundAudioDeviceFactory
+javazoom.jl.player.JavaSoundAudioDeviceFactory: boolean tested
+javazoom.jl.player.JavaSoundAudioDeviceFactory: java.lang.String DEVICE_CLASS_NAME
+javazoom.jl.player.JavaSoundAudioDeviceFactory: JavaSoundAudioDeviceFactory()
+javazoom.jl.player.JavaSoundAudioDeviceFactory: javazoom.jl.player.AudioDevice createAudioDevice()
+javazoom.jl.player.JavaSoundAudioDeviceFactory: javazoom.jl.player.JavaSoundAudioDevice createAudioDeviceImpl()
+javazoom.jl.player.JavaSoundAudioDeviceFactory: void testAudioDevice()
+javazoom.jl.player.NullAudioDevice
+javazoom.jl.player.NullAudioDevice: NullAudioDevice()
+javazoom.jl.player.NullAudioDevice: int getPosition()
+javazoom.jl.player.Player
+javazoom.jl.player.Player: int frame
+javazoom.jl.player.Player: javazoom.jl.decoder.Bitstream bitstream
+javazoom.jl.player.Player: javazoom.jl.decoder.Decoder decoder
+javazoom.jl.player.Player: javazoom.jl.player.AudioDevice audio
+javazoom.jl.player.Player: boolean closed
+javazoom.jl.player.Player: boolean complete
+javazoom.jl.player.Player: int lastPosition
+javazoom.jl.player.Player: Player(java.io.InputStream)
+javazoom.jl.player.Player: Player(java.io.InputStream,javazoom.jl.player.AudioDevice)
+javazoom.jl.player.Player: void play()
+javazoom.jl.player.Player: boolean play(int)
+javazoom.jl.player.Player: void close()
+javazoom.jl.player.Player: boolean isComplete()
+javazoom.jl.player.Player: int getPosition()
+javazoom.jl.player.Player: boolean decodeFrame()
+javazoom.jl.player.PlayerApplet
+javazoom.jl.player.PlayerApplet: java.lang.String AUDIO_PARAMETER
+javazoom.jl.player.PlayerApplet: javazoom.jl.player.Player player
+javazoom.jl.player.PlayerApplet: java.lang.Thread playerThread
+javazoom.jl.player.PlayerApplet: java.lang.String fileName
+javazoom.jl.player.PlayerApplet: PlayerApplet()
+javazoom.jl.player.PlayerApplet: javazoom.jl.player.AudioDevice getAudioDevice()
+javazoom.jl.player.PlayerApplet: java.io.InputStream getAudioStream()
+javazoom.jl.player.PlayerApplet: java.lang.String getAudioFileName()
+javazoom.jl.player.PlayerApplet: java.net.URL getAudioURL()
+javazoom.jl.player.PlayerApplet: void setFileName(java.lang.String)
+javazoom.jl.player.PlayerApplet: java.lang.String getFileName()
+javazoom.jl.player.PlayerApplet: void stopPlayer()
+javazoom.jl.player.PlayerApplet: void play(java.io.InputStream,javazoom.jl.player.AudioDevice)
+javazoom.jl.player.PlayerApplet: java.lang.Thread createPlayerThread()
+javazoom.jl.player.PlayerApplet: void init()
+javazoom.jl.player.PlayerApplet: void start()
+javazoom.jl.player.PlayerApplet: void stop()
+javazoom.jl.player.PlayerApplet: void destroy()
+javazoom.jl.player.PlayerApplet: void run()
+javazoom.jl.player.advanced.AdvancedPlayer
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.decoder.Bitstream bitstream
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.decoder.Decoder decoder
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.player.AudioDevice audio
+javazoom.jl.player.advanced.AdvancedPlayer: boolean closed
+javazoom.jl.player.advanced.AdvancedPlayer: boolean complete
+javazoom.jl.player.advanced.AdvancedPlayer: int lastPosition
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.player.advanced.PlaybackListener listener
+javazoom.jl.player.advanced.AdvancedPlayer: AdvancedPlayer(java.io.InputStream)
+javazoom.jl.player.advanced.AdvancedPlayer: AdvancedPlayer(java.io.InputStream,javazoom.jl.player.AudioDevice)
+javazoom.jl.player.advanced.AdvancedPlayer: void play()
+javazoom.jl.player.advanced.AdvancedPlayer: boolean play(int)
+javazoom.jl.player.advanced.AdvancedPlayer: void close()
+javazoom.jl.player.advanced.AdvancedPlayer: boolean decodeFrame()
+javazoom.jl.player.advanced.AdvancedPlayer: boolean skipFrame()
+javazoom.jl.player.advanced.AdvancedPlayer: boolean play(int,int)
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.player.advanced.PlaybackEvent createEvent(int)
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.player.advanced.PlaybackEvent createEvent(javazoom.jl.player.AudioDevice,int)
+javazoom.jl.player.advanced.AdvancedPlayer: void setPlayBackListener(javazoom.jl.player.advanced.PlaybackListener)
+javazoom.jl.player.advanced.AdvancedPlayer: javazoom.jl.player.advanced.PlaybackListener getPlayBackListener()
+javazoom.jl.player.advanced.AdvancedPlayer: void stop()
+javazoom.jl.player.advanced.PlaybackEvent
+javazoom.jl.player.advanced.PlaybackEvent: int STOPPED
+javazoom.jl.player.advanced.PlaybackEvent: int STARTED
+javazoom.jl.player.advanced.PlaybackEvent: javazoom.jl.player.advanced.AdvancedPlayer source
+javazoom.jl.player.advanced.PlaybackEvent: int frame
+javazoom.jl.player.advanced.PlaybackEvent: int id
+javazoom.jl.player.advanced.PlaybackEvent: PlaybackEvent(javazoom.jl.player.advanced.AdvancedPlayer,int,int)
+javazoom.jl.player.advanced.PlaybackEvent: int getId()
+javazoom.jl.player.advanced.PlaybackEvent: void setId(int)
+javazoom.jl.player.advanced.PlaybackEvent: int getFrame()
+javazoom.jl.player.advanced.PlaybackEvent: void setFrame(int)
+javazoom.jl.player.advanced.PlaybackEvent: javazoom.jl.player.advanced.AdvancedPlayer getSource()
+javazoom.jl.player.advanced.PlaybackEvent: void setSource(javazoom.jl.player.advanced.AdvancedPlayer)
+javazoom.jl.player.advanced.PlaybackEvent: void <clinit>()
+javazoom.jl.player.advanced.PlaybackListener
+javazoom.jl.player.advanced.PlaybackListener: PlaybackListener()
+javazoom.jl.player.advanced.PlaybackListener: void playbackStarted(javazoom.jl.player.advanced.PlaybackEvent)
+javazoom.jl.player.advanced.PlaybackListener: void playbackFinished(javazoom.jl.player.advanced.PlaybackEvent)
+javazoom.jl.player.advanced.jlap
+javazoom.jl.player.advanced.jlap: jlap()
+javazoom.jl.player.advanced.jlap: void main(java.lang.String[])
+javazoom.jl.player.advanced.jlap: void play(java.lang.String)
+javazoom.jl.player.advanced.jlap: void showUsage()
+javazoom.jl.player.advanced.jlap: javazoom.jl.player.advanced.AdvancedPlayer playMp3(java.io.File,javazoom.jl.player.advanced.PlaybackListener)
+javazoom.jl.player.advanced.jlap: javazoom.jl.player.advanced.AdvancedPlayer playMp3(java.io.File,int,int,javazoom.jl.player.advanced.PlaybackListener)
+javazoom.jl.player.advanced.jlap: javazoom.jl.player.advanced.AdvancedPlayer playMp3(java.io.InputStream,int,int,javazoom.jl.player.advanced.PlaybackListener)
+javazoom.jl.player.advanced.jlap$1
+javazoom.jl.player.advanced.jlap$1: javazoom.jl.player.advanced.AdvancedPlayer val$player
+javazoom.jl.player.advanced.jlap$1: int val$start
+javazoom.jl.player.advanced.jlap$1: int val$end
+javazoom.jl.player.advanced.jlap$1: jlap$1(javazoom.jl.player.advanced.AdvancedPlayer,int,int)
+javazoom.jl.player.advanced.jlap$1: void run()
+javazoom.jl.player.advanced.jlap$InfoListener
+javazoom.jl.player.advanced.jlap$InfoListener: javazoom.jl.player.advanced.jlap this$0
+javazoom.jl.player.advanced.jlap$InfoListener: jlap$InfoListener(javazoom.jl.player.advanced.jlap)
+javazoom.jl.player.advanced.jlap$InfoListener: void playbackStarted(javazoom.jl.player.advanced.PlaybackEvent)
+javazoom.jl.player.advanced.jlap$InfoListener: void playbackFinished(javazoom.jl.player.advanced.PlaybackEvent)
+javazoom.jl.player.jlp
+javazoom.jl.player.jlp: java.lang.String fFilename
+javazoom.jl.player.jlp: boolean remote
+javazoom.jl.player.jlp: void main(java.lang.String[])
+javazoom.jl.player.jlp: javazoom.jl.player.jlp createInstance(java.lang.String[])
+javazoom.jl.player.jlp: jlp()
+javazoom.jl.player.jlp: jlp(java.lang.String)
+javazoom.jl.player.jlp: void init(java.lang.String)
+javazoom.jl.player.jlp: boolean parseArgs(java.lang.String[])
+javazoom.jl.player.jlp: void showUsage()
+javazoom.jl.player.jlp: void play()
+javazoom.jl.player.jlp: java.io.InputStream getURLInputStream()
+javazoom.jl.player.jlp: java.io.InputStream getInputStream()
+javazoom.jl.player.jlp: javazoom.jl.player.AudioDevice getAudioDevice()

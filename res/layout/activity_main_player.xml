@@ -3,12 +3,46 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MainPlayer" >
-    
+
+    <ImageButton
+            android:id="@+id/playlist_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="call playlist menu"
+            android:src="@drawable/list"
+            android:background="@null"
+            android:layout_alignParentBottom="true" android:layout_marginTop="5dp" android:layout_marginLeft="25dp"
+            />
+
+    <ImageButton
+            android:id="@+id/play_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="play or pause"
+            android:src="@drawable/play_button_selector"
+            android:background="@null"
+            android:layout_marginTop="5dp"/>
+
+    <ImageButton
+            android:id="@+id/nexttune_ib"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="next tune"
+            android:src="@drawable/next"
+            android:background="@null"
+            android:layout_marginTop="5dp" android:layout_marginRight="25dp"/>
+
     <ImageView 
         android:id="@+id/tune_cover_iv"
         android:layout_width="fill_parent"
-        android:layout_height="430dp"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
+        android:layout_above="@id/playlist_ib"
         android:contentDescription="tune_cover"
         android:scaleType="centerCrop" android:background="#000000"/>
     
@@ -17,11 +51,12 @@
         android:layout_width="fill_parent"
         android:layout_height="35dp"
         android:layout_alignBottom="@id/tune_cover_iv"
-        android:textSize="22sp"
+        android:paddingLeft="17dp"
+        android:textSize="24sp"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="45dp"
         android:textIsSelectable="false"
         android:textColor="#ffffff"
         android:shadowRadius="1"
@@ -34,6 +69,7 @@
         android:id="@+id/tune_info_tv"
         android:layout_width="fill_parent"
         android:layout_height="20dp"
+        android:paddingLeft="17dp"
         android:layout_alignBottom="@id/tune_cover_iv"
         android:textSize="14sp"
         android:layout_marginBottom="30dp"
@@ -65,53 +101,18 @@
         android:id="@+id/tune_progress_pb"
         android:layout_width="fill_parent"
         android:layout_height="5dp"
-        android:indeterminate="false"
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@id/tune_cover_iv"
-        android:progress="0"
-        android:max="0"/>
+        android:progressDrawable="@drawable/progressbar"
+        />
 	
-    <ImageButton 
-        android:id="@+id/playlist_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:contentDescription="call playlist menu"
-        android:src="@drawable/list"
-        android:background="@null"
-        android:layout_alignParentBottom="true" android:layout_marginTop="5dp" android:layout_marginLeft="25dp"
-            />
-    
-    <ImageButton 
-        android:id="@+id/play_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="play or pause"
-        android:src="@drawable/play_button_selector"
-        android:background="@null"
-        android:layout_marginTop="5dp"/>
-    
-    <ImageButton 
-        android:id="@+id/nexttune_ib"
-        android:layout_width="80dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tune_cover_iv"
-        android:contentDescription="next tune"
-        android:src="@drawable/next"
-        android:background="@null"
-        android:layout_marginTop="5dp" android:layout_marginRight="25dp"/>
-    
-    <RelativeLayout 
+    <RelativeLayout
         android:id="@+id/playlist_ll"
         android:layout_width="fill_parent"
-        android:layout_height="440dp"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="75dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:visibility="gone"
         android:background="#00000000"
         >
@@ -123,7 +124,7 @@
             android:layout_marginBottom="10dp"
             android:background="#000000"
             android:alpha="0.93"
-            ></ListView>
+            />
         
         <ImageView 
             android:layout_width="80dp"
@@ -136,5 +137,18 @@
             />
         
     </RelativeLayout>
+
+    <ImageView
+            android:id="@+id/greeting_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ee5043"
+            android:src="@drawable/greeting"
+            android:paddingRight="80dp"
+            android:paddingLeft="80dp"
+            android:paddingTop="100dp"
+            android:paddingBottom="200dp"
+            android:cropToPadding="true"
+            />
 
 </RelativeLayout>
