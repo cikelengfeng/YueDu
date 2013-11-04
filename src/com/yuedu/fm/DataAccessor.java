@@ -91,6 +91,19 @@ public enum  DataAccessor {
         }
     }
 
+    public int indexOfTune(CharSequence tuneName) {
+        int index = -1;
+        if (mDataList != null) {
+            for (int i = 0; i < mDataList.size();i++) {
+                if (mDataList.get(i).title.contains(tuneName)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
     public void downloadData(final Context context) {
         RequestParams param = new RequestParams("data", "playlist");
         getClient().get("http://yuedu.fm/", param, new JsonHttpResponseHandler() {

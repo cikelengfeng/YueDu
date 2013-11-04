@@ -347,6 +347,10 @@ public class StreamingDownloadMediaPlayer {
                             }
                         }
 
+                        if (mAudioTrack.getPlaybackRate() != header.frequency()) {
+                            mAudioTrack.setPlaybackRate(header.frequency());
+                        }
+
                         if (totalBytes >= mBufferSize - 2 * oneshootBytes && !firstPrepared) {
                             firstPrepared = true;
                             notifyPrepared();
@@ -357,7 +361,7 @@ public class StreamingDownloadMediaPlayer {
                         oneshootBytes = decoderBuffer.getBufferLength() * 2;
                         short[] copyBuffer = new short[decoderBuffer.getBufferLength()];
                         System.arraycopy(decoderBuffer.getBuffer(), 0, copyBuffer, 0, decoderBuffer.getBufferLength());
-                        mAudioTrack.write(copyBuffer, 0, decoderBuffer.getBufferLength());
+                        mAudioTrack.write(copyBuffer, 0, copyBuffer.length);
                         totalBytes += oneshootBytes;
                         totalFrameSize += 1;
                         playedTimeInMS += header.ms_per_frame();
