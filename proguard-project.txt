@@ -18,6 +18,24 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class roboguice.**
+
+# if not using Google Maps library, safe to ignore these
+-dontwarn roboguice.activity.RoboMapActivity
+# safe to ignore testing classes, when proguard not being run against an instrumentation testing app
+-dontwarn roboguice.test.**
+
+-keep class com.google.inject.** { *; }
+-keepclassmembers class * {
+    @com.google.inject.Inject <fields>;
+    @com.google.inject.Inject <init>(...);
+}
+-keep class javax.inject.** { *; }
+-keep class javax.annotation.** { *; }
+-keep class com.yuedu.fm.YueduBaseActivity { *; }
+
 
 -dontwarn android.support.v4.**
 -dontwarn javazoom.jl.**
