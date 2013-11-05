@@ -17,3 +17,4 @@ bin
 out
 gen
 YueDu.apk
+proguard_logs/
