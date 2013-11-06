@@ -37,7 +37,9 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Set;
 
-public class MainPlayer extends FragmentActivity implements DataAccessor.DataAccessorHandler {
+import roboguice.inject.InjectView;
+
+public class MainPlayer extends YueduBaseActivity implements DataAccessor.DataAccessorHandler {
 
 
     private BroadcastReceiver mServiceBroadcastReceiver = new BroadcastReceiver() {
@@ -96,54 +98,40 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
 
     private void showLoading() {
         Log.d("yuedu","set progress bar indeterminate!!!!");
-//        getmProgressBar().setIndeterminate(true);
+//        mProgressBar.setIndeterminate(true);
         //do not show progressbar progress animation 2013/09/23
     }
 
     private void hideLoading() {
         Log.d("yuedu","set progress bar determinate!!!!");
-//        getmProgressBar().setIndeterminate(false);
+//        mProgressBar.setIndeterminate(false);
         //do not show progressbar progress animation 2013/09/23
     }
 
     private void setCurrentPosition(int currentPosition) {
         assert currentPosition >= 0;
-        getmProgressBar().setProgress(currentPosition);
+        mProgressBar.setProgress(currentPosition);
         int positionInSecond = currentPosition/1000;
         int minFirstBit = positionInSecond/600;
         int minSecondBit = positionInSecond%600/60;
         int secFirstBit = positionInSecond%600%60/10;
         int secSecondBit = positionInSecond%600%60%10;
-        getmPlayedTimeTextView().setText(minFirstBit +""+ minSecondBit + ":" + secFirstBit +""+ secSecondBit);
+        mPlayedTimeTextView.setText(minFirstBit +""+ minSecondBit + ":" + secFirstBit +""+ secSecondBit);
     }
 
     private PlaylistAdapter mAdapter;
-
-    private ListView mListView;
-    private RelativeLayout mListViewContainer;
-    private ImageView mImageView;
     private ImageFetcher mImageFetcher;
-    private TextView mTitleView;
-    private TextView mInfoView;
-    private ImageButton mListButton;
-    private ImageButton mPlayButton;
-    private ImageButton mNextButton;
-    private ProgressBar mProgressBar;
-    private TextView mPlayedTimeTextView;
 
-    public TextView getmPlayedTimeTextView() {
-        if (mPlayedTimeTextView == null) {
-            mPlayedTimeTextView = (TextView) findViewById(R.id.tune_played_time_tv);
-        }
-        return mPlayedTimeTextView;
-    }
-
-    public ProgressBar getmProgressBar() {
-        if (mProgressBar == null) {
-            mProgressBar = (ProgressBar) findViewById(R.id.tune_progress_pb);
-        }
-        return mProgressBar;
-    }
+    @InjectView(R.id.playlist_lv)           private ListView mListView;
+    @InjectView(R.id.playlist_ll)           private RelativeLayout mListViewContainer;
+    @InjectView(R.id.tune_cover_iv)         private ImageView mImageView;
+    @InjectView(R.id.tune_info_tv)          private TextView mInfoView;
+    @InjectView(R.id.tune_name_tv)          private TextView mTitleView;
+    @InjectView(R.id.playlist_ib)           private ImageButton mListButton;
+    @InjectView(R.id.play_ib)               private ImageButton mPlayButton;
+    @InjectView(R.id.nexttune_ib)           private ImageButton mNextButton;
+    @InjectView(R.id.tune_progress_pb)      private ProgressBar mProgressBar;
+    @InjectView(R.id.tune_played_time_tv)   private TextView mPlayedTimeTextView;
 
     private int getCurrentPlayingTuneDuration() {
         TuneInfo tune = DataAccessor.SINGLE_INSTANCE.getPlayingTune();
@@ -152,53 +140,11 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
         return (min * 60 + sec)*1000;
     }
 
-    public ListView getmListView() {
-        if (mListView == null) {
-            mListView = (ListView) findViewById(R.id.playlist_lv);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setPlaylistViewVisible(false);
-                    playTuneAtIndex(position);
-                }
-            });
-        }
-        return mListView;
-    }
-
-    public RelativeLayout getmListViewContainer() {
-        if (mListViewContainer == null) {
-            mListViewContainer = (RelativeLayout) findViewById(R.id.playlist_ll);
-        }
-        return mListViewContainer;
-    }
-
     public PlaylistAdapter getAdapter() {
         if (mAdapter == null) {
             mAdapter = new PlaylistAdapter(getApplicationContext(), DataAccessor.SINGLE_INSTANCE.getDataList(), getmImageFetcher());
         }
         return mAdapter;
-    }
-
-    public ImageView getmImageView() {
-        if (mImageView == null) {
-            mImageView = (ImageView) findViewById(R.id.tune_cover_iv);
-        }
-        return mImageView;
-    }
-
-    public TextView getmInfoView() {
-        if (mInfoView == null) {
-            mInfoView = (TextView) findViewById(R.id.tune_info_tv);
-        }
-        return mInfoView;
-    }
-
-    public TextView getmTitleView() {
-        if (mTitleView == null) {
-            mTitleView = (TextView) findViewById(R.id.tune_name_tv);
-        }
-        return mTitleView;
     }
 
     public ImageFetcher getmImageFetcher() {
@@ -213,27 +159,6 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
         return mImageFetcher;
     }
 
-    public ImageButton getmListButton() {
-        if (mListButton == null) {
-            mListButton = (ImageButton) findViewById(R.id.playlist_ib);
-        }
-        return mListButton;
-    }
-
-    public ImageButton getmPlayButton() {
-        if (mPlayButton == null) {
-            mPlayButton = (ImageButton) findViewById(R.id.play_ib);
-        }
-        return mPlayButton;
-    }
-
-    public ImageButton getmNextButton() {
-        if (mNextButton == null) {
-            mNextButton = (ImageButton) findViewById(R.id.nexttune_ib);
-        }
-        return mNextButton;
-    }
-
     private void updateCover() {
         TuneInfo tune = DataAccessor.SINGLE_INSTANCE.getPlayingTune();
         String url = tune.bgURL;
@@ -241,24 +166,24 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
         String author = tune.author;
         String player = tune.player;
         String info = getString(R.string.author) + author +" "+ getString(R.string.player) + player;
-        getmImageFetcher().loadImage(url, getmImageView());
-        getmTitleView().setText(title);
-        getmInfoView().setText(info);
-        getmProgressBar().setIndeterminate(false);
-        getmProgressBar().setMax(getCurrentPlayingTuneDuration());
-        getmProgressBar().setProgress(0);
-        getmPlayedTimeTextView().setText("00:00");
+        getmImageFetcher().loadImage(url, mImageView);
+        mTitleView.setText(title);
+        mInfoView.setText(info);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setMax(getCurrentPlayingTuneDuration());
+        mProgressBar.setProgress(0);
+        mPlayedTimeTextView.setText("00:00");
     }
 
     private void updateListView() {
-        getmListView().setAdapter(getAdapter());
+        mListView.setAdapter(getAdapter());
         updateListViewSelection();
     }
 
     private void updateListViewSelection() {
         int playingIndex = DataAccessor.SINGLE_INSTANCE.getPlayingTuneIndex();
-        getmListView().setSelection(playingIndex);
-        getmListView().setItemChecked(playingIndex,true);
+        mListView.setSelection(playingIndex);
+        mListView.setItemChecked(playingIndex,true);
     }
 
     private void updateUI() {
@@ -296,14 +221,20 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
         registerLocalBroadcastReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(mNetworkStateReceiver, filter);
-
-        getmListButton().setOnClickListener(new View.OnClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setPlaylistViewVisible(false);
+                playTuneAtIndex(position);
+            }
+        });
+        mListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setPlaylistViewVisible(!isPlaylistViewVisible());
             }
         });
-        getmPlayButton().setOnClickListener(new View.OnClickListener() {
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (playButtonIsPlayingState()) {
@@ -315,13 +246,13 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
                 }
             }
         });
-        getmNextButton().setOnClickListener(new View.OnClickListener() {
+        mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playNextTune();
             }
         });
-        getmTitleView().setSelected(true);
+        mTitleView.setSelected(true);
         if (DataAccessor.SINGLE_INSTANCE.getDataList().size() > 0) {
             hideGreetingView();
             updateUI();
@@ -345,19 +276,19 @@ public class MainPlayer extends FragmentActivity implements DataAccessor.DataAcc
 
     private void setPlaylistViewVisible(boolean visible) {
         int visibility = visible ? View.VISIBLE : View.GONE;
-        getmListViewContainer().setVisibility(visibility);
+        mListViewContainer.setVisibility(visibility);
     }
 
     private boolean isPlaylistViewVisible() {
-        return getmListViewContainer().getVisibility() == View.VISIBLE;
+        return mListViewContainer.getVisibility() == View.VISIBLE;
     }
 
     private boolean playButtonIsPlayingState() {
-        return getmPlayButton().isSelected();
+        return mPlayButton.isSelected();
     }
 
     private void setPlayButtonPlaying(boolean isPlaying) {
-        getmPlayButton().setSelected(isPlaying);
+        mPlayButton.setSelected(isPlaying);
     }
 
     @Override

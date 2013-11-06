@@ -113,8 +113,8 @@ public enum  DataAccessor {
                 super.onSuccess(jsonObject);
                 JSONArray al = jsonObject.optJSONArray("list");
                 setDataList(al,context);
-                if (mDataHandler.get() != null) {
-                    mDataHandler.get().onSuccess(jsonObject);
+                if (getmDataHandler() != null) {
+                    getmDataHandler().onSuccess(jsonObject);
                 }
             }
 
@@ -122,8 +122,8 @@ public enum  DataAccessor {
             public void onFailure(Throwable throwable, JSONObject jsonObject) {
                 super.onFailure(throwable, jsonObject);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(DATA_ACCESSOR_DOWNLOAD_FAILED_ACTION));
-                if (mDataHandler.get() != null) {
-                    mDataHandler.get().onFailure(throwable,jsonObject);
+                if (getmDataHandler() != null) {
+                    getmDataHandler().onFailure(throwable,jsonObject);
                 }
             }
         });
